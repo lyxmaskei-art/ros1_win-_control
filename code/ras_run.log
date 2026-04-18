@@ -1,0 +1,26 @@
+Connecting to CoppeliaSim...
+Connected on port 20000.
+Joint lower limits: [-3.1416 -3.1416 -3.1416 -6.2832 -6.2832 -6.2832]
+Joint upper limits: [3.1416 3.1416 3.1416 6.2832 6.2832 6.2832]
+theta_dot limits: [-1. -1. -1. -1. -1. -1.] [1. 1. 1. 1. 1. 1.]
+Moving robot to initial posture...
+Running RAS-derived DLCCZNN controller...
+step=   0, pos_err=0.010895, sys_err=0.000000, alpha=0.000000e+00, v=5.618828e-31
+step=  50, pos_err=0.009910, sys_err=0.000078, alpha=-4.389985e-18, v=3.031587e-09
+step= 100, pos_err=0.006983, sys_err=0.000107, alpha=-1.066930e-16, v=5.765227e-09
+step= 150, pos_err=0.002334, sys_err=0.000048, alpha=-2.024946e-16, v=1.155615e-09
+step= 200, pos_err=0.004370, sys_err=0.000122, alpha=-1.707283e-16, v=7.454288e-09
+step= 250, pos_err=0.012051, sys_err=0.000404, alpha=1.011081e-14, v=8.145201e-08
+step= 300, pos_err=0.020809, sys_err=0.000776, alpha=1.164849e-12, v=3.013915e-07
+step= 350, pos_err=0.030277, sys_err=0.001206, alpha=3.247121e-11, v=7.275762e-07
+step= 400, pos_err=0.040145, sys_err=0.001654, alpha=3.850494e-10, v=1.367159e-06
+step= 450, pos_err=0.050140, sys_err=0.002081, alpha=2.596615e-09, v=2.165767e-06
+step= 500, pos_err=0.060044, sys_err=0.002461, alpha=1.172183e-08, v=3.027491e-06
+step= 550, pos_err=0.069689, sys_err=0.002773, alpha=3.928323e-08, v=3.845164e-06
+step= 600, pos_err=0.078948, sys_err=0.003007, alpha=1.048281e-07, v=4.520428e-06
+step= 650, pos_err=0.087723, sys_err=0.003152, alpha=2.336840e-07, v=4.966985e-06
+step= 700, pos_err=0.095921, sys_err=0.003196, alpha=4.491397e-07, v=5.107118e-06
+step= 750, pos_err=0.103444, sys_err=0.003124, alpha=7.589094e-07, v=4.878565e-06
+step= 800, pos_err=0.110173, sys_err=0.002919, alpha=1.140476e-06, v=4.261557e-06
+step= 850, pos_err=0.115977, sys_err=0.002576, alpha=1.537108e-06, v=3.316927e-06
+step= 900, pos_err=0.120723, sys_err=0.002101, alpha=1.876311e-06, v=2.206364e-06

@@ -1,0 +1,13 @@
+Connecting to CoppeliaSim...
+Connected on port 19998.
+Joint lower limits: [-3.1416 -3.1416 -3.1416 -6.2832 -6.2832 -6.2832]
+Joint upper limits: [3.1416 3.1416 3.1416 6.2832 6.2832 6.2832]
+theta_dot limits: [-0.6 -0.6 -0.6 -0.6 -0.6 -0.6] [0.6 0.6 0.6 0.6 0.6 0.6]
+RAS blend ratio: 0.05
+Scene trace enabled: True, stride=20, size=0.0030
+Moving robot to initial posture...
+Running RAS-derived DLCCZNN controller...
+step=   0, pos_err=0.010895, sys_err=0.000000, alpha=0.000000e+00, v=3.596050e-29
+step=  50, pos_err=0.000810, sys_err=1520.974413, alpha=1.098919e-02, v=1.156682e+06
+step= 100, pos_err=0.003748, sys_err=1520.974448, alpha=1.658754e-02, v=1.156682e+06
+step= 150, pos_err=0.004668, sys_err=1520.974448, alpha=2.870356e-02, v=1.156682e+06
