@@ -1,0 +1,41 @@
+{
+  "label": "Method 3a PCG live",
+  "status": "ok",
+  "mean_position_error_m": 0.00013022370019493906,
+  "max_position_error_m": 0.00023121172344488477,
+  "final_position_error_m": 5.81049804454543e-05,
+  "max_abs_joint_drift_rad": 0.41294682025909424,
+  "final_joint_drift_norm_rad": 0.0004106829308458283,
+  "mean_inner_residual_norm": 3.925501894520379e-06,
+  "max_inner_residual_norm": 0.00033846414622716305,
+  "mean_inner_iterations": 5.2835,
+  "max_inner_iterations": 6,
+  "theta_initial_rad": [
+    5.470351879921509e-06,
+    -1.5705238580703735,
+    1.570793867111206,
+    0.00042033378849737346,
+    1.570769190788269,
+    -1.9912960169676808e-12
+  ],
+  "theta_final_rad": [
+    4.829688805330079e-06,
+    -1.5703572034835815,
+    1.570702314376831,
+    0.000783571507781744,
+    1.5707454681396484,
+    -3.2967895080560083e-10
+  ],
+  "theta_delta_rad": [
+    -6.406630745914299e-07,
+    0.0001666545867919922,
+    -9.1552734375e-05,
+    0.00036323771928437054,
+    -2.372264862060547e-05,
+    -3.2768765478863315e-10
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method3a_pcg_solver\\results\\tuning_20260421\\method3a_pcg\\live_selected_runs\\tg198_pw6e03_dw0p001_rg1em07_it6_jac1\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 740.0944473999989
+}

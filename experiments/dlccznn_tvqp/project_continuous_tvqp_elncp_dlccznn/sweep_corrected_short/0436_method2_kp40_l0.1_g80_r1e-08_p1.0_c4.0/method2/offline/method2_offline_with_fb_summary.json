@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    -0.0016176962204169623,
+    -1.3048723681643968,
+    1.370275326225367,
+    -0.2598096066370928,
+    1.3854130040767505,
+    -3.2844918979786505e-09
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -0.0016176962204169623,
+      "delta_rad": -0.0016176962204169623
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3048723681643968,
+      "delta_rad": 0.2659239586304998
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.370275326225367,
+      "delta_rad": -0.20052100056952948
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.2598096066370928,
+      "delta_rad": -0.2598096066370928
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3854130040767505,
+      "delta_rad": -0.18538332271814606
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -3.2844918979786505e-09,
+      "delta_rad": -3.2844918979786505e-09
+    }
+  ],
+  "max_joint_drift_rad": 0.2659239586304998,
+  "final_joint_drift_norm_rad": 0.4612969200277883,
+  "mean_position_error_m": 0.03722263121304352,
+  "final_position_error_m": 0.0769504476851687,
+  "max_position_error_m": 0.0788539999236796,
+  "max_drift_norm": 0.4814180978259733,
+  "final_drift_norm": 0.44984855790111783,
+  "mean_task_residual": 1.6644030665503937,
+  "final_task_residual": 3.5072498980086007,
+  "mean_solver_residual": 4.618510496138921,
+  "final_solver_residual": 31.020596019031842,
+  "mean_solver_energy": 25.75878992305071,
+  "final_solver_energy": 481.1386886879871,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.13959230000182288
+}

@@ -1,0 +1,14 @@
+label: Method 2 DLCCZNN offline (circle)
+status: ok
+mean_position_error_m: 0.00019607609735238123
+max_position_error_m: 0.0004180167056699415
+final_position_error_m: 3.1859944127846477e-07
+max_abs_joint_drift_rad: 0.13548892789662825
+final_joint_drift_norm_rad: 1.5672544454232694e-06
+mean_inner_residual_norm: 0.003902551311669748
+max_inner_residual_norm: 0.045446522279053714
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [-7.335981550502208e-07, -1.57079716537572, 1.5707969940803475, 6.244049463939795e-07, 1.5707969430343274, -9.535871359599891e-17]
+theta_delta_rad: [-7.335981550502208e-07, -8.385808234478986e-07, 6.672854508948944e-07, 6.244049463939795e-07, 6.162394308173447e-07, -9.535871359599891e-17]
+num_samples: 1000
+result_dir: C:\Users\lyx\Desktop\sci\experiments\trajectory_ablation_tuning\project_simple_shape_trajectories\results\method2_scheme_b_positive_dlccznn_shapes\circle\offline

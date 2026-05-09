@@ -1,0 +1,73 @@
+{
+  "stem": "method1_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    -0.020867265897098648,
+    -1.5796031640297075,
+    1.5725157101919756,
+    -0.010598629617868883,
+    1.4964137176157541,
+    2.7373853274070762e-14
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -0.020867265897098648,
+      "delta_rad": -0.020867265897098648
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.5796031640297075,
+      "delta_rad": -0.008806837234810905
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5725157101919756,
+      "delta_rad": 0.0017193833970789996
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.010598629617868883,
+      "delta_rad": -0.010598629617868883
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4964137176157541,
+      "delta_rad": -0.07438260917914241
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 2.7373853274070762e-14,
+      "delta_rad": 2.7373853274070762e-14
+    }
+  ],
+  "max_joint_drift_rad": 0.07438260917914241,
+  "final_joint_drift_norm_rad": 0.07849243877878065,
+  "mean_position_error_m": 0.013080539652507906,
+  "final_position_error_m": 0.004209132835607192,
+  "max_position_error_m": 0.027228177752031176,
+  "max_drift_norm": 0.5042055053410236,
+  "final_drift_norm": 0.07908390387897657,
+  "mean_task_residual": 1.5724220030713694,
+  "final_task_residual": 0.41162002273086085,
+  "mean_solver_residual": 1.851147101359932,
+  "final_solver_residual": 1.0067916326154078,
+  "mean_solver_energy": 2.0242747317104324,
+  "final_solver_energy": 0.5068146957521991,
+  "min_boundary_slack": 0.5860677481549468,
+  "final_boundary_slack": 1.578646870164313,
+  "runtime_s": 0.3201355999990483
+}

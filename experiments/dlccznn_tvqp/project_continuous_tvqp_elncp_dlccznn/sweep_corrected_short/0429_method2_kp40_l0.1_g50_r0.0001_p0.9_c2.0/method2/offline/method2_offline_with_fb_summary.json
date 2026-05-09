@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.03508901699406345,
+    -1.3195312054457369,
+    1.327548798078207,
+    -0.20703254975965826,
+    1.4596137069656492,
+    4.0713583419827975e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.03508901699406345,
+      "delta_rad": 0.03508901699406345
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3195312054457369,
+      "delta_rad": 0.2512651213491597
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.327548798078207,
+      "delta_rad": -0.24324752871668953
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.20703254975965826,
+      "delta_rad": -0.20703254975965826
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4596137069656492,
+      "delta_rad": -0.11118261982924738
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 4.0713583419827975e-12,
+      "delta_rad": 4.0713583419827975e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.2512651213491597,
+  "final_joint_drift_norm_rad": 0.4227987844815482,
+  "mean_position_error_m": 0.030074452983566802,
+  "final_position_error_m": 0.07507971229587246,
+  "max_position_error_m": 0.08288494184360462,
+  "max_drift_norm": 0.6263832494512742,
+  "final_drift_norm": 0.42643631176563834,
+  "mean_task_residual": 1.26188491109657,
+  "final_task_residual": 3.001876541593466,
+  "mean_solver_residual": 1.5806828548440885,
+  "final_solver_residual": 2.9563434169363125,
+  "mean_solver_energy": 1.9497244506513238,
+  "final_solver_energy": 4.369983199431336,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 1.2677927409241931,
+  "runtime_s": 0.12776260000100592
+}

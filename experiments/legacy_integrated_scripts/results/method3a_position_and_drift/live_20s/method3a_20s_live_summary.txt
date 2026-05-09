@@ -1,0 +1,9 @@
+mean_position_error_m=8.3977393585985159e-05
+max_position_error_m=1.6766889778292398e-04
+final_position_error_m=5.8372351574539232e-05
+max_abs_joint_drift_rad=4.1294443607330322e-01
+final_joint_drift_norm_rad=4.1795312105482034e-04
+live_duration_s=20.000000
+tau_s=0.005000
+num_samples=4000
+wall_clock_run_s=1674.210108

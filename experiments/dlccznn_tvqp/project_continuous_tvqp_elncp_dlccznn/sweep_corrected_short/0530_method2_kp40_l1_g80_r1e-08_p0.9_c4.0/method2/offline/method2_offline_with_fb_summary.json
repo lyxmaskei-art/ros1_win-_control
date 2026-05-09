@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.03737963195451778,
+    -1.3764371121002439,
+    1.377649887932718,
+    -0.2660901525533933,
+    1.504310720603213,
+    1.9279947642149648e-09
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.03737963195451778,
+      "delta_rad": 0.03737963195451778
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3764371121002439,
+      "delta_rad": 0.19435921469465267
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.377649887932718,
+      "delta_rad": -0.19314643886217864
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.2660901525533933,
+      "delta_rad": -0.2660901525533933
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.504310720603213,
+      "delta_rad": -0.06648560619168364
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 1.9279947642149648e-09,
+      "delta_rad": 1.9279947642149648e-09
+    }
+  ],
+  "max_joint_drift_rad": 0.2660901525533933,
+  "final_joint_drift_norm_rad": 0.3894901708432221,
+  "mean_position_error_m": 0.032912085436748624,
+  "final_position_error_m": 0.06635501975425102,
+  "max_position_error_m": 0.07884488844076448,
+  "max_drift_norm": 0.5464512581674362,
+  "final_drift_norm": 0.3840405774573923,
+  "mean_task_residual": 1.4744356991230672,
+  "final_task_residual": 3.2982946976957224,
+  "mean_solver_residual": 3.67130668540929,
+  "final_solver_residual": 3.0625473025304,
+  "mean_solver_energy": 17.27141944058128,
+  "final_solver_energy": 4.6895979901181155,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.11106629999994766
+}

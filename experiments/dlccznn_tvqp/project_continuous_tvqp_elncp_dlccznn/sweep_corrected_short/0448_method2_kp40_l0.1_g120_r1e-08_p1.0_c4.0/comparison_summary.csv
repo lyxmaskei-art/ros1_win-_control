@@ -1,0 +1,2 @@
+﻿experiment,mean_position_error_m,final_position_error_m,final_joint_drift_norm_rad,mean_task_residual,final_solver_residual,min_boundary_slack,runtime_s
+method2_offline,0.06781102009941584,0.014581408405809284,0.7138897864743209,2.8007450753379173,5.78297762173332,0.0,0.12489330000244081

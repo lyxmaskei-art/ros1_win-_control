@@ -1,0 +1,4 @@
+﻿method,mean_position_error_m,max_position_error_m,final_position_error_m,max_abs_joint_drift_rad,final_joint_drift_norm_rad,live_duration_s,tau_s,num_samples,wall_clock_run_s,result_dir
+method1,3.0440476347825879e-03,5.6520606057919994e-03,1.4838019486491552e-03,4.5077359676361084e-01,2.6769124464460070e-01,10.000000,0.005000,2000,737.719696,C:\Users\lyx\Desktop\sci\code\results\single_file_integrated_runs\method1_sig_rmp_qp\live
+method2,3.6856397453909528e-04,6.3579019593446105e-04,1.4331887611433719e-04,4.1053569316864014e-01,4.5505004443530542e-03,10.000000,0.005000,2000,738.812043,C:\Users\lyx\Desktop\sci\code\results\single_file_integrated_runs\method2_scheme_b_positive\live
+method3a,1.3022660439260657e-04,2.3121427775818902e-04,5.8153403412407514e-05,4.1294372081756592e-01,4.1698329268355876e-04,10.000000,0.005000,2000,743.082416,C:\Users\lyx\Desktop\sci\code\results\single_file_integrated_runs\method3a_position_and_drift\live

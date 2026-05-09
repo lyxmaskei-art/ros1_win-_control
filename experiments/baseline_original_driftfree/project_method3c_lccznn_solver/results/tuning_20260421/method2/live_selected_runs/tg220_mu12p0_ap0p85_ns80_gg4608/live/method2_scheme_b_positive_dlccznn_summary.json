@@ -1,0 +1,39 @@
+{
+  "label": "Method 2 DLCCZNN live",
+  "status": "ok",
+  "mean_position_error_m": 0.00024126528210738067,
+  "max_position_error_m": 0.00046597049201604424,
+  "final_position_error_m": 0.00010448647185311171,
+  "max_abs_joint_drift_rad": 0.4119904041290283,
+  "final_joint_drift_norm_rad": 0.002609686491134736,
+  "mean_inner_residual_norm": 0.006410863458651981,
+  "max_inner_residual_norm": 0.07510529464099128,
+  "theta_initial_rad": [
+    1.0439271136419848e-05,
+    -1.5704901218414307,
+    1.570742130279541,
+    0.0005196415586397052,
+    1.5707619190216064,
+    0.0
+  ],
+  "theta_final_rad": [
+    -1.2424517080944497e-05,
+    -1.5698028802871704,
+    1.5697011947631836,
+    0.002809282159432769,
+    1.570654034614563,
+    4.051869950671971e-12
+  ],
+  "theta_delta_rad": [
+    -2.2863788217364345e-05,
+    0.0006872415542602539,
+    -0.0010409355163574219,
+    0.0022896406007930636,
+    -0.00010788440704345703,
+    4.051869950671971e-12
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method3c_lccznn_solver\\results\\tuning_20260421\\method2\\live_selected_runs\\tg220_mu12p0_ap0p85_ns80_gg4608\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 739.1079688999998
+}

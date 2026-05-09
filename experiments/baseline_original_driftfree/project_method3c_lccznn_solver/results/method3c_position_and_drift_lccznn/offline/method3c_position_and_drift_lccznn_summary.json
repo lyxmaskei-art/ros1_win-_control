@@ -1,0 +1,38 @@
+{
+  "label": "Method 3c offline",
+  "status": "ok",
+  "mean_position_error_m": 0.004332822727280048,
+  "max_position_error_m": 0.00783024756749825,
+  "final_position_error_m": 0.0004578779597064551,
+  "max_abs_joint_drift_rad": 0.5042109032986536,
+  "final_joint_drift_norm_rad": 0.2644836046328529,
+  "mean_inner_residual_norm": 2368.8375470890164,
+  "max_inner_residual_norm": 8975.330274945063,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    -0.04607604335086331,
+    -1.6298899145660235,
+    1.6823146002563985,
+    -0.17035489616897811,
+    1.419536922893932,
+    -4.655083130950103e-15
+  ],
+  "theta_delta_rad": [
+    -0.04607604335086331,
+    -0.05909358777112694,
+    0.1115182734615019,
+    -0.17035489616897811,
+    -0.15125940390096448,
+    -4.655083130950103e-15
+  ],
+  "num_samples": 200,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\baseline_original_driftfree\\project_method3c_lccznn_solver\\results\\method3c_position_and_drift_lccznn\\offline",
+  "wall_clock_run_s": 0.09471509998547845
+}

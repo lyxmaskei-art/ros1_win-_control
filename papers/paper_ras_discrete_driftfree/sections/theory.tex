@@ -1,0 +1,246 @@
+\section{Discrete time analysis of the proposed method}
+
+The analysis in this section is carried out in the standard sampled data local regime relevant to the implemented controller. During one outer control period, $\bm{H}_k$ and $\bm{p}_k$ are frozen. The task Jacobian is assumed to remain bounded and locally full row rank. For clarity, the main derivations are written for the interior regime where the box projection is inactive; when a fixed active set is present, the same arguments apply on the corresponding reduced coordinates provided that the reduced KKT matrix remains nonsingular.
+
+\subsection{KKT consistency inside the classic formulation}
+
+\begin{proposition}
+Assume that $\J_k$ has full row rank and that no component of the optimizer hits the box bounds at control step $k$. Then any vector $\bm{y}_k^\star = [\qd_k^{\star\top},\bm{\lambda}_k^{\star\top}]^\top$ satisfying
+\begin{equation}
+  \bm{H}_k \bm{y}_k^\star + \bm{p}_k = \bm{0}
+  \label{eq:kkt_zero}
+\end{equation}
+is the unique solution of the equality constrained problem \eqref{eq:method2_shell} without active box constraints.
+\end{proposition}
+
+\begin{proof}
+Equation \eqref{eq:kkt_zero} expands into
+\begin{equation}
+  \qd_k^\star - \J_k^\top \bm{\lambda}_k^\star + \hat{\bm{c}}_2(k) = \bm{0},
+\end{equation}
+\begin{equation}
+  \J_k \qd_k^\star - \bm{b}_{\mathrm{fb}}(k) = \bm{0}.
+\end{equation}
+These are exactly the stationarity and equality feasibility conditions of \eqref{eq:method2_shell}. The quadratic term has Hessian equal to the identity matrix, hence the objective is strictly convex in $\qd_k$. Because $\J_k$ has full row rank, the equality constraints are regular. Therefore the equality constrained problem has a unique optimizer, and $\qd_k^\star$ is that optimizer.
+\end{proof}
+
+The proposition clarifies what the inner residual tracker is solving. It is not an arbitrary neural state equation; it is a sampled approximation of the KKT root of the classic drift free formulation. When box constraints become active, the final control signal is obtained by the explicit projection \eqref{eq:method2_primal_proj}, so feasibility is preserved even though the equality constrained root is no longer the applied command exactly.
+
+\subsection{Discrete time residual contraction in the local interior regime}
+
+\begin{proposition}
+Define
+\begin{equation}
+  \bm{r}_\ell = \bm{H}_k \bm{y}_\ell + \bm{p}_k,
+\end{equation}
+\begin{equation}
+  \bm{g}_\ell = \bm{H}_k^\top \bm{r}_\ell,
+\end{equation}
+\begin{equation}
+  V_\ell = \frac{1}{2}\|\bm{r}_\ell\|_2^2,
+\end{equation}
+and the effective scalar step size
+\begin{equation}
+  \eta_\ell
+  =
+  \frac{h\gamma_{\mathrm{s}}\phi(V_\ell)}
+  {\|\bm{g}_\ell\|_2^2 + \lambda_{\mathrm{s}}}.
+  \label{eq:eta_ell}
+\end{equation}
+Assume that the primal box projection is inactive at inner step $\ell$, so the update becomes
+\begin{equation}
+  \bm{y}_{\ell+1} = \bm{y}_\ell - \eta_\ell \bm{g}_\ell.
+  \label{eq:inner_unprojected}
+\end{equation}
+Then
+\begin{equation}
+  V_{\ell+1} - V_\ell
+  \le
+  -
+  \left(
+    \eta_\ell - \frac{\|\bm{H}_k\|_2^2}{2}\eta_\ell^2
+  \right)
+  \|\bm{g}_\ell\|_2^2.
+  \label{eq:V_contract}
+\end{equation}
+Consequently, if
+\begin{equation}
+  0 < \eta_\ell < \frac{2}{\|\bm{H}_k\|_2^2},
+  \label{eq:eta_cond}
+\end{equation}
+then $V_{\ell+1} < V_\ell$ whenever $\bm{g}_\ell \neq \bm{0}$.
+\end{proposition}
+
+\begin{proof}
+From \eqref{eq:inner_unprojected},
+\begin{equation}
+  \bm{r}_{\ell+1}
+  =
+  \bm{H}_k(\bm{y}_\ell - \eta_\ell \bm{g}_\ell) + \bm{p}_k
+  =
+  \bm{r}_\ell - \eta_\ell \bm{H}_k \bm{g}_\ell.
+\end{equation}
+Therefore
+\begin{equation}
+  V_{\ell+1} - V_\ell
+  =
+  -\eta_\ell \bm{r}_\ell^\top \bm{H}_k \bm{g}_\ell
+  + \frac{\eta_\ell^2}{2}\|\bm{H}_k \bm{g}_\ell\|_2^2.
+\end{equation}
+Since $\bm{g}_\ell = \bm{H}_k^\top \bm{r}_\ell$, the first term is
+\begin{equation}
+  \bm{r}_\ell^\top \bm{H}_k \bm{g}_\ell
+  =
+  \bm{g}_\ell^\top \bm{g}_\ell
+  =
+  \|\bm{g}_\ell\|_2^2.
+\end{equation}
+Moreover,
+\begin{equation}
+  \|\bm{H}_k \bm{g}_\ell\|_2
+  \le
+  \|\bm{H}_k\|_2 \|\bm{g}_\ell\|_2.
+\end{equation}
+Substituting these two relations into the previous equation gives \eqref{eq:V_contract}. If \eqref{eq:eta_cond} holds, then the coefficient multiplying $\|\bm{g}_\ell\|_2^2$ is strictly positive, and thus $V_{\ell+1} < V_\ell$ whenever $\bm{g}_\ell \neq \bm{0}$.
+\end{proof}
+
+The proposition gives the discrete time Lyapunov inequality that is missing in a purely continuous time narrative. In the implemented controller, the primal part is projected onto the admissible box. This projection is nonexpansive and keeps the applied velocity feasible. Hence the sampled update remains bounded globally, whereas the strict contraction law above governs each interior segment, and each fixed active set segment can be analyzed through the corresponding reduced system.
+
+\subsection{Sampled outer loop tracking bound}
+
+\begin{proposition}
+Let $\qd_k^\star$ denote the interior optimizer of \eqref{eq:method2_shell} and define the solver mismatch
+\begin{equation}
+  \bm{s}_k = \qd_k - \qd_k^\star.
+\end{equation}
+Assume $\|\J_k\|_2 \le \bar J$ for all $k$, and let the first order linearization remainder in \eqref{eq:fk_linearization} satisfy
+\begin{equation}
+  \|\bm{\delta}_k\|_2 \le c_{\mathrm{x}}\tau^2.
+\end{equation}
+Then the position tracking error of the sampled outer loop satisfies
+\begin{equation}
+  \ep(k+1)
+  =
+  (1-\tau k_{\mathrm{p}})\ep(k)
+  +
+  \tau \J_k \bm{s}_k
+  +
+  \bm{\delta}_k.
+  \label{eq:ep_ss}
+\end{equation}
+If $0 < \tau k_{\mathrm{p}} < 2$ and $\|\bm{s}_k\|_2 \le \bar s$, then
+\begin{equation}
+  \|\ep(k)\|_2
+  \le
+  \rho^k \|\ep(0)\|_2
+  +
+  \frac{\tau \bar J \bar s + c_{\mathrm{x}}\tau^2}{1-\rho},
+  \qquad
+  \rho = |1-\tau k_{\mathrm{p}}|,
+  \label{eq:ep_bound}
+\end{equation}
+and therefore
+\begin{equation}
+  \limsup_{k\to\infty}\|\ep(k)\|_2
+  =
+  \mathcal{O}(\bar s + \tau).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The ideal interior optimizer satisfies
+\begin{equation}
+  \J_k \qd_k^\star = \rd(k) - k_{\mathrm{p}}\ep(k).
+\end{equation}
+Substituting $\qd_k = \qd_k^\star + \bm{s}_k$ into the one step prediction \eqref{eq:ep_basic} gives
+\begin{equation}
+  \ep(k+1)
+  =
+  \ep(k)
+  + \tau\bigl(\J_k \qd_k^\star - \rd(k)\bigr)
+  + \tau \J_k \bm{s}_k
+  + \bm{\delta}_k,
+\end{equation}
+which leads to \eqref{eq:ep_ss}. Taking norms yields
+\begin{equation}
+  \|\ep(k+1)\|_2
+  \le
+  \rho \|\ep(k)\|_2
+  +
+  \tau \bar J \bar s
+  +
+  c_{\mathrm{x}}\tau^2.
+\end{equation}
+Standard iteration of this scalar inequality gives \eqref{eq:ep_bound}.
+\end{proof}
+
+The proposition provides the outer loop meaning of the inner residual suppression. It shows that sampled tracking performance is controlled by two terms: the discretization remainder $\mathcal{O}(\tau)$ and the solver mismatch level $\bar s$. Therefore a solver that lowers the residual more effectively inside each sample directly tightens the sampled tracking bound.
+
+\subsection{Residual to command mismatch relation}
+
+\begin{proposition}
+Assume that $\J_k$ has full row rank in the operating region of interest and that the smallest singular value of $\bm{H}_k$ is bounded below by a positive constant $\underline{\sigma}_{\mathrm{H}}$. Then
+\begin{equation}
+  \|\bm{s}_k\|_2
+  \le
+  \underline{\sigma}_{\mathrm{H}}^{-1}
+  \|\bm{r}_{N_s}(k)\|_2.
+  \label{eq:residual_to_command}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Let $\bm{y}_k^\star$ be the interior KKT solution at control step $k$. Since
+\begin{equation}
+  \bm{r}_{N_s}(k)
+  =
+  \bm{H}_k\bigl(\bm{y}_{N_s}(k)-\bm{y}_k^\star\bigr),
+\end{equation}
+and $\bm{H}_k$ is nonsingular in the local operating region, one has
+\begin{equation}
+  \bm{y}_{N_s}(k)-\bm{y}_k^\star
+  =
+  \bm{H}_k^{-1}\bm{r}_{N_s}(k).
+\end{equation}
+Therefore
+\begin{equation}
+  \|\bm{y}_{N_s}(k)-\bm{y}_k^\star\|_2
+  \le
+  \|\bm{H}_k^{-1}\|_2 \|\bm{r}_{N_s}(k)\|_2
+  \le
+  \underline{\sigma}_{\mathrm{H}}^{-1}\|\bm{r}_{N_s}(k)\|_2.
+\end{equation}
+Taking the primal part gives \eqref{eq:residual_to_command}.
+\end{proof}
+
+Combining \eqref{eq:ep_bound} and \eqref{eq:residual_to_command} shows why the residual plot is not a cosmetic diagnostic. It is a control relevant quantity that bounds the command mismatch and therefore affects sampled tracking accuracy. The final cycle drift is likewise sensitive to this mismatch because
+\begin{equation}
+  \ed(N)
+  =
+  \ed(0)
+  +
+  \tau \sum_{k=0}^{N-1}\qd_k^\star
+  +
+  \tau \sum_{k=0}^{N-1}\bm{s}_k.
+\end{equation}
+The classic formulation shapes the first sum, whereas the sampled solver quality determines the size of the second sum.
+
+\subsection{Per sample computational cost}
+
+For fixed $N_s$, each inner substep of \methodtwoDL{} requires one multiplication by $\bm{H}_k$, one multiplication by $\bm{H}_k^\top$, one scalar activation, and one projection of the primal part onto the velocity box. Since $\bm{H}_k \in \R^{(n+m)\times(n+m)}$, the dominant per sample cost is
+\begin{equation}
+  \mathcal{O}\!\bigl(N_s(n+m)^2\bigr).
+  \label{eq:method2_complexity}
+\end{equation}
+
+For \methodthreepcg{}, forming $\bm{Q}_k$ from $\J_k \in \R^{m\times n}$ costs $\mathcal{O}(mn^2)$, and $k$ conjugate gradient iterations cost $\mathcal{O}(kn^2)$. Hence
+\begin{equation}
+  \mathcal{O}\!\bigl((m+k)n^2\bigr)
+\end{equation}
+per sample, where $k$ is the realized number of inner iterations.
+
+In the present UR3e problem, $n=6$ and $m=3$, so both costs are small in absolute terms. The main merit of \methodtwoDL{} is therefore not a dramatic wall clock advantage on a tiny system. Its value lies in preserving the classic formulation, maintaining an explicit sampled control interpretation, and avoiding dense direct matrix inversion within the formulation preserving line.
+
+\subsection{Design implication for this paper}
+
+The baseline data later show that \methodthree{} reaches the best raw accuracy because it directly optimizes the sampled one step tracking and drift objective. That result is important, but it answers a different design question. The main question of the present paper is whether the classic drift free kinematic resolution formulation itself can be made more suitable for sampled robot control through a DLCCZNN inspired solver. From this viewpoint, \methodtwoDL{} is the principal route: it starts from the strongest formulation preserving baseline, admits a discrete time residual analysis, and retains drift recovery in closed loop. The auxiliary comparisons are kept precisely to make this claim rigorous rather than rhetorical.

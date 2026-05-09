@@ -1,0 +1,41 @@
+{
+  "label": "Method 3a offline (circle)",
+  "status": "ok",
+  "mean_position_error_m": 5.0265875457939047e-05,
+  "max_position_error_m": 9.424518941656746e-05,
+  "final_position_error_m": 3.942388083226713e-11,
+  "max_abs_joint_drift_rad": 0.13529605214290075,
+  "final_joint_drift_norm_rad": 2.969066891936427e-11,
+  "mean_inner_residual_norm": 4.3763373436800276e-15,
+  "max_inner_residual_norm": 2.1900397950137233e-14,
+  "mean_inner_iterations": 1.0,
+  "max_inner_iterations": 1,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    -2.321313486517344e-11,
+    -1.5707963268056089,
+    1.5707963268034124,
+    7.274560158456164e-12,
+    1.5707963268050205,
+    -2.8760225724513823e-27
+  ],
+  "theta_delta_rad": [
+    -2.321313486517344e-11,
+    -1.071231992000321e-11,
+    8.5158546880848e-12,
+    7.274560158456164e-12,
+    1.0123901716951877e-11,
+    -2.8760225724513823e-27
+  ],
+  "num_samples": 4000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_simple_shape_trajectories\\results\\method3a_position_and_drift_shapes\\circle\\offline",
+  "wall_clock_run_s": 1.4227651999990485,
+  "trajectory_name": "circle"
+}

@@ -1,0 +1,16 @@
+# Local assistant and upload caches
+.claude/
+.uploads/
+
+# Python runtime caches
+__pycache__/
+*.py[cod]
+
+# Local logs and temporary files
+*.log
+*.tmp
+~$*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

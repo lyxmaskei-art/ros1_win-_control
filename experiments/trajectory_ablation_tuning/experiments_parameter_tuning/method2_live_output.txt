@@ -1,0 +1,15 @@
+=== Method 2 TVQP Tuning (20260428) ===
+Output: C:\Users\lyx\Desktop\sci\code\experiments_parameter_tuning\method2\tuning_20260428
+
+--- Stage 3: Live verification ---
+  [live] Running tg260_mu20_g3072_ns80...
+    Connected to CoppeliaSim on port 19997
+  [live] tg260_mu20_g3072_ns80: pos=2.044e-04, drift=2.084e-03
+  [live] Running tg260_mu20_g3072_ns100...
+    Connected to CoppeliaSim on port 19997
+  [live] tg260_mu20_g3072_ns100: pos=2.044e-04, drift=2.082e-03
+  [live] Running tg260_mu20_g3072_ns60...
+    Connected to CoppeliaSim on port 19997
+  [live] tg260_mu20_g3072_ns60: pos=2.005e-04, drift=9.437e-04
+  [live] Running tg220_mu16_g1280_ns40...
+    Connected to CoppeliaSim on port 19997

@@ -1,0 +1,15 @@
+label: Method 2 DLCCZNN live
+status: ok
+mean_position_error_m: 0.00035994591390350574
+max_position_error_m: 0.0008432011199794228
+final_position_error_m: 0.0001505587142636747
+max_abs_joint_drift_rad: 0.4107646942138672
+final_joint_drift_norm_rad: 0.00454776705274149
+mean_inner_residual_norm: 0.026829325124837954
+max_inner_residual_norm: 0.3181614848566066
+theta_initial_rad: [4.093237748747924e-06, -1.570504069328308, 1.5707439184188843, 0.0005101548158563673, 1.5707650184631348, 0.0]
+theta_final_rad: [-5.0217135139973834e-05, -1.5693773031234741, 1.5689005851745605, 0.004507339093834162, 1.5705798864364624, 0.0]
+theta_delta_rad: [-5.431037288872176e-05, 0.0011267662048339844, -0.0018433332443237305, 0.003997184277977794, -0.00018513202667236328, 0.0]
+num_samples: 2000
+result_dir: C:\Users\lyx\Desktop\sci\code\project_method3c_lccznn_solver\results\method2_scheme_b_positive_dlccznn\live
+coppeliasim_port: 19997

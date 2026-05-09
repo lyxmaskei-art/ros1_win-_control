@@ -1,0 +1,53 @@
+{
+  "label": "Method 3 TVQP ELNCP PCG offline",
+  "status": "ok",
+  "method": "Method 3: continuous TVQP + ELNCP + PCG",
+  "tau": 0.005,
+  "task_gain": 198.0,
+  "position_weight": 15000.0,
+  "drift_weight": 0.0005,
+  "regularization_gain": 1e-10,
+  "ncp_epsilon": 1e-10,
+  "pcg_max_iters": 8,
+  "mean_position_error_m": 0.00020433668773123088,
+  "max_position_error_m": 0.0003074013271522352,
+  "final_position_error_m": 6.079975503728618e-07,
+  "max_abs_joint_drift_rad": 0.4125530800102486,
+  "final_joint_drift_norm_rad": 4.6671803940884594e-07,
+  "mean_elncp_residual_norm": 1.9095206686859357e-08,
+  "max_elncp_residual_norm": 1.4811182048296623e-07,
+  "mean_stationarity_norm": 1.905586282222095e-08,
+  "mean_ncp_residual_norm": 8.670080869261876e-11,
+  "mean_pcg_iterations": 9.51525,
+  "max_pcg_iterations": 13,
+  "mean_active_iterations": 1.5305,
+  "max_active_iterations": 2,
+  "min_boundary_slack": 1.8596598459274203,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    3.733707487205825e-09,
+    -1.5707960593673411,
+    1.5707966859614881,
+    1.3078456194913931e-07,
+    1.570796340544376,
+    -5.16095083272482e-15
+  ],
+  "theta_delta_rad": [
+    3.733707487205825e-09,
+    2.674275554337413e-07,
+    3.591665915791964e-07,
+    1.3078456194913931e-07,
+    1.3749479332858527e-08,
+    -5.16095083272482e-15
+  ],
+  "num_samples": 4000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method3_tvqp_elncp_pcg_solver\\results\\standard_heart20_default\\offline",
+  "wall_clock_run_s": 1.5966823999915505
+}

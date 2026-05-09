@@ -1,0 +1,85 @@
+{
+  "stem": "method2_dlccznn_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    -2.7081981067234274e-06,
+    -1.5708005211795988,
+    1.5708001065572292,
+    3.0742594962567653e-06,
+    1.5707970083724694,
+    -8.07556436550579e-09
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -2.7081981067234274e-06,
+      "delta_rad": -2.7081981067234274e-06
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.5708005211795988,
+      "delta_rad": -4.194384702227438e-06
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5708001065572292,
+      "delta_rad": 3.7797623326785157e-06
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": 3.0742594962567653e-06,
+      "delta_rad": 3.0742594962567653e-06
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5707970083724694,
+      "delta_rad": 6.81577572825276e-07
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -8.07556436550579e-09,
+      "delta_rad": -8.07556436550579e-09
+    }
+  ],
+  "max_joint_drift_rad": 4.194384702227438e-06,
+  "final_joint_drift_norm_rad": 7.009243037583899e-06,
+  "mean_position_error_m": 9.70514807228719e-06,
+  "final_position_error_m": 1.4143683303904664e-06,
+  "max_position_error_m": 3.3971907222033477e-05,
+  "max_drift_norm": 0.14389176614421703,
+  "final_drift_norm": 7.991359106843417e-06,
+  "mean_task_residual": 0.002656965894123491,
+  "final_task_residual": 0.00040967764295694913,
+  "mean_solver_residual": 0.005442722212690869,
+  "final_solver_residual": 0.0008267981958409097,
+  "mean_solver_energy": 2.360835578381834e-05,
+  "final_solver_energy": 3.4179762832289163e-07,
+  "min_boundary_slack": 1.9462295327845143,
+  "final_boundary_slack": 1.999839428570769,
+  "runtime_s": 3.9512312000006204,
+  "avg_step_time_s": 0.0019756156000003103,
+  "trajectory_name": "line",
+  "solver_type": "dlccznn",
+  "task_gain": 300.0,
+  "drift_gain": 10.0,
+  "drift_feedback_mode": "nonlinear",
+  "solver_gamma": 2048.0,
+  "activation_power": 0.8,
+  "activation_exp_clip": 4.0,
+  "dlccznn_inner_steps": 40,
+  "pdnn_gain": 20.0,
+  "pdnn_inner_steps": 1
+}

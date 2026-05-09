@@ -1,0 +1,79 @@
+{
+  "stem": "method2_dlccznn_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    -1.0234840402326896e-07,
+    -1.5707959237847453,
+    1.570795964783272,
+    -2.962608957560723e-07,
+    1.5707962560606457,
+    6.782620470595277e-14
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -1.0234840402326896e-07,
+      "delta_rad": -1.0234840402326896e-07
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.5707959237847453,
+      "delta_rad": 4.0301015125088213e-07
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.570795964783272,
+      "delta_rad": -3.6201162445514967e-07
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -2.962608957560723e-07,
+      "delta_rad": -2.962608957560723e-07
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5707962560606457,
+      "delta_rad": -7.07342509009834e-08
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 6.782620470595277e-14,
+      "delta_rad": 6.782620470595277e-14
+    }
+  ],
+  "max_joint_drift_rad": 4.0301015125088213e-07,
+  "final_joint_drift_norm_rad": 6.298560523347725e-07,
+  "mean_position_error_m": 3.0465915870793753e-05,
+  "final_position_error_m": 1.41136368972964e-07,
+  "max_position_error_m": 9.575624042289288e-05,
+  "max_drift_norm": 0.08068258122931687,
+  "final_drift_norm": 6.595852182945328e-07,
+  "mean_task_residual": 0.004876940853812427,
+  "final_task_residual": 2.1641032277242875e-05,
+  "mean_solver_residual": 0.005250914262687077,
+  "final_solver_residual": 2.2627019500938725e-05,
+  "mean_solver_energy": 2.192379743605436e-05,
+  "final_solver_energy": 2.5599100574793065e-10,
+  "min_boundary_slack": 1.9681465158490588,
+  "final_boundary_slack": 1.9999959859692724,
+  "runtime_s": 2.811670700000832,
+  "avg_step_time_s": 0.0007029176750002079,
+  "trajectory_name": "small_circle",
+  "solver_type": "dlccznn",
+  "dlccznn_inner_steps": 10,
+  "pdnn_gain": 20.0,
+  "pdnn_inner_steps": 1
+}

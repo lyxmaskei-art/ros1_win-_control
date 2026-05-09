@@ -1,0 +1,14 @@
+label: Method 2 DLCCZNN offline (line)
+status: ok
+mean_position_error_m: 1.8709042106663716e-05
+max_position_error_m: 3.127307613506924e-05
+final_position_error_m: 2.467666386253863e-07
+max_abs_joint_drift_rad: 0.11791585218187633
+final_joint_drift_norm_rad: 1.172839619758425e-06
+mean_inner_residual_norm: 0.0006568864481055304
+max_inner_residual_norm: 0.0018368223362399837
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [1.037323058705283e-07, -1.5707971049294913, 1.5707970341210336, 5.053203818574718e-07, 1.5707963871271635, -9.529736798134985e-17]
+theta_delta_rad: [1.037323058705283e-07, -7.781345947588392e-07, 7.07326136994979e-07, 5.053203818574718e-07, 6.033226696011695e-08, -9.529736798134985e-17]
+num_samples: 4000
+result_dir: C:\Users\lyx\Desktop\sci\code\project_simple_shape_trajectories\results\method2_scheme_b_positive_dlccznn_shapes\line\offline

@@ -1,0 +1,116 @@
+{
+  "method1": {
+    "label": "Method 1",
+    "status": "ok",
+    "mean_position_error_m": 0.003044047634782588,
+    "max_position_error_m": 0.0056520606057919994,
+    "final_position_error_m": 0.0014838019486491552,
+    "max_abs_joint_drift_rad": 0.45077359676361084,
+    "final_joint_drift_norm_rad": 0.2676912446446007,
+    "theta_initial_rad": [
+      1.3585406122729182e-05,
+      -1.5702213048934937,
+      1.5709316730499268,
+      0.000412484077969566,
+      1.570755958557129,
+      0.0
+    ],
+    "theta_final_rad": [
+      -0.004481134470552206,
+      -1.5083529949188232,
+      1.4473145008087158,
+      0.22930338978767395,
+      1.5589890480041504,
+      0.0
+    ],
+    "theta_delta_rad": [
+      -0.004494719876674935,
+      0.06186830997467041,
+      -0.12361717224121094,
+      0.22889090570970438,
+      -0.011766910552978516,
+      0.0
+    ],
+    "live_duration_s": 10.0,
+    "tau_s": 0.005,
+    "num_samples": 2000,
+    "wall_clock_run_s": 737.7196962833405,
+    "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\results\\single_file_integrated_runs\\method1_sig_rmp_qp\\live"
+  },
+  "method2": {
+    "label": "Method 2",
+    "status": "ok",
+    "mean_position_error_m": 0.0003685639745390953,
+    "max_position_error_m": 0.000635790195934461,
+    "final_position_error_m": 0.0001433188761143372,
+    "max_abs_joint_drift_rad": 0.41053569316864014,
+    "final_joint_drift_norm_rad": 0.004550500444353054,
+    "theta_initial_rad": [
+      0.0,
+      -1.5707963705062866,
+      1.5707963705062866,
+      0.0,
+      1.5707963705062866,
+      0.0
+    ],
+    "theta_final_rad": [
+      -4.542607348412275e-05,
+      -1.5696552991867065,
+      1.568919062614441,
+      0.003980016801506281,
+      1.5706011056900024,
+      0.0
+    ],
+    "theta_delta_rad": [
+      -4.542607348412275e-05,
+      0.0011410713195800781,
+      -0.0018773078918457031,
+      0.003980016801506281,
+      -0.0001952648162841797,
+      0.0
+    ],
+    "live_duration_s": 10.0,
+    "tau_s": 0.005,
+    "num_samples": 2000,
+    "wall_clock_run_s": 738.8120429515839,
+    "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\results\\single_file_integrated_runs\\method2_scheme_b_positive\\live"
+  },
+  "method3a": {
+    "label": "Method 3a",
+    "status": "ok",
+    "mean_position_error_m": 0.00013022660439260657,
+    "max_position_error_m": 0.00023121427775818902,
+    "final_position_error_m": 5.8153403412407514e-05,
+    "max_abs_joint_drift_rad": 0.4129437208175659,
+    "final_joint_drift_norm_rad": 0.00041698329268355876,
+    "theta_initial_rad": [
+      4.122489372093696e-06,
+      -1.570504069328308,
+      1.5707439184188843,
+      0.0005101560382172465,
+      1.5707650184631348,
+      0.0
+    ],
+    "theta_final_rad": [
+      3.3071783036575653e-06,
+      -1.5703359842300415,
+      1.5706493854522705,
+      0.0008790651336312294,
+      1.5707406997680664,
+      0.0
+    ],
+    "theta_delta_rad": [
+      -8.153110684361309e-07,
+      0.00016808509826660156,
+      -9.453296661376953e-05,
+      0.00036890909541398287,
+      -2.4318695068359375e-05,
+      0.0
+    ],
+    "live_duration_s": 10.0,
+    "tau_s": 0.005,
+    "num_samples": 2000,
+    "wall_clock_run_s": 743.0824162960052,
+    "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\results\\single_file_integrated_runs\\method3a_position_and_drift\\live"
+  }
+}

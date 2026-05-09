@@ -1,0 +1,42 @@
+{
+  "label": "Method 3a live (circle)",
+  "status": "ok",
+  "mean_position_error_m": 6.513502362392593e-05,
+  "max_position_error_m": 0.0001029246204179736,
+  "final_position_error_m": 5.842640351078571e-05,
+  "max_abs_joint_drift_rad": 0.1353464126586914,
+  "final_joint_drift_norm_rad": 0.00041824287414651725,
+  "mean_inner_residual_norm": 1.9319977908571022e-14,
+  "max_inner_residual_norm": 6.964134436739989e-14,
+  "mean_inner_iterations": 1.0,
+  "max_inner_iterations": 1,
+  "theta_initial_rad": [
+    4.636385710909963e-06,
+    -1.5704878568649292,
+    1.5707472562789917,
+    0.0005216719000600278,
+    1.5707627534866333,
+    2.220446049250313e-15
+  ],
+  "theta_final_rad": [
+    3.8726243474229705e-06,
+    -1.5703173875808716,
+    1.570656180381775,
+    0.0008917885133996606,
+    1.5707385540008545,
+    2.220446049250313e-15
+  ],
+  "theta_delta_rad": [
+    -7.637613634869922e-07,
+    0.0001704692840576172,
+    -9.107589721679688e-05,
+    0.00037011661333963275,
+    -2.4199485778808594e-05,
+    0.0
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_simple_shape_trajectories\\results\\method3a_position_and_drift_shapes\\circle\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 724.0259693000007,
+  "trajectory_name": "circle"
+}

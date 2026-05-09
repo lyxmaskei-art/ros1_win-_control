@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.250434699065771,
+    -1.608976802435025,
+    1.3932694513896178,
+    -0.04855252820284972,
+    1.4296247398709008,
+    -2.686710810440831e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.250434699065771,
+      "delta_rad": 0.250434699065771
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.608976802435025,
+      "delta_rad": -0.0381804756401285
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3932694513896178,
+      "delta_rad": -0.17752687540527878
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.04855252820284972,
+      "delta_rad": -0.04855252820284972
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4296247398709008,
+      "delta_rad": -0.14117158692399578
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -2.686710810440831e-12,
+      "delta_rad": -2.686710810440831e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.250434699065771,
+  "final_joint_drift_norm_rad": 0.34347902942823005,
+  "mean_position_error_m": 0.081424052912379,
+  "final_position_error_m": 0.11927563590489801,
+  "max_position_error_m": 0.13327599836561013,
+  "max_drift_norm": 0.630064561370241,
+  "final_drift_norm": 0.3444272060272252,
+  "mean_task_residual": 3.335596401343829,
+  "final_task_residual": 4.735923264555387,
+  "mean_solver_residual": 3.723293891258245,
+  "final_solver_residual": 4.805205608031544,
+  "mean_solver_energy": 8.217092278700767,
+  "final_solver_energy": 11.545000467728903,
+  "min_boundary_slack": 0.46844543458132315,
+  "final_boundary_slack": 1.4912569175284325,
+  "runtime_s": 0.14392159999988507
+}

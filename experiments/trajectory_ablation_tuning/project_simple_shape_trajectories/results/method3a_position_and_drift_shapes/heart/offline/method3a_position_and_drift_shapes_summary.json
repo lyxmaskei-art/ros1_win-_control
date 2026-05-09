@@ -1,0 +1,41 @@
+{
+  "label": "Method 3a offline (heart)",
+  "status": "ok",
+  "mean_position_error_m": 0.00020433671179906574,
+  "max_position_error_m": 0.0003074121785140346,
+  "final_position_error_m": 6.079972351808265e-07,
+  "max_abs_joint_drift_rad": 0.4125528879868723,
+  "final_joint_drift_norm_rad": 4.667174981005923e-07,
+  "mean_inner_residual_norm": 1.9434198144219548e-14,
+  "max_inner_residual_norm": 7.289559011057347e-14,
+  "mean_inner_iterations": 1.0,
+  "max_inner_iterations": 1,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    3.737181843412406e-09,
+    -1.5707960593638894,
+    1.5707966859536795,
+    1.307955813441419e-07,
+    1.5707963405570722,
+    -3.0251479428503023e-24
+  ],
+  "theta_delta_rad": [
+    3.737181843412406e-09,
+    2.6743100711712486e-07,
+    3.59158782936575e-07,
+    1.307955813441419e-07,
+    1.3762175621323536e-08,
+    -3.0251479428503023e-24
+  ],
+  "num_samples": 4000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_simple_shape_trajectories\\results\\method3a_position_and_drift_shapes\\heart\\offline",
+  "wall_clock_run_s": 1.1932082999999238,
+  "trajectory_name": "heart"
+}

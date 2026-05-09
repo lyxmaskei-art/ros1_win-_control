@@ -1,0 +1,78 @@
+{
+  "stem": "method2_pdnn_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.10822696042467427,
+    -1.4551407376487042,
+    1.4116816478965621,
+    -0.09166660566399351,
+    1.4914182381990055,
+    0.0041131921954019835
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.10822696042467427,
+      "delta_rad": 0.10822696042467427
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.4551407376487042,
+      "delta_rad": 0.11565558914619234
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4116816478965621,
+      "delta_rad": -0.15911467889833442
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.09166660566399351,
+      "delta_rad": -0.09166660566399351
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4914182381990055,
+      "delta_rad": -0.07937808859589102
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 0.0041131921954019835,
+      "delta_rad": 0.0041131921954019835
+    }
+  ],
+  "max_joint_drift_rad": 0.15911467889833442,
+  "final_joint_drift_norm_rad": 0.25520058228297293,
+  "mean_position_error_m": 0.039601343030845455,
+  "final_position_error_m": 0.047809509609420764,
+  "max_position_error_m": 0.05543129565969432,
+  "max_drift_norm": 0.3822559413592875,
+  "final_drift_norm": 0.24329089268800505,
+  "mean_task_residual": 6.373290640489379,
+  "final_task_residual": 8.684469947536204,
+  "mean_solver_residual": 8.570111835883752,
+  "final_solver_residual": 10.53937638526316,
+  "mean_solver_energy": 37.45318963666119,
+  "final_solver_energy": 55.53922729512139,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 1.1175729999995383,
+  "avg_step_time_s": 0.0002793932499998846,
+  "trajectory_name": "heart",
+  "solver_type": "pdnn",
+  "pdnn_gain": 500.0,
+  "pdnn_inner_steps": 1
+}

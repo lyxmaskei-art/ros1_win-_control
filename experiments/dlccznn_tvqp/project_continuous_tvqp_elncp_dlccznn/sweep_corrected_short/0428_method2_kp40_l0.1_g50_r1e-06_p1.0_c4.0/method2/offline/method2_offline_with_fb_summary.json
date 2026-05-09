@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.12944937505155085,
+    -1.400896465505595,
+    1.4073048936640171,
+    -0.12478762452344631,
+    1.3752776736712915,
+    1.4698220877510835e-10
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.12944937505155085,
+      "delta_rad": 0.12944937505155085
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.400896465505595,
+      "delta_rad": 0.16989986128930146
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4073048936640171,
+      "delta_rad": -0.16349143313087944
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.12478762452344631,
+      "delta_rad": -0.12478762452344631
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3752776736712915,
+      "delta_rad": -0.19551865312360506
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 1.4698220877510835e-10,
+      "delta_rad": 1.4698220877510835e-10
+    }
+  ],
+  "max_joint_drift_rad": 0.19551865312360506,
+  "final_joint_drift_norm_rad": 0.35517889468269787,
+  "mean_position_error_m": 0.02885089375873041,
+  "final_position_error_m": 0.0664598336373328,
+  "max_position_error_m": 0.07813574553090145,
+  "max_drift_norm": 0.5997526966622773,
+  "final_drift_norm": 0.3558035577524123,
+  "mean_task_residual": 1.2433579395890333,
+  "final_task_residual": 3.2227948300923206,
+  "mean_solver_residual": 2.7152994005182167,
+  "final_solver_residual": 3.5965401330080358,
+  "mean_solver_energy": 15.246321626304164,
+  "final_solver_energy": 6.46755046416873,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.13914630000363104
+}

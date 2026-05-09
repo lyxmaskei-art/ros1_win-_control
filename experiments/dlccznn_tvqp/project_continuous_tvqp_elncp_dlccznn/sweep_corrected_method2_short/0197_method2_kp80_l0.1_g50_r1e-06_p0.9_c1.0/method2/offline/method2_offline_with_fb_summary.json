@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.0233846307686654,
+    -1.372895544792711,
+    1.4088762060700064,
+    -0.16758704467488225,
+    1.4813140982705415,
+    -2.5849542214526e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.0233846307686654,
+      "delta_rad": 0.0233846307686654
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.372895544792711,
+      "delta_rad": 0.19790078200218564
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4088762060700064,
+      "delta_rad": -0.16192012072489015
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.16758704467488225,
+      "delta_rad": -0.16758704467488225
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4813140982705415,
+      "delta_rad": -0.08948222852435506
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -2.5849542214526e-12,
+      "delta_rad": -2.5849542214526e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.19790078200218564,
+  "final_joint_drift_norm_rad": 0.31940909932776224,
+  "mean_position_error_m": 0.02261520834915903,
+  "final_position_error_m": 0.05753217435706197,
+  "max_position_error_m": 0.0670501635960319,
+  "max_drift_norm": 0.5725741820382741,
+  "final_drift_norm": 0.3231376617959551,
+  "mean_task_residual": 1.8453713113901773,
+  "final_task_residual": 4.484242056285425,
+  "mean_solver_residual": 2.0900432887867946,
+  "final_solver_residual": 4.568556683744573,
+  "mean_solver_energy": 3.240398458382957,
+  "final_solver_energy": 10.435855086293605,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 1.260387145588805,
+  "runtime_s": 0.0975207000010414
+}

@@ -1,0 +1,189 @@
+\section{Results and discussion}
+
+\subsection{Which baseline should anchor the paper}
+
+Table~\ref{tab:baseline_summary} summarizes the original baseline results. This table is not included merely for completeness; it determines how the rest of the paper should be read. Two conclusions are immediate. First, \methodthree{} gives the best raw accuracy because it directly optimizes the sampled one step tracking and drift objective. Second, among the methods that preserve the classic equality constrained formulation, \methodtwo{} is clearly stronger than \methodone{} in both offline and real time execution. This is precisely why \methodtwo{} rather than \methodthree{} is used as the baseline anchor for the main contribution of the paper.
+
+\begin{table}[H]
+  \centering
+  \caption{Summary of the original baseline methods.}
+  \label{tab:baseline_summary}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.08}
+  \resizebox{\linewidth}{!}{%
+  \begin{tabular}{@{}lcccc@{}}
+    \toprule
+    Method &
+    \shortstack[c]{Offline mean\\position error (m)} &
+    \shortstack[c]{Offline final\\drift norm (rad)} &
+    \shortstack[c]{Real time mean\\position error (m)} &
+    \shortstack[c]{Real time final\\drift norm (rad)} \\
+    \midrule
+    \methodone &
+    $2.333\times 10^{-4}$ &
+    $1.034\times 10^{-2}$ &
+    $3.044\times 10^{-3}$ &
+    $2.677\times 10^{-1}$ \\
+    \methodtwo &
+    $3.121\times 10^{-5}$ &
+    $3.553\times 10^{-6}$ &
+    $3.686\times 10^{-4}$ &
+    $4.551\times 10^{-3}$ \\
+    \methodthree &
+    $\mathbf{1.563\times 10^{-7}}$ &
+    $\mathbf{4.667\times 10^{-7}}$ &
+    $\mathbf{1.302\times 10^{-4}}$ &
+    $\mathbf{4.170\times 10^{-4}}$ \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
+
+An additional \SI{20}{\second} real time run of the original \methodthree{} further reduces the mean position error to \SI{8.398e-5}{\meter} while keeping the final drift norm at \SI{4.180e-4}{\radian}. This confirms that the Method~3 objective benefits from a longer execution period. However, this result does not invalidate the choice of \methodtwoDL{} as the main method, because the scientific objective of the present paper is to improve the classic formulation preserving route through sampled DLCCZNN design.
+
+\subsection{Can the classic formulation be improved in real time execution}
+
+Table~\ref{tab:advanced_live_summary} reports the main real time comparisons for the solver replacement studies. This is the core table of the paper because it answers the central reviewer question directly: if the classic drift free kinematic resolution formulation is retained, can it be made more suitable for sampled control? The direct untuned transfer from \methodtwo{} to \methodtwoDL{} is already slightly better in position error and almost identical in final drift. After tuning, the proposed \methodtwoDL{} becomes clearly better than the original \methodtwo{} in all three reported real time metrics.
+
+\begin{table}[H]
+  \centering
+  \caption{Real time comparison of the solver replacement studies over \SI{10}{\second}.}
+  \label{tab:advanced_live_summary}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.08}
+  \resizebox{\linewidth}{!}{%
+  \begin{tabular}{@{}lcccc@{}}
+    \toprule
+    Method &
+    \shortstack[c]{Mean position\\error (m)} &
+    \shortstack[c]{Final position\\error (m)} &
+    \shortstack[c]{Final drift\\norm (rad)} &
+    Role \\
+    \midrule
+    Original \methodtwo{} &
+    $3.686\times 10^{-4}$ &
+    $1.433\times 10^{-4}$ &
+    $4.551\times 10^{-3}$ &
+    classic formulation anchor \\
+    \methodoneDL{} &
+    $2.562\times 10^{-3}$ &
+    $8.249\times 10^{-4}$ &
+    $2.673\times 10^{-1}$ &
+    weak formulation transfer \\
+    \methodtwoDL{} default &
+    $3.364\times 10^{-4}$ &
+    $1.421\times 10^{-4}$ &
+    $4.546\times 10^{-3}$ &
+    direct transfer \\
+    Proposed \methodtwoDL{} &
+    $2.466\times 10^{-4}$ &
+    $1.043\times 10^{-4}$ &
+    $1.430\times 10^{-3}$ &
+    main method \\
+    \methodthreelcc{} &
+    $1.277\times 10^{-4}$ &
+    $4.534\times 10^{-5}$ &
+    $6.273\times 10^{-1}$ &
+    drift recovery lost \\
+    \methodthreepcg{} &
+    $1.302\times 10^{-4}$ &
+    $5.815\times 10^{-5}$ &
+    $3.197\times 10^{-4}$ &
+    secondary upper reference \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
+
+Relative to the original \methodtwo{}, the tuned proposed \methodtwoDL{} reduces the mean real time position error by about $33.1\%$, the final position error by about $27.2\%$, and the final drift norm by about $68.6\%$. These gains are important because they are achieved without abandoning the classic formulation. In other words, the paper does not merely report that a different objective can work better; it shows that the established drift free kinematic resolution formulation can itself be made more suitable for sampled execution.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.70\linewidth]{method2_scheme_b_positive_dlccznn_live_trajectory.png}
+  \caption{Representative real time trajectory of \methodtwoDL{}. The figure illustrates the formulation preserving closed loop behavior.}
+  \label{fig:m2dl_live_traj}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\linewidth]{method2_scheme_b_positive_dlccznn_live_joint_drift.png}
+\caption{Representative real time joint drift histories of \methodtwoDL{}. Tuning lowers the cycle end drift reported in Table~\ref{tab:advanced_live_summary} while preserving the same qualitative recovery pattern.}
+  \label{fig:m2dl_live_drift}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\linewidth]{method2_scheme_b_positive_dlccznn_live_inner_residual.png}
+  \caption{Real time KKT residual norm of \methodtwoDL{}. The residual decrease is consistent with the discrete time analysis in Section~5 and helps explain the smaller cycle end drift seen in Fig.~\ref{fig:m2dl_live_drift}.}
+  \label{fig:m2dl_live_residual}
+\end{figure}
+
+\subsection{Why the retained parameter set is scientifically defensible}
+
+An important practical result of this work is that the offline optimum and the real time optimum are not the same. In the refined offline ranking, the best cases cluster in the family
+\begin{equation}
+  k_{\mathrm{p}} \approx 220,\qquad
+  \rho_{\mathrm{a}} \approx 0.85,\qquad
+  N_s \approx 80,\qquad
+  \gamma_{\mathrm{s}} \approx 4608,
+\end{equation}
+with only minor differences among $\mu_{\mathrm{a}}=12,14,16$. Under same model replay, all these cases already produce final drift norms around $10^{-6}$ radian, so the offline metric does not strongly separate them.
+
+The real time study is more informative. Table~\ref{tab:m2_tuning_tradeoff} keeps the same parameter family and varies only the drift gain $\mu_{\mathrm{a}}$. The smallest real time mean position error appears near $\mu_{\mathrm{a}}=12$, but the best real time drift recovery is achieved at $\mu_{\mathrm{a}}=20$. The increase in mean position error is small, whereas the reduction in final drift is substantial. This is why the final retained setting is chosen from the drift recovery viewpoint rather than from the minimum position error viewpoint.
+
+\begin{table}[H]
+  \centering
+  \caption{Real time tradeoff inside the retained \methodtwoDL{} parameter family.}
+  \label{tab:m2_tuning_tradeoff}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.08}
+  \begin{tabular}{@{}cccc@{}}
+    \toprule
+    $\mu_{\mathrm{a}}$ &
+    \shortstack[c]{Mean position\\error (m)} &
+    \shortstack[c]{Final position\\error (m)} &
+    \shortstack[c]{Final drift\\norm (rad)} \\
+    \midrule
+    $12$ &
+    $2.413\times 10^{-4}$ &
+    $1.045\times 10^{-4}$ &
+    $2.610\times 10^{-3}$ \\
+    $14$ &
+    $2.425\times 10^{-4}$ &
+    $1.038\times 10^{-4}$ &
+    $2.171\times 10^{-3}$ \\
+    $20$ &
+    $2.466\times 10^{-4}$ &
+    $1.043\times 10^{-4}$ &
+    $\mathbf{1.430\times 10^{-3}}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+This tradeoff has a direct control interpretation. In idealized offline replay, stronger drift gain changes very little because the controller and plant share the same deterministic model. In real time execution, however, the cycle end drift channel is more exposed to servo mismatch and sampled accumulation. Therefore a parameter choice that looks only marginally better in position error can still be clearly inferior in drift recovery. For drift free repetitive control, this distinction is more important than a small gain in mean tracking accuracy. This is also why the final paper should not present the retained setting as a casual tuning outcome; it is the result of choosing the parameter set that best serves the actual drift free control objective.
+
+\subsection{Why tight algorithmic and structural coupling matters more than raw numerical appeal}
+
+The auxiliary results in Table~\ref{tab:advanced_live_summary} are important because they show two opposite failure modes. \methodoneDL{} preserves the formulation but starts from a weaker outer design, so the low complexity residual tracker cannot rescue the overall control quality. \methodthreelcc{} starts from a very strong discrete objective, so its position error remains small, but its direct LCCZNN replacement destroys cycle end drift recovery and produces a final drift norm of \SI{6.273e-1}{\radian}. This is the clearest evidence in the paper that a numerically attractive solver is not automatically a good drift free controller.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\linewidth]{method3c_position_and_drift_lccznn_live_joint_drift.png}
+  \caption{Real time joint drift histories of \methodthreelcc{}. Position accuracy alone is not sufficient; the cycle end drift recovery collapses under this direct algorithmic and structural decoupling.}
+  \label{fig:m3c_live_drift}
+\end{figure}
+
+From a control engineering viewpoint, this is an important distinction. The drift free property is a closed loop periodic requirement, not a single step algebraic accuracy criterion. A solver that perturbs the drift compensation channel in the wrong way can look accurate in instantaneous position tracking while still failing the repetitive motion objective.
+
+\subsection{How the Method~3 line should be interpreted}
+
+\methodthreepcg{} reaches \SI{1.302e-4}{\meter} mean position error and \SI{3.197e-4}{\radian} final drift norm, with a mean of $4.6655$ inner iterations. This is a strong result, but it should be interpreted carefully. It solves the Method~3 discrete objective, not the classic equality constrained formulation, so it belongs to a different design line from the main contribution of the paper. For the present \(6\times 6\) problem, its practical value is mainly as a structured secondary benchmark rather than as evidence that the paper should be rewritten around PCG.
+
+The combination of \methodthree{}, \methodthreelcc{}, and \methodthreepcg{} actually sharpens the central claim of the paper. Method~3 demonstrates what can be achieved by changing the objective. Method~3c shows that algorithmic and structural decoupling can break drift recovery. Method~3a~PCG shows that a better structured solver can recover strong performance on that objective. These results are valuable, but they should be read as boundary evidence around the main story rather than as competing stories. The main question addressed here is how to improve the classic drift free formulation itself while respecting a fixed sampled control budget.
+
+\subsection{Current limits and next experimental step}
+
+The present manuscript reports complete offline data and complete simulator based real time validation data, but the physical UR3e experiment is still pending. Before final submission to Control Engineering Practice, that hardware study must become the culminating validation section rather than a peripheral addition. In addition, this draft uses the heart trajectory as the main task in the body of the paper, while additional circle and line studies will be reorganized as supplementary material after the hardware validation is completed. These limits do not change the present conclusion: if the goal is to retain the classic drift free formulation and make it more suitable for sampled repetitive control, \methodtwoDL{} is the most convincing main route in the current set of experiments.

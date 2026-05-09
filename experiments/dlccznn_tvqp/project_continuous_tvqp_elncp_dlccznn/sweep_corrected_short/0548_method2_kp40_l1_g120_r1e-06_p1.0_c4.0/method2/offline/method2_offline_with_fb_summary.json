@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.06621163590071955,
+    -1.4980523351683568,
+    1.4317101282952793,
+    -0.14266412273250617,
+    1.5134845644929045,
+    -0.0002539592501199575
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.06621163590071955,
+      "delta_rad": 0.06621163590071955
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.4980523351683568,
+      "delta_rad": 0.07274399162653977
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4317101282952793,
+      "delta_rad": -0.13908619849961723
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.14266412273250617,
+      "delta_rad": -0.14266412273250617
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5134845644929045,
+      "delta_rad": -0.057311762301992086
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -0.0002539592501199575,
+      "delta_rad": -0.0002539592501199575
+    }
+  ],
+  "max_joint_drift_rad": 0.14266412273250617,
+  "final_joint_drift_norm_rad": 0.22947416884691577,
+  "mean_position_error_m": 0.054976688415550236,
+  "final_position_error_m": 0.050981242996838164,
+  "max_position_error_m": 0.11858719570209461,
+  "max_drift_norm": 0.48482949217103016,
+  "final_drift_norm": 0.23061955710584994,
+  "mean_task_residual": 2.363948345342889,
+  "final_task_residual": 1.8559139219867737,
+  "mean_solver_residual": 10.806377991924217,
+  "final_solver_residual": 2.05089889373439,
+  "mean_solver_energy": 123.11946823884145,
+  "final_solver_energy": 2.1030931361604726,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.10998770000151126
+}

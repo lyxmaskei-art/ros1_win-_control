@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.043689913080179,
+    -1.2772624538747686,
+    1.333686988749349,
+    -0.22271093659916363,
+    1.4666293914829371,
+    3.162202122982896e-11
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.043689913080179,
+      "delta_rad": 0.043689913080179
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.2772624538747686,
+      "delta_rad": 0.293533872920128
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.333686988749349,
+      "delta_rad": -0.23710933804554757
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.22271093659916363,
+      "delta_rad": -0.22271093659916363
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4666293914829371,
+      "delta_rad": -0.10416693531195942
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 3.162202122982896e-11,
+      "delta_rad": 3.162202122982896e-11
+    }
+  ],
+  "max_joint_drift_rad": 0.293533872920128,
+  "final_joint_drift_norm_rad": 0.45248501957302834,
+  "mean_position_error_m": 0.031318918899167415,
+  "final_position_error_m": 0.08084992999173767,
+  "max_position_error_m": 0.08679625205641665,
+  "max_drift_norm": 0.6188713315980992,
+  "final_drift_norm": 0.4580474768112006,
+  "mean_task_residual": 1.327362817249625,
+  "final_task_residual": 3.3351816978674593,
+  "mean_solver_residual": 1.969613320906995,
+  "final_solver_residual": 9.533809939222936,
+  "mean_solver_energy": 3.7141003362467724,
+  "final_solver_energy": 45.44676597861302,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.06347007301081442,
+  "runtime_s": 0.13440549999359064
+}

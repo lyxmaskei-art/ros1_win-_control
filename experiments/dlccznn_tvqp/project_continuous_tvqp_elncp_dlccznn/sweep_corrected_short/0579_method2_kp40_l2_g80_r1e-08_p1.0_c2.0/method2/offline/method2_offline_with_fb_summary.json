@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.04035653530114232,
+    -1.3709180679196444,
+    1.3463827328829359,
+    -0.1520609056406218,
+    1.5148917177994548,
+    -3.963467983996918e-13
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.04035653530114232,
+      "delta_rad": 0.04035653530114232
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3709180679196444,
+      "delta_rad": 0.19987825887525212
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3463827328829359,
+      "delta_rad": -0.2244135939119607
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.1520609056406218,
+      "delta_rad": -0.1520609056406218
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5148917177994548,
+      "delta_rad": -0.05590460899544181
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -3.963467983996918e-13,
+      "delta_rad": -3.963467983996918e-13
+    }
+  ],
+  "max_joint_drift_rad": 0.2244135939119607,
+  "final_joint_drift_norm_rad": 0.34378666899136207,
+  "mean_position_error_m": 0.027772177973197188,
+  "final_position_error_m": 0.06187416117576811,
+  "max_position_error_m": 0.06913929232604427,
+  "max_drift_norm": 0.4918423471829916,
+  "final_drift_norm": 0.34219082665071365,
+  "mean_task_residual": 1.170422587927731,
+  "final_task_residual": 2.5027795636293133,
+  "mean_solver_residual": 1.5206652057817789,
+  "final_solver_residual": 2.8199886033541595,
+  "mean_solver_energy": 1.7473309618264028,
+  "final_solver_energy": 3.9761678615236717,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 1.2001368521431233,
+  "runtime_s": 0.1226639000014984
+}

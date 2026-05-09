@@ -1,0 +1,17 @@
+\section{Related work}
+
+\subsection{Drift free repetitive motion planning}
+
+Drift free repetitive motion planning was developed to resolve the conflict between end effector periodicity and joint posture recovery in redundant manipulators. The representative formulation of \citet{zhang2009rmp} introduced a drift suppression term together with task equality and dynamic velocity bounds converted from joint limits, which yielded a compact online quadratic program. Later studies compared several recurrent neural solvers under the same repetitive motion planning formulation and showed that solver dynamics can substantially affect numerical behavior even when the outer optimization model is unchanged \citep{zhang2017three}. This classical line remains the control foundation of the present work.
+
+\subsection{Neural dynamic solvers for constrained inverse kinematics}
+
+Recurrent neural networks have long been used as online solvers for redundant manipulator inverse kinematics and constrained quadratic programming \citep{wang2004recurrent,toshani2014ik}. More recent work has continued this direction for physical constraints, Lyapunov analysis, and real time execution \citep{tan2022physical}. A broad review is given in \citet{hassan2020review}. These contributions establish the practical importance of neural dynamic optimization, but they do not resolve the sampled drift free control issue considered here, namely how the solver design should interact with the discrete repetitive motion objective.
+
+\subsection{LCCZNN, DLCCZNN, and sampled robot control}
+
+LCCZNN has been shown to reduce the computational burden of solving dynamic nonlinear equations while preserving a residual driven structure that is convenient for control oriented interpretation \citep{zheng2024lccznn}. Follow up studies extended this line to time varying quadratic programming and robot kinematic control \citep{yang2025predefined,wen2024firstsecond,yang2026enhanced}. Discrete ZNN models further demonstrated that sampled implementation should be treated as a first class design problem rather than a mere discretization afterthought \citep{qiu2022jerk}. Our recent DLCCZNN study reaches the same conclusion for UR3e trajectory tracking \citep{li2026dlccznn}. The current paper continues this sampled control viewpoint, but applies it to the drift free repetitive motion problem.
+
+\subsection{Positioning of this paper}
+
+The novelty of this paper lies in control level positioning rather than in proposing a universal new ZNN theory. The main scientific question is which solver reformulation is most suitable when drift free repetitive inverse kinematics must run in sampled form. The paper therefore distinguishes three cases that are often conflated in the literature: preserving the classic drift free kinematic resolution formulation and changing only the solver, changing the outer discrete objective itself, and transferring a low complexity solver into an objective whose closed loop meaning is not preserved by that transfer. This distinction is what motivates the choice of \methodtwoDL{} as the main method and the use of \methodthreepcg{} only as a secondary comparison.

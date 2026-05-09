@@ -1,0 +1,30 @@
+label: Method 3 TVQP ELNCP PCG live
+status: ok
+method: Method 3: continuous TVQP + ELNCP + PCG
+tau: 0.005
+task_gain: 198.0
+position_weight: 15000.0
+drift_weight: 0.0005
+regularization_gain: 1e-10
+ncp_epsilon: 1e-10
+pcg_max_iters: 8
+mean_position_error_m: 0.00013023099307802444
+max_position_error_m: 0.00023121553853496093
+final_position_error_m: 5.815280268085359e-05
+max_abs_joint_drift_rad: 0.4131762981414795
+final_joint_drift_norm_rad: 0.00041728008429060056
+mean_elncp_residual_norm: 5.879662313701967e-09
+max_elncp_residual_norm: 1.6204904385354697e-07
+mean_stationarity_norm: 5.8324096434850804e-09
+mean_ncp_residual_norm: 8.762897057486246e-11
+mean_pcg_iterations: 10.6775
+max_pcg_iterations: 13
+mean_active_iterations: 1.8815
+max_active_iterations: 2
+min_boundary_slack: 1.5653309936793827
+theta_initial_rad: [-0.0006183389923535287, -1.5706034898757935, 1.5714166164398193, -0.00025756179820746183, 1.5690126419067383, -3.672617765460018e-13]
+theta_final_rad: [-0.0006191892316564918, -1.5704355239868164, 1.5713220834732056, 0.0001117368956329301, 1.56898832321167, -3.597122599785507e-13]
+theta_delta_rad: [-8.502393029630184e-07, 0.00016796588897705078, -9.453296661376953e-05, 0.00036929869384039193, -2.4318695068359375e-05, 7.549516567451064e-15]
+num_samples: 2000
+result_dir: C:\Users\lyx\Desktop\sci\code\project_spd_box_qp_pcg_generalization_research\results\method3_robot_validation_live10\live
+coppeliasim_port: 19997

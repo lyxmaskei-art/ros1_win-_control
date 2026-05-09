@@ -1,0 +1,73 @@
+{
+  "method2_live": {
+    "stem": "method2_live_with_fb",
+    "theta_initial": [
+      0.0,
+      -1.5707963705062866,
+      1.5707963705062866,
+      0.0,
+      1.5707963705062866,
+      0.0
+    ],
+    "theta_final": [
+      -8.379469363717362e-06,
+      -1.570351004600525,
+      1.5703047513961792,
+      0.0012650693533942103,
+      1.57073175907135,
+      -1.2164758089738825e-10
+    ],
+    "joint_drift_table": [
+      {
+        "joint": "theta_1",
+        "initial_rad": 0.0,
+        "final_rad": -8.379469363717362e-06,
+        "delta_rad": -8.379469363717362e-06
+      },
+      {
+        "joint": "theta_2",
+        "initial_rad": -1.5707963705062866,
+        "final_rad": -1.570351004600525,
+        "delta_rad": 0.00044536590576171875
+      },
+      {
+        "joint": "theta_3",
+        "initial_rad": 1.5707963705062866,
+        "final_rad": 1.5703047513961792,
+        "delta_rad": -0.0004916191101074219
+      },
+      {
+        "joint": "theta_4",
+        "initial_rad": 0.0,
+        "final_rad": 0.0012650693533942103,
+        "delta_rad": 0.0012650693533942103
+      },
+      {
+        "joint": "theta_5",
+        "initial_rad": 1.5707963705062866,
+        "final_rad": 1.57073175907135,
+        "delta_rad": -6.461143493652344e-05
+      },
+      {
+        "joint": "theta_6",
+        "initial_rad": 0.0,
+        "final_rad": -1.2164758089738825e-10,
+        "delta_rad": -1.2164758089738825e-10
+      }
+    ],
+    "max_joint_drift_rad": 0.0012650693533942103,
+    "final_joint_drift_norm_rad": 0.0014299249845241546,
+    "mean_position_error_m": 0.00023569505560898843,
+    "final_position_error_m": 0.00010417014547162306,
+    "max_position_error_m": 0.0004179968065723532,
+    "max_drift_norm": 0.5123785250392345,
+    "final_drift_norm": 0.0014299249845241546,
+    "runtime_s": 932.7192179000012,
+    "solver_integrator": "RK45",
+    "solver_gamma_gain": 4608.0,
+    "rk45_rtol": 1e-05,
+    "rk45_atol": 1e-08,
+    "rk45_max_step_factor": 1.0,
+    "rk45_mode": "adaptive"
+  }
+}

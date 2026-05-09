@@ -1,0 +1,40 @@
+{
+  "label": "Method 3a PCG offline",
+  "status": "ok",
+  "mean_position_error_m": 0.0002043367656963825,
+  "max_position_error_m": 0.00030740683336817723,
+  "final_position_error_m": 6.176303945005853e-07,
+  "max_abs_joint_drift_rad": 0.4125459428388829,
+  "final_joint_drift_norm_rad": 5.493333670962627e-05,
+  "mean_inner_residual_norm": 5.136502271671061e-06,
+  "max_inner_residual_norm": 2.1402937636412326e-05,
+  "mean_inner_iterations": 4.412,
+  "max_inner_iterations": 5,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    1.4595426906047917e-05,
+    -1.5707933531824667,
+    1.5708003678804936,
+    -2.0940313088799664e-05,
+    1.5708447104237346,
+    3.18460878718927e-12
+  ],
+  "theta_delta_rad": [
+    1.4595426906047917e-05,
+    2.973612429846284e-06,
+    4.04108559703964e-06,
+    -2.0940313088799664e-05,
+    4.83836288380779e-05,
+    3.18460878718927e-12
+  ],
+  "num_samples": 4000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method3a_pcg_solver\\results\\tuning_20260421\\method3a_pcg\\offline_broad_runs\\tg180_pw8e03_dw0p0005_rg1em08_it5_jac1\\offline",
+  "wall_clock_run_s": 1.7727484999995795
+}

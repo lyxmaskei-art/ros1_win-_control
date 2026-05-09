@@ -1,0 +1,42 @@
+{
+  "label": "Method 3a live (line)",
+  "status": "ok",
+  "mean_position_error_m": 5.6244231671370034e-05,
+  "max_position_error_m": 7.574312827049299e-05,
+  "final_position_error_m": 5.844011460237745e-05,
+  "max_abs_joint_drift_rad": 0.11780935079877963,
+  "final_joint_drift_norm_rad": 0.00041827686219520654,
+  "mean_inner_residual_norm": 1.2775142845504497e-14,
+  "max_inner_residual_norm": 4.0971892881709936e-14,
+  "mean_inner_iterations": 1.0,
+  "max_inner_iterations": 1,
+  "theta_initial_rad": [
+    5.449364834930748e-06,
+    -1.5705229043960571,
+    1.5707924365997314,
+    0.0004233351210132241,
+    1.57076895236969,
+    0.0
+  ],
+  "theta_final_rad": [
+    4.34785806646687e-06,
+    -1.570352554321289,
+    1.5707014799118042,
+    0.0007935812463983893,
+    1.5707448720932007,
+    0.0
+  ],
+  "theta_delta_rad": [
+    -1.101506768463878e-06,
+    0.0001703500747680664,
+    -9.09566879272461e-05,
+    0.0003702461253851652,
+    -2.4080276489257812e-05,
+    0.0
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_simple_shape_trajectories\\results\\method3a_position_and_drift_shapes\\line\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 723.6715903999975,
+  "trajectory_name": "line"
+}

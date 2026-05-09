@@ -1,0 +1,40 @@
+{
+  "label": "Method 2 DLCCZNN offline",
+  "status": "ok",
+  "mean_position_error_m": 0.01585585489391234,
+  "max_position_error_m": 0.02488100470205344,
+  "final_position_error_m": 0.0148383206535731,
+  "max_abs_joint_drift_rad": 0.3657452290030986,
+  "final_joint_drift_norm_rad": 0.08267294454644745,
+  "mean_inner_residual_norm": 3.8314321328835814,
+  "max_inner_residual_norm": 5.780397932648498,
+  "min_boundary_slack": 0.5355083124613271,
+  "final_boundary_slack": 1.7420058642705474,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    0.01727022330794015,
+    -1.518233768270264,
+    1.5243831688630762,
+    -0.03610148488862416,
+    1.5530133532569648,
+    -8.186030074547811e-14
+  ],
+  "theta_delta_rad": [
+    0.01727022330794015,
+    0.05256255852463254,
+    -0.046413157931820326,
+    -0.03610148488862416,
+    -0.01778297353793179,
+    -8.186030074547811e-14
+  ],
+  "num_samples": 400,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method2_dlccznn_elncp_bounds\\results\\offline_stability_sweep\\0100_ns120_gg20_sl10_ncp1e-08\\offline",
+  "wall_clock_run_s": 1.59901119999995
+}

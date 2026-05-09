@@ -1,0 +1,73 @@
+{
+  "stem": "method1_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.0010530815307874886,
+    -1.5119815674783312,
+    1.4946273361215119,
+    -0.04830925474181324,
+    1.4332527784445317,
+    3.065536406973434e-14
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.0010530815307874886,
+      "delta_rad": 0.0010530815307874886
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.5119815674783312,
+      "delta_rad": 0.058814759316565324
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4946273361215119,
+      "delta_rad": -0.07616899067338467
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.04830925474181324,
+      "delta_rad": -0.04830925474181324
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4332527784445317,
+      "delta_rad": -0.13754354835036486
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 3.065536406973434e-14,
+      "delta_rad": 3.065536406973434e-14
+    }
+  ],
+  "max_joint_drift_rad": 0.13754354835036486,
+  "final_joint_drift_norm_rad": 0.17468260308598768,
+  "mean_position_error_m": 0.02151157773102568,
+  "final_position_error_m": 0.025348178148531263,
+  "max_position_error_m": 0.03944813623601396,
+  "max_drift_norm": 0.4666781526288159,
+  "final_drift_norm": 0.17726422845545442,
+  "mean_task_residual": 1.736280248087346,
+  "final_task_residual": 1.8845466168402296,
+  "mean_solver_residual": 1.9798941522429316,
+  "final_solver_residual": 2.213147006141959,
+  "mean_solver_energy": 2.2502419371880453,
+  "final_solver_energy": 2.449009835397558,
+  "min_boundary_slack": 0.6869699847506501,
+  "final_boundary_slack": 1.4274819427196372,
+  "runtime_s": 0.4036938999997801
+}

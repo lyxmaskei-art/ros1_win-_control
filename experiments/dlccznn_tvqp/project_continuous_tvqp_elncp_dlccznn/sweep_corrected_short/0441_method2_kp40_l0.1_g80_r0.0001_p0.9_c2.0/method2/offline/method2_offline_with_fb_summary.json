@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.017954113385256393,
+    -1.4041101648126195,
+    1.3943258392718914,
+    -0.20362713376963695,
+    1.5173612416027225,
+    4.261445043698653e-10
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.017954113385256393,
+      "delta_rad": 0.017954113385256393
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.4041101648126195,
+      "delta_rad": 0.16668616198227704
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3943258392718914,
+      "delta_rad": -0.1764704875230052
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.20362713376963695,
+      "delta_rad": -0.20362713376963695
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5173612416027225,
+      "delta_rad": -0.0534350851921741
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 4.261445043698653e-10,
+      "delta_rad": 4.261445043698653e-10
+    }
+  ],
+  "max_joint_drift_rad": 0.20362713376963695,
+  "final_joint_drift_norm_rad": 0.3218194799684634,
+  "mean_position_error_m": 0.028153826227197153,
+  "final_position_error_m": 0.05988820119299407,
+  "max_position_error_m": 0.0735831848229266,
+  "max_drift_norm": 0.598116095909844,
+  "final_drift_norm": 0.32146964296685554,
+  "mean_task_residual": 1.1851644186224164,
+  "final_task_residual": 2.328316431977651,
+  "mean_solver_residual": 1.846545573079925,
+  "final_solver_residual": 2.345592464799749,
+  "mean_solver_energy": 3.3070068076816685,
+  "final_solver_energy": 2.7509020054626805,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.9428701850497649,
+  "runtime_s": 0.14809239999885904
+}

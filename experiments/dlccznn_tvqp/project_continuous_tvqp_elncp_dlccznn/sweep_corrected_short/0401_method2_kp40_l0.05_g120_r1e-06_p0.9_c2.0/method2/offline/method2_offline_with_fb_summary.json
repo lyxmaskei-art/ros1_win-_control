@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.05916143111969078,
+    -1.2962066989675205,
+    1.3177635448586464,
+    -0.20781893795391468,
+    1.4907393046815076,
+    3.050616022165945e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.05916143111969078,
+      "delta_rad": 0.05916143111969078
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.2962066989675205,
+      "delta_rad": 0.27458962782737606
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3177635448586464,
+      "delta_rad": -0.2530327819362501
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.20781893795391468,
+      "delta_rad": -0.20781893795391468
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4907393046815076,
+      "delta_rad": -0.08005702211338894
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 3.050616022165945e-12,
+      "delta_rad": 3.050616022165945e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.27458962782737606,
+  "final_joint_drift_norm_rad": 0.43877438979373146,
+  "mean_position_error_m": 0.02916032146824186,
+  "final_position_error_m": 0.07758541303045605,
+  "max_position_error_m": 0.08488545411755949,
+  "max_drift_norm": 0.5875143400324885,
+  "final_drift_norm": 0.4410428281228723,
+  "mean_task_residual": 1.2491211159584006,
+  "final_task_residual": 3.0360609065431032,
+  "mean_solver_residual": 1.9905709164750436,
+  "final_solver_residual": 3.8172881402505032,
+  "mean_solver_energy": 3.834481449452718,
+  "final_solver_energy": 7.2858443728485724,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.7768796744725386,
+  "runtime_s": 0.13193150000006426
+}

@@ -1,0 +1,82 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Zhang2009 Offline",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_zhang2009_style_experiments.py",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "args": [
+        "--mode",
+        "offline"
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "Zhang2009 Live",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_zhang2009_style_experiments.py",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "args": [
+        "--mode",
+        "live"
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "Zhang2009 Both",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_zhang2009_style_experiments.py",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "args": [
+        "--mode",
+        "both"
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "Live Method3a",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/validate_live_precision_timeseries.py",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "args": [
+        "--methods",
+        "method3a_position_and_drift",
+        "--tau",
+        "0.01",
+        "--duration",
+        "10",
+        "--cycles",
+        "1"
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "Offline Method3a",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/validate_offline_precision_timeseries.py",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "args": [
+        "--methods",
+        "method3a_position_and_drift",
+        "--tau",
+        "0.005",
+        "--duration",
+        "10",
+        "--cycles",
+        "5"
+      ],
+      "justMyCode": false
+    }
+  ]
+}

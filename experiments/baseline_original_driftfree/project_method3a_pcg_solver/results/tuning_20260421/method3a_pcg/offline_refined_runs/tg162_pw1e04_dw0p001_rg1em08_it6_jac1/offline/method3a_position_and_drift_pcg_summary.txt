@@ -1,0 +1,16 @@
+label: Method 3a PCG offline
+status: ok
+mean_position_error_m: 0.00020433686104956932
+max_position_error_m: 0.00030741513464127676
+final_position_error_m: 6.282336589870899e-07
+max_abs_joint_drift_rad: 0.4125538072914601
+final_joint_drift_norm_rad: 9.463411073585342e-07
+mean_inner_residual_norm: 5.351648963802537e-06
+max_inner_residual_norm: 5.377067604295411e-05
+mean_inner_iterations: 4.8675
+max_inner_iterations: 6
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [-1.6067634317438333e-07, -1.5707962228227281, 1.570797036777213, -2.7057318301069953e-07, 1.5707957960881458, -2.0410587316695208e-12]
+theta_delta_rad: [-1.6067634317438333e-07, 1.0397216843038848e-07, 7.099823164935515e-07, -2.7057318301069953e-07, -5.307067507676066e-07, -2.0410587316695208e-12]
+num_samples: 4000
+result_dir: C:\Users\lyx\Desktop\sci\code\project_method3a_pcg_solver\results\tuning_20260421\method3a_pcg\offline_refined_runs\tg162_pw1e04_dw0p001_rg1em08_it6_jac1\offline

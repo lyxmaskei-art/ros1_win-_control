@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.05678889436460639,
+    -1.3715364034322284,
+    1.3508239115696852,
+    -0.15547123004822402,
+    1.521313705487605,
+    2.2080585812032501e-13
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.05678889436460639,
+      "delta_rad": 0.05678889436460639
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3715364034322284,
+      "delta_rad": 0.19925992336266818
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3508239115696852,
+      "delta_rad": -0.21997241522521138
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.15547123004822402,
+      "delta_rad": -0.15547123004822402
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.521313705487605,
+      "delta_rad": -0.04948262130729164
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 2.2080585812032501e-13,
+      "delta_rad": 2.2080585812032501e-13
+    }
+  ],
+  "max_joint_drift_rad": 0.21997241522521138,
+  "final_joint_drift_norm_rad": 0.34341984832827044,
+  "mean_position_error_m": 0.027331424993430033,
+  "final_position_error_m": 0.0612280532527272,
+  "max_position_error_m": 0.06829725406326746,
+  "max_drift_norm": 0.48180821399227886,
+  "final_drift_norm": 0.3439211837299476,
+  "mean_task_residual": 1.156839467391581,
+  "final_task_residual": 2.688266719738575,
+  "mean_solver_residual": 1.5558276954936685,
+  "final_solver_residual": 5.514334616075934,
+  "mean_solver_energy": 1.962063240779857,
+  "final_solver_energy": 15.203943129026658,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.10501610000210349
+}

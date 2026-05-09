@@ -1,0 +1,162 @@
+\section{Classic formulations and the proposed sampled DLCCZNN controller}
+
+\subsection{Original baseline formulations}
+
+\methodone{} and \methodtwo{} both start from the classic drift free kinematic resolution formulation \eqref{eq:classical_qp_shell}. In the integrated scripts used in this work, $\bm{W}$ is the identity matrix and the drift bias is constructed from the cycle deviation:
+\begin{equation}
+  \hat{\bm{c}}(k) = \mu_{\mathrm{a}} \, \psi\!\bigl(\ed(k)\bigr),
+\end{equation}
+where $\mu_{\mathrm{a}} > 0$ and the elementwise activation is
+\begin{equation}
+  \psi_i(z_i)
+  =
+  \operatorname{sign}(z_i)\,|z_i|^{\rho_{\mathrm{a}}}
+  \exp\!\bigl(\min(|z_i|,c_{\mathrm{a}})\bigr).
+  \label{eq:drift_activation}
+\end{equation}
+The difference between \methodone{} and \methodtwo{} lies mainly in the inner primal dual dynamics. \methodone{} uses a simplified projected primal dual update, whereas \methodtwo{} introduces a positive residual energy shaping term. Because \methodtwo{} will later be shown to be the strongest baseline that still preserves the classic formulation, it is selected as the anchor for the proposed solver.
+
+\methodthree{} changes the problem layer rather than the solver layer. Define
+\begin{equation}
+  \bm{a}_k
+  =
+  \left( \frac{1}{\tau} + k_{\mathrm{p}} \right)\ep(k) - \rd(k).
+  \label{eq:ak}
+\end{equation}
+Ignoring constants that do not affect the optimizer, \eqref{eq:method3_original} becomes
+\begin{equation}
+  \begin{aligned}
+    \min_{\qd_k} \quad &
+      \frac{1}{2}\qd_k^\top \bm{Q}_k \qd_k + \bm{c}_k^\top \qd_k \\
+    \text{s.t.} \quad &
+      \bm{\xi}^{-}(k) \le \qd_k \le \bm{\xi}^{+}(k),
+  \end{aligned}
+  \label{eq:method3_qp}
+\end{equation}
+with
+\begin{equation}
+  \bm{Q}_k = \alpha \J_k^\top \J_k + \beta \bm{I} + \varepsilon \bm{I},
+  \label{eq:method3_Q}
+\end{equation}
+\begin{equation}
+  \bm{c}_k
+  =
+  \alpha \J_k^\top \bm{a}_k
+  +
+  \beta \frac{\ed(k)}{\tau}.
+  \label{eq:method3_c}
+\end{equation}
+This sampled objective is useful as a high accuracy reference, but it no longer answers the formulation preserving question that is central to the proposed method.
+
+\subsection{Proposed \methodtwoDL{}}
+
+Starting from the \methodtwo{} formulation, define the optimization problem
+\begin{equation}
+  \begin{aligned}
+    \min_{\qd_k} \quad &
+      \frac{1}{2}\qd_k^\top \qd_k + \hat{\bm{c}}_2(k)^\top \qd_k \\
+    \text{s.t.} \quad &
+      \J_k \qd_k = \bm{b}_{\mathrm{fb}}(k), \\
+    &
+      \bm{\xi}^{-}(k) \le \qd_k \le \bm{\xi}^{+}(k),
+  \end{aligned}
+  \label{eq:method2_shell}
+\end{equation}
+with
+\begin{equation}
+  \hat{\bm{c}}_2(k) = \mu_{\mathrm{a}} \, \psi\!\bigl(\ed(k)\bigr).
+\end{equation}
+
+For the equality constrained part of \eqref{eq:method2_shell}, introduce the primal dual vector
+\begin{equation}
+  \bm{y}_\ell =
+  \begin{bmatrix}
+    \qd_\ell \\
+    \bm{\lambda}_\ell
+  \end{bmatrix}
+  \in \R^{n+m},
+\end{equation}
+and define
+\begin{equation}
+  \bm{H}_k =
+  \begin{bmatrix}
+    \bm{I} & -\J_k^\top \\
+    \J_k & \bm{0}
+  \end{bmatrix},
+  \qquad
+  \bm{p}_k =
+  \begin{bmatrix}
+    \hat{\bm{c}}_2(k) \\
+    -\bm{b}_{\mathrm{fb}}(k)
+  \end{bmatrix}.
+  \label{eq:method2_Hp}
+\end{equation}
+The sampled KKT residual is
+\begin{equation}
+  \bm{r}_\ell = \bm{H}_k \bm{y}_\ell + \bm{p}_k,
+  \qquad
+  v_\ell = \frac{1}{2}\|\bm{r}_\ell\|_2^2.
+  \label{eq:method2_residual}
+\end{equation}
+
+At each outer control step, $\bm{H}_k$ and $\bm{p}_k$ are frozen and the inner DLCCZNN tracker runs for at most $N_s$ substeps with inner step size $h = \tau / N_s$. Let
+\begin{equation}
+  \phi(v_\ell)
+  =
+  v_\ell^{\rho_{\mathrm{s}}}
+  \exp\!\bigl(\min(v_\ell,c_{\mathrm{s}})\bigr),
+  \qquad
+  0 < \rho_{\mathrm{s}} < 1,
+  \label{eq:method2_phi}
+\end{equation}
+and define the normalized residual direction
+\begin{equation}
+  \bm{d}_\ell
+  =
+  \frac{\bm{H}_k^\top \bm{r}_\ell}
+  {\|\bm{H}_k^\top \bm{r}_\ell\|_2^2 + \lambda_{\mathrm{s}}},
+  \label{eq:method2_direction}
+\end{equation}
+where $\lambda_{\mathrm{s}} > 0$ avoids singular normalization. The raw DLCCZNN update is
+\begin{equation}
+  \bm{y}_{\ell+1}^{\mathrm{raw}}
+  =
+  \bm{y}_\ell
+  -
+  h \gamma_{\mathrm{s}} \phi(v_\ell)\bm{d}_\ell.
+  \label{eq:method2_raw_update}
+\end{equation}
+Only the primal part is projected onto the dynamic velocity box:
+\begin{equation}
+  \qd_{\ell+1}
+  =
+  \Pi_{[\bm{\xi}^{-}(k),\bm{\xi}^{+}(k)]}
+  \bigl([\bm{y}_{\ell+1}^{\mathrm{raw}}]_{1:n}\bigr),
+  \label{eq:method2_primal_proj}
+\end{equation}
+\begin{equation}
+  \bm{\lambda}_{\ell+1}
+  =
+  [\bm{y}_{\ell+1}^{\mathrm{raw}}]_{n+1:n+m},
+\end{equation}
+which gives
+\begin{equation}
+  \bm{y}_{\ell+1}
+  =
+  \begin{bmatrix}
+    \qd_{\ell+1} \\
+    \bm{\lambda}_{\ell+1}
+  \end{bmatrix}.
+  \label{eq:method2_final_update}
+\end{equation}
+The applied joint command at control step $k$ is the final primal part $\qd_k = \qd_{N_s}$.
+
+The control meaning of \methodtwoDL{} is therefore explicit. The solver is not treated as a continuous time neural dynamics running in the background. Instead, the code level sampled implementation is itself the design object: the outer drift free formulation generates $\bm{H}_k$ and $\bm{p}_k$, and the inner residual tracker spends a prescribed number of operations to reduce the KKT inconsistency before the control period ends. This interpretation is practically important because the controller never waits for asymptotic neural convergence; it can only spend a fixed amount of work inside each sample.
+
+\subsection{Auxiliary solver variants}
+
+Three auxiliary variants are retained only to delimit the main contribution. \methodoneDL{} applies the same sampled residual tracking logic to the weaker \methodone{} formulation and therefore tests whether solver replacement alone can compensate for a weaker outer design. \methodthreelcc{} starts from the Method~3 quadratic form \eqref{eq:method3_qp} and rewrites its optimality condition as
+\begin{equation}
+  \bm{Q}_k \qd_k + \bm{c}_k = \bm{0}.
+\end{equation}
+An LCCZNN style residual tracker is then applied to this linear root problem. \methodthreepcg{} keeps the same sampled objective \eqref{eq:method3_qp}, but solves the corresponding linear system by a warm started projected conjugate gradient iteration with a fixed iteration cap. These two variants are not developed as parallel protagonists. They are kept only to separate the effects of formulation strength, sampled solver structure, and objective rewriting in Section~7.

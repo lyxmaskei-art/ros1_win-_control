@@ -1,0 +1,89 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm,bm,mathtools}
+\usepackage{booktabs,multirow,array,threeparttable}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{url}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+\journal{Control Engineering Practice}
+\graphicspath{
+  {figures/}
+  {../code/project_method3c_lccznn_solver/results/method2_scheme_b_positive_dlccznn/live/}
+  {../code/project_method3c_lccznn_solver/results/method2_scheme_b_positive_dlccznn/offline/}
+  {../code/project_method3c_lccznn_solver/results/method3c_position_and_drift_lccznn/live/}
+  {../code/project_method3a_pcg_solver/results/method3a_position_and_drift_pcg/live/}
+}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\sisetup{
+  detect-all,
+  scientific-notation = true,
+  round-mode = places,
+  round-precision = 3
+}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\q}{\bm{q}}
+\newcommand{\qd}{\dot{\bm{q}}}
+\newcommand{\ep}{\bm{e}_{\mathrm{p}}}
+\newcommand{\ed}{\bm{e}_{\mathrm{d}}}
+\newcommand{\x}{\bm{x}}
+\newcommand{\xd}{\bm{x}_{\mathrm{d}}}
+\newcommand{\rd}{\dot{\bm{r}}_{\mathrm{d}}}
+\newcommand{\J}{\bm{J}}
+\newcommand{\methodone}{Method~1}
+\newcommand{\methodtwo}{Method~2}
+\newcommand{\methodthree}{Method~3a}
+\newcommand{\methodoneDL}{Method~1~DLCCZNN}
+\newcommand{\methodtwoDL}{Method~2~DLCCZNN}
+\newcommand{\methodthreepcg}{Method~3a~PCG}
+\newcommand{\methodthreelcc}{Method~3c~LCCZNN}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Sampled DLCCZNN realization of a classic drift free kinematic resolution formulation for redundant manipulators}
+
+\author[1]{Yuxuan Li}
+\author[1]{Junpei Yang}
+\author[1]{Zhan Li\corref{cor1}}
+\cortext[cor1]{Corresponding author.}
+\ead{zhan.li@swjtu.edu.cn}
+\address[1]{School of Mechanical Engineering, Southwest Jiaotong University, Chengdu 611756, China}
+
+\begin{abstract}
+Classic drift free repetitive motion planning of redundant manipulators is well established, yet its derivation and solver interpretation remain largely rooted in continuous time neural dynamics. Real robot controllers, however, operate in sampled form and can spend only a finite computational budget within each control period. The primary contribution of this paper is a formulation preserving sampled \methodtwoDL{} controller for the classic drift free kinematic resolution problem. The method starts from the strongest classical formulation preserving baseline and tracks the Karush Kuhn Tucker residual through projected DLCCZNN dynamics with matrix vector products, scalar residual shaping, and explicit velocity box projection. To position this contribution precisely, the paper separates two design questions that are often mixed together in the literature: improvement by objective reformulation and improvement by solver redesign under a fixed formulation. The baseline comparison identifies \methodtwo{} as the strongest formulation preserving anchor and \methodthree{} as a high accuracy reference obtained by changing the sampled objective itself. A discrete time analysis then establishes local residual contraction, sampled outer loop tracking bounds, and a residual to command mismatch relation for the proposed controller. Offline UR3e tests over a \SI{20}{\second} cycle and simulator based real time control loop validation in CoppeliaSim over a \SI{10}{\second} cycle show that the proposed \methodtwoDL{} reduces the mean position error of the classical \methodtwo{} from \SI{3.686e-4}{\meter} to \SI{2.466e-4}{\meter} and its final joint drift norm from \SI{4.551e-3}{\radian} to \SI{1.430e-3}{\radian}. A dedicated parameter study further shows that the offline optimum and the real time optimum do not coincide, so the retained setting must be selected according to cycle end drift recovery rather than idealized replay accuracy alone. Auxiliary studies clarify the role of tight algorithmic and structural coupling: \methodthreepcg{} remains strong on the rewritten Method~3 objective, whereas a direct LCCZNN transfer to that objective loses drift recovery despite small instantaneous position error. These results support \methodtwoDL{} as the main route for carrying the classic drift free formulation into sampled robot control.
+\end{abstract}
+
+\begin{keyword}
+redundant manipulators \sep repetitive motion control \sep drift free control \sep low computational complexity zeroing neural network \sep quadratic programming \sep sampled data control
+\end{keyword}
+
+\end{frontmatter}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/problem_formulation}
+\input{sections/methods}
+\input{sections/theory}
+\input{sections/experiments}
+\input{sections/results_discussion}
+\input{sections/conclusion}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+
+\appendix
+\input{sections/appendix}
+
+\end{document}

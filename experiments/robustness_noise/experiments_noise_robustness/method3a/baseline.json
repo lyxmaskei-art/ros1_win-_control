@@ -1,0 +1,8 @@
+{
+  "mean_position_error_m": 7.944719042078606e-07,
+  "final_position_error_m": 8.825280281054841e-07,
+  "max_position_error_m": 1.6186042404567074e-06,
+  "final_joint_drift_norm_rad": 2.0823183004564752e-06,
+  "max_drift_norm": 0.5123553573387146,
+  "mean_drift_norm": 0.31012162935251486
+}

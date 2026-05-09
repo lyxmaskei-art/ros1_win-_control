@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.02408028793729735,
+    -1.386509346077546,
+    1.3693668181597594,
+    -0.12797328887478077,
+    1.5133193117841244,
+    -5.998578204335608e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.02408028793729735,
+      "delta_rad": 0.02408028793729735
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.386509346077546,
+      "delta_rad": 0.1842869807173506
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3693668181597594,
+      "delta_rad": -0.2014295086351372
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.12797328887478077,
+      "delta_rad": -0.12797328887478077
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5133193117841244,
+      "delta_rad": -0.05747701501077218
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -5.998578204335608e-12,
+      "delta_rad": -5.998578204335608e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.2014295086351372,
+  "final_joint_drift_norm_rad": 0.3078898640716023,
+  "mean_position_error_m": 0.02818608438083728,
+  "final_position_error_m": 0.055590681353671095,
+  "max_position_error_m": 0.07760055523869497,
+  "max_drift_norm": 0.5388582993621491,
+  "final_drift_norm": 0.305053306110599,
+  "mean_task_residual": 1.2008203368981476,
+  "final_task_residual": 2.5770973021041117,
+  "mean_solver_residual": 1.873408664163376,
+  "final_solver_residual": 6.849847312471757,
+  "mean_solver_energy": 3.0108249285689315,
+  "final_solver_energy": 23.460204102088277,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.09720000000379514
+}

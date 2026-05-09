@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.05450862396955291,
+    -1.5212442273306466,
+    1.4156653209447485,
+    -0.07818364713678902,
+    1.5248052400693441,
+    -6.353372603571381e-05
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.05450862396955291,
+      "delta_rad": 0.05450862396955291
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.5212442273306466,
+      "delta_rad": 0.04955209946424999
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4156653209447485,
+      "delta_rad": -0.15513100585014805
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.07818364713678902,
+      "delta_rad": -0.07818364713678902
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5248052400693441,
+      "delta_rad": -0.04599108672555241
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -6.353372603571381e-05,
+      "delta_rad": -6.353372603571381e-05
+    }
+  ],
+  "max_joint_drift_rad": 0.15513100585014805,
+  "final_joint_drift_norm_rad": 0.1942166223544969,
+  "mean_position_error_m": 0.04220381921502101,
+  "final_position_error_m": 0.05244172905293831,
+  "max_position_error_m": 0.08297650054043514,
+  "max_drift_norm": 0.48447802578699184,
+  "final_drift_norm": 0.20099409932751047,
+  "mean_task_residual": 1.867958898904401,
+  "final_task_residual": 1.5037046249706023,
+  "mean_solver_residual": 6.398110304156367,
+  "final_solver_residual": 15.487865140976627,
+  "mean_solver_energy": 39.041080599630945,
+  "final_solver_energy": 119.93698331253947,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.10706730000674725
+}

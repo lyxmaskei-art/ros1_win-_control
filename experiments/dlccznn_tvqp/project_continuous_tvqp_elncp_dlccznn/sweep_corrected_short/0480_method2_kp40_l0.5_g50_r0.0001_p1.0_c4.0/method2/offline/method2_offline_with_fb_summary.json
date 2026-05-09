@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.06082023931278758,
+    -1.347363352299786,
+    1.358925226052118,
+    -0.1585922852633818,
+    1.5717314202992727,
+    -7.409523898289806e-10
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.06082023931278758,
+      "delta_rad": 0.06082023931278758
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.347363352299786,
+      "delta_rad": 0.22343297449511046
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.358925226052118,
+      "delta_rad": -0.21187110074277848
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.1585922852633818,
+      "delta_rad": -0.1585922852633818
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5717314202992727,
+      "delta_rad": 0.0009350935043761499
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -7.409523898289806e-10,
+      "delta_rad": -7.409523898289806e-10
+    }
+  ],
+  "max_joint_drift_rad": 0.22343297449511046,
+  "final_joint_drift_norm_rad": 0.35165771181175287,
+  "mean_position_error_m": 0.027562618333344596,
+  "final_position_error_m": 0.061605476726942845,
+  "max_position_error_m": 0.07351196808718319,
+  "max_drift_norm": 0.5706585738521399,
+  "final_drift_norm": 0.35251865484467554,
+  "mean_task_residual": 1.1930685821620106,
+  "final_task_residual": 2.745899981522173,
+  "mean_solver_residual": 2.0872531377281534,
+  "final_solver_residual": 3.2768599625583614,
+  "mean_solver_energy": 5.647725589480142,
+  "final_solver_energy": 5.368905607108993,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.09391340000001946
+}

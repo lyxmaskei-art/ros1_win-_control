@@ -1,0 +1,186 @@
+{
+  "main": {
+    "id": "b94e3106db58b327",
+    "type": "split",
+    "children": [
+      {
+        "id": "bc5c25378b46d91d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a7cba636911d23d2",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a63a5f5c02b2cedb",
+    "type": "split",
+    "children": [
+      {
+        "id": "0c835d310eadff70",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fa6ccbb04b52ca67",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "eff781aea9b2d913",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "7faaf0da9637d109",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1730f562ef7d1b82",
+    "type": "split",
+    "children": [
+      {
+        "id": "c44ade0f8d69f075",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3a2f03bc13b126f0",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "导师汇报_阶段进展_2026_04_19.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "导师汇报_阶段进展_2026_04_19 的反向链接列表"
+            }
+          },
+          {
+            "id": "a35e7f01a7857a79",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "导师汇报_阶段进展_2026_04_19.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "导师汇报_阶段进展_2026_04_19 的出链列表"
+            }
+          },
+          {
+            "id": "18c8c6f63513c227",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "800e23002fb18c42",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "2b55db2a44c9e90c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "导师汇报_阶段进展_2026_04_19.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "导师汇报_阶段进展_2026_04_19 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "a7cba636911d23d2",
+  "lastOpenFiles": [
+    "README.md"
+  ]
+}

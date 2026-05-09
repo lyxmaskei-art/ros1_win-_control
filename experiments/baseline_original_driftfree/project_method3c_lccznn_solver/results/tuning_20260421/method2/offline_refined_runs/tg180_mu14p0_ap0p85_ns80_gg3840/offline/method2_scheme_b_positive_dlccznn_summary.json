@@ -1,0 +1,38 @@
+{
+  "label": "Method 2 DLCCZNN offline",
+  "status": "ok",
+  "mean_position_error_m": 0.00020013240724975817,
+  "max_position_error_m": 0.00032389106607971584,
+  "final_position_error_m": 1.0174213470878903e-06,
+  "max_abs_joint_drift_rad": 0.4110468929086717,
+  "final_joint_drift_norm_rad": 1.921348934410196e-06,
+  "mean_inner_residual_norm": 0.004085817542492593,
+  "max_inner_residual_norm": 0.038409556205966824,
+  "theta_initial_rad": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final_rad": [
+    4.659233752740346e-07,
+    -1.5707944795990847,
+    1.5707963402766403,
+    6.520318896860838e-08,
+    1.5707960861052275,
+    1.966922644629557e-10
+  ],
+  "theta_delta_rad": [
+    4.659233752740346e-07,
+    1.847195811865987e-06,
+    1.3481743721399653e-08,
+    6.520318896860838e-08,
+    -2.406896690843041e-07,
+    1.966922644629557e-10
+  ],
+  "num_samples": 4000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method3c_lccznn_solver\\results\\tuning_20260421\\method2\\offline_refined_runs\\tg180_mu14p0_ap0p85_ns80_gg3840\\offline",
+  "wall_clock_run_s": 7.063989199999924
+}

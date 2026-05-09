@@ -1,0 +1,5 @@
+Sampled drift free repetitive motion is formulated explicitly for redundant manipulator control.
+Method 2 DLCCZNN is proposed as the main shell preserving solver design.
+The proposed method improves the classical Method 2 in live position accuracy and final drift recovery.
+Auxiliary comparisons show that solver structure matching is essential to preserve drift free behavior.
+A physical UR3e validation protocol is prepared for the next revision.

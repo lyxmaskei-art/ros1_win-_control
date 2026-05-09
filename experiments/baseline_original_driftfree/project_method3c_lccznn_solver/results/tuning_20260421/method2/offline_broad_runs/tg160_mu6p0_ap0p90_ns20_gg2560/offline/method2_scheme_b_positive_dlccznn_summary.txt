@@ -1,0 +1,14 @@
+label: Method 2 DLCCZNN offline
+status: ok
+mean_position_error_m: 0.00019815390314228121
+max_position_error_m: 0.00045661198778647544
+final_position_error_m: 3.0374778961020188e-06
+max_abs_joint_drift_rad: 0.4095643006681269
+final_joint_drift_norm_rad: 1.491419000219275e-05
+mean_inner_residual_norm: 0.00880082793219127
+max_inner_residual_norm: 0.20363655992955373
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [-1.0995581752152463e-06, -1.5707960221942503, 1.5707992410419167, 1.3956200939678098e-05, 1.5708005532441538, -5.765117245819698e-19]
+theta_delta_rad: [-1.0995581752152463e-06, 3.04600646261477e-07, 2.914247020147087e-06, 1.3956200939678098e-05, 4.226449257238585e-06, -5.765117245819698e-19]
+num_samples: 4000
+result_dir: C:\Users\lyx\Desktop\sci\code\project_method3c_lccznn_solver\results\tuning_20260421\method2\offline_broad_runs\tg160_mu6p0_ap0p90_ns20_gg2560\offline

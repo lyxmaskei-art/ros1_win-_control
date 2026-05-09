@@ -1,0 +1,41 @@
+{
+  "label": "Method 3a PCG live",
+  "status": "ok",
+  "mean_position_error_m": 0.00013022702088695074,
+  "max_position_error_m": 0.00023119757181401393,
+  "final_position_error_m": 5.8146776161208616e-05,
+  "max_abs_joint_drift_rad": 0.4129486083984375,
+  "final_joint_drift_norm_rad": 0.000407126060401613,
+  "mean_inner_residual_norm": 5.3445425691130086e-06,
+  "max_inner_residual_norm": 0.00019205551284643974,
+  "mean_inner_iterations": 4.526,
+  "max_inner_iterations": 5,
+  "theta_initial_rad": [
+    5.4768183872511145e-06,
+    -1.5705238580703735,
+    1.5707937479019165,
+    0.00042056755046360195,
+    1.5707690715789795,
+    0.0
+  ],
+  "theta_final_rad": [
+    3.623467819124926e-06,
+    -1.5703585147857666,
+    1.5707045793533325,
+    0.0007806979119777679,
+    1.5707414150238037,
+    -3.3278579891771187e-10
+  ],
+  "theta_delta_rad": [
+    -1.8533505681261886e-06,
+    0.0001653432846069336,
+    -8.916854858398438e-05,
+    0.000360130361514166,
+    -2.765655517578125e-05,
+    -3.3278579891771187e-10
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_method3a_pcg_solver\\results\\method3a_position_and_drift_pcg\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 725.2043119000009
+}

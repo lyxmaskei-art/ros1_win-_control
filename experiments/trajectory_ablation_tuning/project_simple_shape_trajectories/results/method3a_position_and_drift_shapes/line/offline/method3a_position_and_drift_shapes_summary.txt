@@ -1,0 +1,16 @@
+label: Method 3a offline (line)
+status: ok
+mean_position_error_m: 2.0000006157368877e-05
+max_position_error_m: 3.1429339749406214e-05
+final_position_error_m: 3.707300025301882e-08
+max_abs_joint_drift_rad: 0.11781261668769126
+final_joint_drift_norm_rad: 4.5904441879319795e-08
+mean_inner_residual_norm: 1.4620166500598651e-15
+max_inner_residual_norm: 7.619600628085429e-15
+mean_inner_iterations: 1.0
+max_inner_iterations: 1
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [3.5890606613164636e-08, -1.5707963102351785, 1.570796313628025, -1.1246853569986457e-08, 1.5707963111424317, -4.628022938081567e-24]
+theta_delta_rad: [3.5890606613164636e-08, 1.655971804126466e-08, -1.3166871593028873e-08, -1.1246853569986457e-08, -1.565246487977845e-08, -4.628022938081567e-24]
+num_samples: 4000
+result_dir: C:\Users\lyx\Desktop\sci\code\project_simple_shape_trajectories\results\method3a_position_and_drift_shapes\line\offline

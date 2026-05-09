@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.021930376793432377,
+    -1.3490779799821064,
+    1.3447259061907113,
+    -0.07101744519777421,
+    1.5082786400005692,
+    9.127451364288184e-09
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.021930376793432377,
+      "delta_rad": 0.021930376793432377
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3490779799821064,
+      "delta_rad": 0.22171834681279012
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3447259061907113,
+      "delta_rad": -0.22607042060418525
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.07101744519777421,
+      "delta_rad": -0.07101744519777421
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5082786400005692,
+      "delta_rad": -0.06251768679432734
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 9.127451364288184e-09,
+      "delta_rad": 9.127451364288184e-09
+    }
+  ],
+  "max_joint_drift_rad": 0.22607042060418525,
+  "final_joint_drift_norm_rad": 0.3312095114823612,
+  "mean_position_error_m": 0.027668497611592492,
+  "final_position_error_m": 0.05863688099062446,
+  "max_position_error_m": 0.07165872887147835,
+  "max_drift_norm": 0.5376177593572089,
+  "final_drift_norm": 0.33469425473906506,
+  "mean_task_residual": 1.1878099926859824,
+  "final_task_residual": 2.257839687895453,
+  "mean_solver_residual": 2.1288801949508676,
+  "final_solver_residual": 6.638632784434233,
+  "mean_solver_energy": 6.627542602086475,
+  "final_solver_energy": 22.035722623282513,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.09051159999944502
+}

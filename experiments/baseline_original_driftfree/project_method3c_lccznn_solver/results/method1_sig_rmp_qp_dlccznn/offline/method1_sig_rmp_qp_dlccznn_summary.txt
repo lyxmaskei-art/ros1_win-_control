@@ -1,0 +1,14 @@
+label: Method 1 DLCCZNN offline
+status: ok
+mean_position_error_m: 0.02113218976574803
+max_position_error_m: 0.04899674916422563
+final_position_error_m: 0.023777807237092413
+max_abs_joint_drift_rad: 0.3898196211330842
+final_joint_drift_norm_rad: 0.09709441432246638
+mean_inner_residual_norm: 0.5889614654239167
+max_inner_residual_norm: 1.2330499174978073
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [-0.03521446360756342, -1.5265187639541107, 1.5177782029521831, -0.054770339996516995, 1.5503989574743384, -1.0662705142238903e-17]
+theta_delta_rad: [-0.03521446360756342, 0.04427756284078588, -0.05301812384271343, -0.054770339996516995, -0.020397369320558134, -1.0662705142238903e-17]
+num_samples: 200
+result_dir: C:\Users\lyx\Desktop\sci\experiments\baseline_original_driftfree\project_method3c_lccznn_solver\results\method1_sig_rmp_qp_dlccznn\offline

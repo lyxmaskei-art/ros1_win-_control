@@ -1,0 +1,5 @@
+case,mode,mean_position_error_m,max_position_error_m,final_position_error_m,final_joint_drift_norm_rad,mean_solver_iterations,max_solver_iterations,notes
+method3a_pcg_original,offline20,2.0433671160163258e-04,3.0741203496647895e-04,6.079450556495063e-07,2.2841365565166473e-05,4.44375,5,Original Method3a PCG with post solve velocity clipping
+method3_tvqp_elncp_pcg,offline20,2.0433668773123088e-04,3.074013271522352e-04,6.079975503728618e-07,4.6671803940884594e-07,9.51525,13,New Method3 box QP with ELNCP KKT boundary treatment and reduced PCG
+method3a_pcg_best_live,live10,1.3023023638833518e-04,2.3118642496467365e-04,5.814786417501239e-05,3.197148817648393e-04,4.6655,6,Previous best live Method3a PCG setting
+method3_tvqp_elncp_pcg,live10,1.302305246026711e-04,2.3121506529864e-04,5.8159545931849617e-05,4.170262650664861e-04,10.7005,13,New live run on CoppeliaSim port 19997

@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.03438766255654584,
+    -1.40382023115309,
+    1.4244152857080665,
+    -0.13430960375013007,
+    1.549538392285385,
+    -1.4935499338898715e-07
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.03438766255654584,
+      "delta_rad": 0.03438766255654584
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.40382023115309,
+      "delta_rad": 0.1669760956418065
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4244152857080665,
+      "delta_rad": -0.14638104108683003
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.13430960375013007,
+      "delta_rad": -0.13430960375013007
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.549538392285385,
+      "delta_rad": -0.021257934509511633
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -1.4935499338898715e-07,
+      "delta_rad": -1.4935499338898715e-07
+    }
+  ],
+  "max_joint_drift_rad": 0.1669760956418065,
+  "final_joint_drift_norm_rad": 0.26264406804780255,
+  "mean_position_error_m": 0.03970403296614939,
+  "final_position_error_m": 0.04835978802771197,
+  "max_position_error_m": 0.06983026327415855,
+  "max_drift_norm": 0.46342008567609455,
+  "final_drift_norm": 0.2639295020928349,
+  "mean_task_residual": 1.7913306031662943,
+  "final_task_residual": 2.121926724737345,
+  "mean_solver_residual": 5.129181578603939,
+  "final_solver_residual": 6.891215752725579,
+  "mean_solver_energy": 20.922204694094653,
+  "final_solver_energy": 23.74442727530658,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.12377189999824623
+}

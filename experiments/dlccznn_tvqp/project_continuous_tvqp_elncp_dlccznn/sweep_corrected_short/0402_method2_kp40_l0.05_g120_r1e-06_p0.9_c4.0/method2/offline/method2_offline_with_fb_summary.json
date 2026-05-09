@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.0444398295691525,
+    -1.434122541223722,
+    1.5090650644239856,
+    -0.3263320545624544,
+    1.3103055228699272,
+    -3.077093224173346e-05
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.0444398295691525,
+      "delta_rad": 0.0444398295691525
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.434122541223722,
+      "delta_rad": 0.1366737855711746
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5090650644239856,
+      "delta_rad": -0.06173126237091098
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.3263320545624544,
+      "delta_rad": -0.3263320545624544
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3103055228699272,
+      "delta_rad": -0.26049080392496937
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -3.077093224173346e-05,
+      "delta_rad": -3.077093224173346e-05
+    }
+  ],
+  "max_joint_drift_rad": 0.3263320545624544,
+  "final_joint_drift_norm_rad": 0.44588500824727983,
+  "mean_position_error_m": 0.04829736753017515,
+  "final_position_error_m": 0.05784465387575387,
+  "max_position_error_m": 0.09884904636478548,
+  "max_drift_norm": 0.5091745005612469,
+  "final_drift_norm": 0.44801446096494807,
+  "mean_task_residual": 2.111614398575861,
+  "final_task_residual": 2.4004586166991273,
+  "mean_solver_residual": 6.928126161924251,
+  "final_solver_residual": 7.223768867374024,
+  "mean_solver_energy": 42.25744414311879,
+  "final_solver_energy": 26.091418324621095,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.13581970000086585
+}

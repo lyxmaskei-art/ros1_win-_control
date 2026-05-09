@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.04511887198927247,
+    -1.3548604942923839,
+    1.3134970878950574,
+    -0.17419990437701702,
+    1.5187083869463636,
+    7.826845970327363e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.04511887198927247,
+      "delta_rad": 0.04511887198927247
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3548604942923839,
+      "delta_rad": 0.2159358325025127
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3134970878950574,
+      "delta_rad": -0.2572992388998392
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.17419990437701702,
+      "delta_rad": -0.17419990437701702
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5187083869463636,
+      "delta_rad": -0.052087939848532994
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 7.826845970327363e-12,
+      "delta_rad": 7.826845970327363e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.2572992388998392,
+  "final_joint_drift_norm_rad": 0.3846110436131552,
+  "mean_position_error_m": 0.032112682499720345,
+  "final_position_error_m": 0.06929936423354566,
+  "max_position_error_m": 0.08127372118859183,
+  "max_drift_norm": 0.6054574628486719,
+  "final_drift_norm": 0.38601828483669315,
+  "mean_task_residual": 1.352550571947324,
+  "final_task_residual": 2.9234237006145367,
+  "mean_solver_residual": 1.7265818491038198,
+  "final_solver_residual": 6.511515906044395,
+  "mean_solver_energy": 2.6522577845652138,
+  "final_solver_energy": 21.19991969733458,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.13549849999981234
+}

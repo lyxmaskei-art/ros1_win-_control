@@ -1,0 +1,16 @@
+label: Method 2 DLCCZNN offline
+status: ok
+mean_position_error_m: 0.002081375989129694
+max_position_error_m: 0.0032071780054699415
+final_position_error_m: 0.00047572005322556616
+max_abs_joint_drift_rad: 0.4101305115605427
+final_joint_drift_norm_rad: 0.0024105675063829336
+mean_inner_residual_norm: 0.4431470065329185
+max_inner_residual_norm: 0.7085575815852511
+min_boundary_slack: 0.6016546239942331
+final_boundary_slack: 1.9352485840488838
+theta_initial_rad: [0.0, -1.5707963267948966, 1.5707963267948966, 0.0, 1.5707963267948966, 0.0]
+theta_final_rad: [0.000503038349067961, -1.5689704678444958, 1.56969959219239, -0.0008757238429551171, 1.5702920370190916, -9.06335881446673e-10]
+theta_delta_rad: [0.000503038349067961, 0.0018258589504007716, -0.0010967346025065883, -0.0008757238429551171, -0.0005042897758049669, -9.06335881446673e-10]
+num_samples: 400
+result_dir: C:\Users\lyx\Desktop\sci\code\project_method2_dlccznn_elncp_bounds\results\offline_stability_sweep\0076_ns80_gg1000_sl0.01_ncp1e-08\offline

@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    -0.026387114553975702,
+    -1.535141245934918,
+    1.6207384543830246,
+    -0.16895592512577834,
+    1.449514200992571,
+    0.01645166513754227
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -0.026387114553975702,
+      "delta_rad": -0.026387114553975702
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.535141245934918,
+      "delta_rad": 0.03565508085997848
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.6207384543830246,
+      "delta_rad": 0.049942127588127994
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.16895592512577834,
+      "delta_rad": -0.16895592512577834
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.449514200992571,
+      "delta_rad": -0.12128212580232556
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 0.01645166513754227,
+      "delta_rad": 0.01645166513754227
+    }
+  ],
+  "max_joint_drift_rad": 0.16895592512577834,
+  "final_joint_drift_norm_rad": 0.21906139932375504,
+  "mean_position_error_m": 0.046481279310006854,
+  "final_position_error_m": 0.017681172823541817,
+  "max_position_error_m": 0.11638925573657899,
+  "max_drift_norm": 0.45618664860466696,
+  "final_drift_norm": 0.2165544395312024,
+  "mean_task_residual": 2.036564397910644,
+  "final_task_residual": 1.5913935948901425,
+  "mean_solver_residual": 9.848931232900874,
+  "final_solver_residual": 9.471755960500511,
+  "mean_solver_energy": 125.11778218499342,
+  "final_solver_energy": 44.85708048763848,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.13876970000274014
+}

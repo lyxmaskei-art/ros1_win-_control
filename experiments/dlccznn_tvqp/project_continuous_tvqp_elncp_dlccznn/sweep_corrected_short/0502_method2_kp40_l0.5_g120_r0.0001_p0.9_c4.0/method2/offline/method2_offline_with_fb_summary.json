@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.06751774121126385,
+    -1.4961957065701639,
+    1.4516084174110215,
+    -0.18838319664470524,
+    1.6527805012049452,
+    -0.04312889900488342
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.06751774121126385,
+      "delta_rad": 0.06751774121126385
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.4961957065701639,
+      "delta_rad": 0.07460062022473268
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4516084174110215,
+      "delta_rad": -0.11918790938387502
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.18838319664470524,
+      "delta_rad": -0.18838319664470524
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.6527805012049452,
+      "delta_rad": 0.08198417441004868
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -0.04312889900488342,
+      "delta_rad": -0.04312889900488342
+    }
+  ],
+  "max_joint_drift_rad": 0.18838319664470524,
+  "final_joint_drift_norm_rad": 0.26153277274680736,
+  "mean_position_error_m": 0.042770954609433545,
+  "final_position_error_m": 0.03981269648341324,
+  "max_position_error_m": 0.07932038363887718,
+  "max_drift_norm": 0.4530868039605166,
+  "final_drift_norm": 0.2534915254961188,
+  "mean_task_residual": 1.9008876247560922,
+  "final_task_residual": 2.6784517127964453,
+  "mean_solver_residual": 6.08090974881489,
+  "final_solver_residual": 11.610949708354315,
+  "mean_solver_energy": 31.65117347038842,
+  "final_solver_energy": 67.40707656496659,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.44626019172292386,
+  "runtime_s": 0.08797939999931259
+}

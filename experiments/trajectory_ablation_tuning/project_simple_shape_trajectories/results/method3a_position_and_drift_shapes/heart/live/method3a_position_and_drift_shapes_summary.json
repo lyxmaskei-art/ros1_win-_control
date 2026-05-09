@@ -1,0 +1,42 @@
+{
+  "label": "Method 3a live (heart)",
+  "status": "ok",
+  "mean_position_error_m": 0.00013075234478823451,
+  "max_position_error_m": 0.0002329062891683211,
+  "final_position_error_m": 5.884736208551038e-05,
+  "max_abs_joint_drift_rad": 0.4142458438873291,
+  "final_joint_drift_norm_rad": 0.00041920730267213193,
+  "mean_inner_residual_norm": 6.265319216292355e-14,
+  "max_inner_residual_norm": 3.26540580689313e-13,
+  "mean_inner_iterations": 1.0,
+  "max_inner_iterations": 1,
+  "theta_initial_rad": [
+    0.007834826596081257,
+    -1.5625544786453247,
+    1.5687158107757568,
+    -0.0023921916726976633,
+    1.5677367448806763,
+    -5.728750807065808e-14
+  ],
+  "theta_final_rad": [
+    0.007833451963961124,
+    -1.5623849630355835,
+    1.5686209201812744,
+    -0.0020214987453073263,
+    1.567712664604187,
+    -5.728750807065808e-14
+  ],
+  "theta_delta_rad": [
+    -1.3746321201324463e-06,
+    0.00016951560974121094,
+    -9.489059448242188e-05,
+    0.000370692927390337,
+    -2.4080276489257812e-05,
+    0.0
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_simple_shape_trajectories\\results\\method3a_position_and_drift_shapes\\heart\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 757.727442200001,
+  "trajectory_name": "heart"
+}

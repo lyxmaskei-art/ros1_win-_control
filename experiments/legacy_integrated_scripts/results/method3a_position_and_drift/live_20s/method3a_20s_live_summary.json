@@ -1,0 +1,38 @@
+{
+  "label": "Method 3a 20s live",
+  "status": "ok",
+  "mean_position_error_m": 8.397739358598516e-05,
+  "max_position_error_m": 0.00016766889778292398,
+  "final_position_error_m": 5.837235157453923e-05,
+  "max_abs_joint_drift_rad": 0.4129444360733032,
+  "final_joint_drift_norm_rad": 0.00041795312105482034,
+  "theta_initial_rad": [
+    5.433927071862854e-06,
+    -1.5705232620239258,
+    1.5707924365997314,
+    0.0004230482445564121,
+    1.5707690715789795,
+    0.0
+  ],
+  "theta_final_rad": [
+    4.653327323467238e-06,
+    -1.570353388786316,
+    1.5707005262374878,
+    0.000792897364590317,
+    1.5707447528839111,
+    0.0
+  ],
+  "theta_delta_rad": [
+    -7.805997483956162e-07,
+    0.00016987323760986328,
+    -9.191036224365234e-05,
+    0.0003698491200339049,
+    -2.4318695068359375e-05,
+    0.0
+  ],
+  "live_duration_s": 20.0,
+  "tau_s": 0.005,
+  "num_samples": 4000,
+  "wall_clock_run_s": 1674.2101078033447,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\results\\single_file_integrated_runs\\method3a_position_and_drift\\live_20s"
+}

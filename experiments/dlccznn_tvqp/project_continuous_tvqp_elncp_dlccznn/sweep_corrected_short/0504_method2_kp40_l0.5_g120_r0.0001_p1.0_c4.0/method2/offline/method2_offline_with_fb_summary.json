@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.04285453862022352,
+    -1.4222324374128044,
+    1.4381767754949153,
+    -0.13382821768215725,
+    1.3832144552594428,
+    0.011282188618551956
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.04285453862022352,
+      "delta_rad": 0.04285453862022352
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.4222324374128044,
+      "delta_rad": 0.1485638893820922
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4381767754949153,
+      "delta_rad": -0.13261955129998126
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.13382821768215725,
+      "delta_rad": -0.13382821768215725
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3832144552594428,
+      "delta_rad": -0.1875818715354538
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 0.011282188618551956,
+      "delta_rad": 0.011282188618551956
+    }
+  ],
+  "max_joint_drift_rad": 0.1875818715354538,
+  "final_joint_drift_norm_rad": 0.3077660219264727,
+  "mean_position_error_m": 0.04172968685079161,
+  "final_position_error_m": 0.05038558174941164,
+  "max_position_error_m": 0.1047595387907154,
+  "max_drift_norm": 0.4922612127220471,
+  "final_drift_norm": 0.30989609432285076,
+  "mean_task_residual": 1.8540588563682159,
+  "final_task_residual": 2.104394177726706,
+  "mean_solver_residual": 6.4273113029270625,
+  "final_solver_residual": 11.463508239344309,
+  "mean_solver_energy": 41.59814324498295,
+  "final_solver_energy": 65.70601057675742,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.10029760000179522
+}

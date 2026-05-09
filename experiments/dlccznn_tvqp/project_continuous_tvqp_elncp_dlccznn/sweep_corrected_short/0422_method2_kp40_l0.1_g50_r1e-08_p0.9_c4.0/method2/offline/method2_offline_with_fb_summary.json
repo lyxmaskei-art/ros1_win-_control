@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.07846912497565796,
+    -1.3108225259393185,
+    1.3293332107674931,
+    -0.17023111841292843,
+    1.4423664490203518,
+    -4.898118212028105e-12
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.07846912497565796,
+      "delta_rad": 0.07846912497565796
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.3108225259393185,
+      "delta_rad": 0.2599738008555781
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3293332107674931,
+      "delta_rad": -0.24146311602740345
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.17023111841292843,
+      "delta_rad": -0.17023111841292843
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.4423664490203518,
+      "delta_rad": -0.12842987777454473
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -4.898118212028105e-12,
+      "delta_rad": -4.898118212028105e-12
+    }
+  ],
+  "max_joint_drift_rad": 0.2599738008555781,
+  "final_joint_drift_norm_rad": 0.42133251036290265,
+  "mean_position_error_m": 0.033097657077728354,
+  "final_position_error_m": 0.07485093293988879,
+  "max_position_error_m": 0.09530111819105341,
+  "max_drift_norm": 0.6267108380756247,
+  "final_drift_norm": 0.4260982752495938,
+  "mean_task_residual": 1.4196929512207592,
+  "final_task_residual": 2.9876640720046783,
+  "mean_solver_residual": 2.3852396807705194,
+  "final_solver_residual": 15.618105195215408,
+  "mean_solver_energy": 6.426027083207232,
+  "final_solver_energy": 121.96260494440726,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.15963290000217967
+}

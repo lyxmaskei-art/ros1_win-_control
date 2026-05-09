@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.055271374413589175,
+    -1.5353710589171539,
+    1.5477825279089084,
+    -0.18988232806278457,
+    1.5882684595690666,
+    -3.631830520951068e-06
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.055271374413589175,
+      "delta_rad": 0.055271374413589175
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.5353710589171539,
+      "delta_rad": 0.035425267877742694
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5477825279089084,
+      "delta_rad": -0.0230137988859882
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.18988232806278457,
+      "delta_rad": -0.18988232806278457
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.5882684595690666,
+      "delta_rad": 0.017472132774170035
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -3.631830520951068e-06,
+      "delta_rad": -3.631830520951068e-06
+    }
+  ],
+  "max_joint_drift_rad": 0.18988232806278457,
+  "final_joint_drift_norm_rad": 0.20297803654669896,
+  "mean_position_error_m": 0.03627908669747652,
+  "final_position_error_m": 0.024530520106950063,
+  "max_position_error_m": 0.0870162516342817,
+  "max_drift_norm": 0.46450847505868764,
+  "final_drift_norm": 0.19638379984326057,
+  "mean_task_residual": 1.6500830701878857,
+  "final_task_residual": 1.5019640053956513,
+  "mean_solver_residual": 5.955029215122526,
+  "final_solver_residual": 9.115126089065567,
+  "mean_solver_energy": 34.34782265961107,
+  "final_solver_energy": 41.54276180978187,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.1014320999966003
+}

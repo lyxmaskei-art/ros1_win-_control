@@ -1,0 +1,5 @@
+﻿case,mean_position_error_m,final_position_error_m,max_position_error_m,final_joint_drift_norm_rad,max_joint_drift_rad,path
+euler_offline,1.186804267848571e-05,8.240221535386393e-07,0.0001440255632458973,2.1443578990958105e-06,2.057033398061847e-06,C:\Users\lyx\Desktop\sci\experiments_tvqp_dlccznn_paper_with_feedback\method2\offline\method2_offline_with_fb_summary.json
+rk45_offline,8.910018836129982e-07,4.234357900441968e-07,1.2755398829546474e-06,1.2677517806834677e-06,1.2115144685242996e-06,code\project_tvqp_method2_rk45_solver\results\final_gamma4608_rtol1e-5\method2\offline\method2_offline_with_fb_summary.json
+euler_live,0.00024265041241587726,0.00010435781601232488,0.00047810522354017844,0.0014163038587465305,0.00125193502753973,C:\Users\lyx\Desktop\sci\experiments_tvqp_dlccznn_paper_with_feedback\method2\live\method2_live_with_fb_summary.json
+rk45_live,0.00023569505560898843,0.00010417014547162306,0.0004179968065723532,0.0014299249845241546,0.0012650693533942103,code\project_tvqp_method2_rk45_solver\results\final_gamma4608_rtol1e-5\method2\live\method2_live_with_fb_summary.json

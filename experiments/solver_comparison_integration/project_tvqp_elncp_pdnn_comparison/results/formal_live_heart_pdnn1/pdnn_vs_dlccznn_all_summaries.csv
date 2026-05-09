@@ -1,0 +1,2 @@
+﻿experiment,trajectory_name,solver_type,pdnn_gain,pdnn_inner_steps,mean_position_error_m,final_position_error_m,max_position_error_m,final_joint_drift_norm_rad,max_joint_drift_rad,mean_task_residual,final_task_residual,mean_solver_residual,final_solver_residual,min_boundary_slack,runtime_s,avg_step_time_s
+single_heart_method2_pdnn_live,heart,pdnn,500.0,1,0.03726351262162395,0.050705716553630875,0.05101481368181634,0.29253474501051546,0.19098734855651855,6.005383893449907,7.809278018212074,8.22555467072122,10.03291466481457,0.0,185.41864180000266,0.09270932090000134

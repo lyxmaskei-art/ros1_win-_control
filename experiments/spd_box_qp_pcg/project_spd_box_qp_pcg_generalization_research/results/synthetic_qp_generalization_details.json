@@ -1,0 +1,152 @@
+[
+  {
+    "case": "native_spd_box_qp",
+    "claim_tested": "Method3-like SPD box QP is compatible with active-set PCG.",
+    "exact_possible": true,
+    "pcg_solution_error_norm": 3.608224830031759e-16,
+    "objective_gap": -2.5845992013273644e-12,
+    "constraint_violation": 0.0,
+    "kkt_violation": 2.7957192116900842e-11,
+    "pcg_iterations": 3,
+    "active_iterations": 332,
+    "tested_active_sets": 332,
+    "verdict": "supported"
+  },
+  {
+    "case": "hard_equality_qp_penalized_as_spd",
+    "claim_tested": "A hard equality QP can be replaced by an SPD penalty problem without cost.",
+    "exact_possible": false,
+    "pcg_solution_error_norm": 4.242428565685446e-05,
+    "objective_gap": "",
+    "constraint_violation": 5.9997000149802915e-05,
+    "kkt_violation": "",
+    "pcg_iterations": 3,
+    "active_iterations": "",
+    "condition_number_at_largest_penalty": 20000.999999981435,
+    "penalty_sweep": [
+      {
+        "rho": 1.0,
+        "solution": [
+          1.6,
+          -0.2
+        ],
+        "equality_violation": 0.40000000000000013,
+        "solution_error_norm": 0.2828427124746191,
+        "condition_number": 2.999999999999999,
+        "pcg_iterations": 2,
+        "pcg_residual": 4.335559509131367e-16
+      },
+      {
+        "rho": 10.0,
+        "solution": [
+          1.4285714285714288,
+          -0.3714285714285725
+        ],
+        "equality_violation": 0.057142857142856274,
+        "solution_error_norm": 0.040406101782087894,
+        "condition_number": 21.000000000000057,
+        "pcg_iterations": 2,
+        "pcg_residual": 1.2089711931865068e-14
+      },
+      {
+        "rho": 100.0,
+        "solution": [
+          1.402985074626864,
+          -0.39701492537313254
+        ],
+        "equality_violation": 0.005970149253731405,
+        "solution_error_norm": 0.004221533022009322,
+        "condition_number": 201.0000000000009,
+        "pcg_iterations": 3,
+        "pcg_residual": 7.811405263030857e-17
+      },
+      {
+        "rho": 1000.0,
+        "solution": [
+          1.400299850074931,
+          -0.399700149925006
+        ],
+        "equality_violation": 0.0005997001499249421,
+        "solution_error_norm": 0.00042405204269063354,
+        "condition_number": 2000.999999999933,
+        "pcg_iterations": 3,
+        "pcg_residual": 5.351880936680936e-23
+      },
+      {
+        "rho": 10000.0,
+        "solution": [
+          1.4000299984996574,
+          -0.3999700014995075
+        ],
+        "equality_violation": 5.9997000149802915e-05,
+        "solution_error_norm": 4.242428565685446e-05,
+        "condition_number": 20000.999999981435,
+        "pcg_iterations": 3,
+        "pcg_residual": 7.850072300685249e-17
+      }
+    ],
+    "verdict": "refuted_exact_equivalence"
+  },
+  {
+    "case": "coupled_linear_inequality_triangle",
+    "claim_tested": "A general linear inequality feasible set can be treated as a box without changing the problem.",
+    "exact_possible": false,
+    "pcg_solution_error_norm": 0.7071067811865476,
+    "objective_gap": "",
+    "constraint_violation": 1.0,
+    "kkt_violation": "",
+    "pcg_iterations": 0,
+    "active_iterations": 9,
+    "penalty_sweep": [
+      {
+        "rho": 1.0,
+        "solution": [
+          1.0,
+          1.0
+        ],
+        "sum_constraint_violation": 1.0,
+        "solution_error_norm": 0.7071067811865476
+      },
+      {
+        "rho": 10.0,
+        "solution": [
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "sum_constraint_violation": 0.1428571428571428,
+        "solution_error_norm": 0.10101525445522103
+      },
+      {
+        "rho": 100.0,
+        "solution": [
+          0.5074626865671642,
+          0.5074626865671642
+        ],
+        "sum_constraint_violation": 0.014925373134328401,
+        "solution_error_norm": 0.010553832555023127
+      },
+      {
+        "rho": 1000.0,
+        "solution": [
+          0.5007496251874063,
+          0.5007496251874063
+        ],
+        "sum_constraint_violation": 0.0014992503748125774,
+        "solution_error_norm": 0.0010601301067264465
+      }
+    ],
+    "verdict": "refuted_for_general_coupled_inequality"
+  },
+  {
+    "case": "nonconvex_indefinite_qp",
+    "claim_tested": "A nonconvex indefinite QP can be made SPD without changing the optimizer.",
+    "exact_possible": false,
+    "pcg_solution_error_norm": 1.0,
+    "objective_gap": 0.5,
+    "constraint_violation": 0.0,
+    "kkt_violation": "",
+    "pcg_iterations": 1,
+    "active_iterations": 5,
+    "verdict": "refuted_for_nonconvex_qp"
+  }
+]

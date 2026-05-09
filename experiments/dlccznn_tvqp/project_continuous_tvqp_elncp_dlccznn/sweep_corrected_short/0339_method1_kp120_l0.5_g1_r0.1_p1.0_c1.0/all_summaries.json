@@ -1,0 +1,75 @@
+{
+  "method1_offline": {
+    "stem": "method1_offline_with_fb",
+    "theta_initial": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "theta_final": [
+      -0.001711024124430645,
+      -1.5302389740820364,
+      1.5271849845063106,
+      -0.046431573410209134,
+      1.4544347150386125,
+      2.650081644461481e-14
+    ],
+    "joint_drift_table": [
+      {
+        "joint": "theta_1",
+        "initial_rad": 0.0,
+        "final_rad": -0.001711024124430645,
+        "delta_rad": -0.001711024124430645
+      },
+      {
+        "joint": "theta_2",
+        "initial_rad": -1.5707963267948966,
+        "final_rad": -1.5302389740820364,
+        "delta_rad": 0.040557352712860206
+      },
+      {
+        "joint": "theta_3",
+        "initial_rad": 1.5707963267948966,
+        "final_rad": 1.5271849845063106,
+        "delta_rad": -0.043611342288585986
+      },
+      {
+        "joint": "theta_4",
+        "initial_rad": 0.0,
+        "final_rad": -0.046431573410209134,
+        "delta_rad": -0.046431573410209134
+      },
+      {
+        "joint": "theta_5",
+        "initial_rad": 1.5707963267948966,
+        "final_rad": 1.4544347150386125,
+        "delta_rad": -0.11636161175628401
+      },
+      {
+        "joint": "theta_6",
+        "initial_rad": 0.0,
+        "final_rad": 2.650081644461481e-14,
+        "delta_rad": 2.650081644461481e-14
+      }
+    ],
+    "max_joint_drift_rad": 0.11636161175628401,
+    "final_joint_drift_norm_rad": 0.13872884104867939,
+    "mean_position_error_m": 0.01649945326498462,
+    "final_position_error_m": 0.018305927217005486,
+    "max_position_error_m": 0.03245434263062633,
+    "max_drift_norm": 0.4740017555130055,
+    "final_drift_norm": 0.14074973566940774,
+    "mean_task_residual": 1.989782514717712,
+    "final_task_residual": 2.0810241889491725,
+    "mean_solver_residual": 2.2029420256622285,
+    "final_solver_residual": 2.3010616859779787,
+    "mean_solver_energy": 2.8645299061962235,
+    "final_solver_energy": 2.6474424413379087,
+    "min_boundary_slack": 0.6806214866414788,
+    "final_boundary_slack": 1.5352362537594655,
+    "runtime_s": 0.32600169999932405
+  }
+}

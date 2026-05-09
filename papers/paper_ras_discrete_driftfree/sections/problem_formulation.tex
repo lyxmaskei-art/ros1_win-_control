@@ -1,0 +1,162 @@
+\section{Problem formulation}
+
+\subsection{Manipulator kinematics and drift definition}
+
+Consider a redundant manipulator with joint vector $\q_k \in \R^n$ at sampling instant $k$ and end effector position
+\begin{equation}
+  \x(\q_k) = f(\q_k) \in \R^m,
+\end{equation}
+where $n > m$. Let the desired Cartesian trajectory be $\xd(k)$ with desired task velocity $\rd(k)$. We define the position tracking error and joint drift error as
+\begin{equation}
+  \ep(k) = \x(\q_k) - \xd(k),
+\end{equation}
+\begin{equation}
+  \ed(k) = \q_k - \q_0,
+\end{equation}
+where $\q_0$ is the initial joint posture at the beginning of the repetitive task.
+
+The drift free requirement concerns the cycle end residual rather than the transient joint excursion. During the task, the joints are allowed to move substantially. What matters is whether the final posture returns close to $\q_0$ after one completed cycle.
+
+The sampled control architecture studied in this paper is summarized in Fig.~\ref{fig:sampled_architecture}. This figure is useful because it makes the central design choice explicit: the proposed method retains the classic drift free kinematic resolution formulation and modifies the sampled solver layer, rather than replacing the entire control objective.
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[
+    node distance=10mm and 12mm,
+    >=Latex,
+    block/.style={draw, rounded corners, align=center, minimum height=9mm, text width=30mm},
+    smallblock/.style={draw, rounded corners, align=center, minimum height=8mm, text width=23mm}
+  ]
+    \node[block] (traj) {Desired trajectory generator\\$\xd(k),\,\rd(k)$};
+    \node[block, right=of traj] (error) {Error evaluation\\$\ep(k),\,\ed(k)$};
+    \node[smallblock, below=of error] (q0) {Cycle start posture\\$\q_0$};
+    \node[block, right=of error] (scheme) {Classic drift free kinematic\\resolution formulation};
+    \node[block, right=of scheme] (solver) {Sampled DLCCZNN\\solver};
+    \node[block, right=of solver] (plant) {Sampled robot update\\$\q_{k+1}=\q_k+\tau\qd_k$};
+
+    \draw[->] (traj) -- (error);
+    \draw[->] (q0) -- (error);
+    \draw[->] (error) -- node[above]{task and drift signals} (scheme);
+    \draw[->] (scheme) -- node[above]{$\bm{H}_k,\bm{p}_k,\bm{\xi}^{\pm}(k)$} (solver);
+    \draw[->] (solver) -- node[above]{$\qd_k$} (plant);
+    \draw[->] (plant.south) |- ++(0,-0.8) -| node[pos=0.25, below]{joint feedback and forward kinematics} (error.south);
+  \end{tikzpicture}
+  \caption{Sampled control architecture of the studied system. The proposed method keeps the classic drift free kinematic resolution formulation and changes the sampled solver layer.}
+  \label{fig:sampled_architecture}
+\end{figure}
+
+\subsection{One step sampled model}
+
+Let $\tau > 0$ be the outer control period. A first order linearization around $\q_k$ gives
+\begin{equation}
+  \x(\q_{k+1}) \approx \x(\q_k) + \tau \J_k \qd_k,
+  \label{eq:fk_linearization}
+\end{equation}
+where $\J_k = \J(\q_k)$ is the task Jacobian and $\qd_k$ is the joint velocity command at step $k$. The joint update is
+\begin{equation}
+  \q_{k+1} = \q_k + \tau \qd_k.
+  \label{eq:joint_update}
+\end{equation}
+
+If the desired trajectory is discretized by
+\begin{equation}
+  \xd(k+1) \approx \xd(k) + \tau \rd(k),
+\end{equation}
+then the one step position error satisfies
+\begin{equation}
+  \ep(k+1) \approx \ep(k) + \tau \bigl(\J_k \qd_k - \rd(k)\bigr),
+  \label{eq:ep_basic}
+\end{equation}
+and the joint drift error propagates as
+\begin{equation}
+  \ed(k+1) = \ed(k) + \tau \qd_k.
+  \label{eq:ed_basic}
+\end{equation}
+
+\subsection{Why the task equality uses feedback velocity}
+
+The classic drift free kinematic resolution formulation does not impose $\J_k \qd_k = \rd(k)$ directly. Instead, it uses the feedback corrected velocity
+\begin{equation}
+  \bm{b}_{\mathrm{fb}}(k) = \rd(k) - k_{\mathrm{p}} \ep(k),
+  \label{eq:bfb}
+\end{equation}
+with task gain $k_{\mathrm{p}} > 0$. The reason is immediate from \eqref{eq:ep_basic}. If $\J_k \qd_k = \rd(k)$, then $\ep(k+1) \approx \ep(k)$, so the existing task error is simply carried forward. If one enforces
+\begin{equation}
+  \J_k \qd_k = \rd(k) - k_{\mathrm{p}} \ep(k),
+  \label{eq:task_feedback_constraint}
+\end{equation}
+then
+\begin{equation}
+  \ep(k+1) \approx (1 - \tau k_{\mathrm{p}})\ep(k),
+\end{equation}
+which makes the sampled position correction explicit. This is why the classical drift free formulations use task feedback velocity rather than pure task velocity.
+
+\subsection{Dynamic velocity bounds}
+
+Let the joint position and velocity bounds be
+\begin{equation}
+  \bm{\theta}_{\min} \le \q_k \le \bm{\theta}_{\max},
+\end{equation}
+\begin{equation}
+  \dot{\bm{\theta}}_{\min} \le \qd_k \le \dot{\bm{\theta}}_{\max}.
+\end{equation}
+Following \citet{zhang2009rmp}, the position limits are converted into dynamic velocity limits:
+\begin{equation}
+  \bm{\xi}^{-}(k) =
+  \max\!\left(
+    \dot{\bm{\theta}}_{\min},
+    \frac{\eta}{\tau}\left( \bm{\theta}_{\min} - \q_k \right)
+  \right),
+\end{equation}
+\begin{equation}
+  \bm{\xi}^{+}(k) =
+  \min\!\left(
+    \dot{\bm{\theta}}_{\max},
+    \frac{\eta}{\tau}\left( \bm{\theta}_{\max} - \q_k \right)
+  \right),
+\end{equation}
+where $\eta \in (0,1]$ is a safety factor. These bounds guarantee that the next step update \eqref{eq:joint_update} remains feasible.
+
+\subsection{Classic formulation and discrete objective}
+
+The equality constrained formulation shared by \methodone{} and \methodtwo{} is
+\begin{equation}
+  \begin{aligned}
+    \min_{\qd_k} \quad &
+      \frac{1}{2}\qd_k^\top \bm{W}\qd_k + \hat{\bm{c}}(k)^\top \qd_k \\
+    \text{s.t.} \quad &
+      \J_k \qd_k = \bm{b}_{\mathrm{fb}}(k), \\
+    &
+      \bm{\xi}^{-}(k) \le \qd_k \le \bm{\xi}^{+}(k),
+  \end{aligned}
+  \label{eq:classical_qp_shell}
+\end{equation}
+where $\bm{W}$ is positive definite and $\hat{\bm{c}}(k)$ biases the solution toward drift recovery.
+
+By contrast, \methodthree{} is built directly from the one step predictions \eqref{eq:ep_basic} and \eqref{eq:ed_basic}. With positive weights $\alpha$ and $\beta$, the sampled objective is
+\begin{equation}
+  \begin{aligned}
+    \min_{\qd_k} \quad &
+      \alpha
+      \left\|
+        \ep(k) + \tau\bigl(\J_k\qd_k - \rd(k) + k_{\mathrm{p}}\ep(k)\bigr)
+      \right\|_2^2 \\
+      & \quad +
+      \beta
+      \left\|
+        \ed(k) + \tau \qd_k
+      \right\|_2^2 \\
+    \text{s.t.} \quad &
+      \bm{\xi}^{-}(k) \le \qd_k \le \bm{\xi}^{+}(k).
+  \end{aligned}
+  \label{eq:method3_original}
+\end{equation}
+
+The methods studied in this paper are therefore divided into three families.
+\begin{itemize}[leftmargin=1.5em]
+  \item \methodone{}, \methodtwo{}, \methodoneDL{}, and \methodtwoDL{} preserve the classic equality constrained formulation in \eqref{eq:classical_qp_shell}.
+  \item \methodthree{} and \methodthreepcg{} use the discrete sampled objective in \eqref{eq:method3_original}.
+  \item \methodthreelcc{} keeps the Method~3 outer objective but replaces its inner linear solve by an LCCZNN style residual tracker.
+\end{itemize}
+
+This separation is central to the later discussion because it distinguishes solver improvement from objective reformulation.

@@ -1,0 +1,40 @@
+{
+  "label": "Method 2 DLCCZNN live (line)",
+  "status": "ok",
+  "mean_position_error_m": 0.00014009950540042792,
+  "max_position_error_m": 0.00015239528140091114,
+  "final_position_error_m": 0.00014474910896164063,
+  "max_abs_joint_drift_rad": 0.11799260999032413,
+  "final_joint_drift_norm_rad": 0.004437527994194715,
+  "mean_inner_residual_norm": 0.0011101856454437842,
+  "max_inner_residual_norm": 0.004048734560821011,
+  "theta_initial_rad": [
+    1.821692058001645e-05,
+    -1.5702054500579834,
+    1.570879578590393,
+    0.0005110363708809018,
+    1.5707489252090454,
+    8.570921750106208e-14
+  ],
+  "theta_final_rad": [
+    -3.277989890193567e-05,
+    -1.5690765380859375,
+    1.569055199623108,
+    0.0043884385377168655,
+    1.5705208778381348,
+    8.570921750106208e-14
+  ],
+  "theta_delta_rad": [
+    -5.0996819481952116e-05,
+    0.0011289119720458984,
+    -0.0018243789672851562,
+    0.0038774021668359637,
+    -0.00022804737091064453,
+    0.0
+  ],
+  "num_samples": 2000,
+  "result_dir": "C:\\Users\\lyx\\Desktop\\sci\\code\\project_simple_shape_trajectories\\results\\method2_scheme_b_positive_dlccznn_shapes\\line\\live",
+  "coppeliasim_port": 19997,
+  "wall_clock_run_s": 731.5720344999972,
+  "trajectory_name": "line"
+}

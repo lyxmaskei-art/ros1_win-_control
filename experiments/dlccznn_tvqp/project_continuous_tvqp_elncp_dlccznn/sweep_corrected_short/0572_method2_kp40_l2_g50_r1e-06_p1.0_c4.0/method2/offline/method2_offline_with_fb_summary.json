@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.06987347486971733,
+    -1.378839536176193,
+    1.381968469088832,
+    -0.08731984519054416,
+    1.548189933507473,
+    3.302265629067433e-11
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.06987347486971733,
+      "delta_rad": 0.06987347486971733
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.378839536176193,
+      "delta_rad": 0.19195679061870363
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.381968469088832,
+      "delta_rad": -0.18882785770606447
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.08731984519054416,
+      "delta_rad": -0.08731984519054416
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.548189933507473,
+      "delta_rad": -0.022606393287423643
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 3.302265629067433e-11,
+      "delta_rad": 3.302265629067433e-11
+    }
+  ],
+  "max_joint_drift_rad": 0.19195679061870363,
+  "final_joint_drift_norm_rad": 0.2924405515355725,
+  "mean_position_error_m": 0.030306623120670572,
+  "final_position_error_m": 0.05090902706189883,
+  "max_position_error_m": 0.0676595115692396,
+  "max_drift_norm": 0.49205958145506895,
+  "final_drift_norm": 0.29252127285280455,
+  "mean_task_residual": 1.311457465831608,
+  "final_task_residual": 2.473080480069526,
+  "mean_solver_residual": 2.3217550903769326,
+  "final_solver_residual": 4.445023901978616,
+  "mean_solver_energy": 5.524937095711898,
+  "final_solver_energy": 9.879118744580602,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.12341169999854174
+}

@@ -1,0 +1,73 @@
+{
+  "stem": "method2_offline_with_fb",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    0.012661887995392734,
+    -1.337488390201721,
+    1.3201650157798774,
+    -0.22116957131443246,
+    1.3973268896142188,
+    -1.5050104355469495e-10
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": 0.012661887995392734,
+      "delta_rad": 0.012661887995392734
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.337488390201721,
+      "delta_rad": 0.2333079365931756
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3201650157798774,
+      "delta_rad": -0.2506313110150191
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": -0.22116957131443246,
+      "delta_rad": -0.22116957131443246
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.3973268896142188,
+      "delta_rad": -0.17346943718067775
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -1.5050104355469495e-10,
+      "delta_rad": -1.5050104355469495e-10
+    }
+  ],
+  "max_joint_drift_rad": 0.2506313110150191,
+  "final_joint_drift_norm_rad": 0.4431891195158916,
+  "mean_position_error_m": 0.030607331133150426,
+  "final_position_error_m": 0.07719995203738375,
+  "max_position_error_m": 0.08425470406983507,
+  "max_drift_norm": 0.597671096173989,
+  "final_drift_norm": 0.44599819788019957,
+  "mean_task_residual": 1.3179638666082065,
+  "final_task_residual": 2.996253050154677,
+  "mean_solver_residual": 2.7916130006333204,
+  "final_solver_residual": 9.418103245421255,
+  "mean_solver_energy": 12.979905715403465,
+  "final_solver_energy": 44.350334370707195,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 0.16213849999621743
+}
