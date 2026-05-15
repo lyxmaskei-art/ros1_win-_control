@@ -1,0 +1,12 @@
+{
+  "candidates_csv": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\solver_comparison_integration\\project_tvqp_euler_ns40_trajectory_live_opt\\results\\round2_candidates.csv",
+  "arguments": {
+    "candidates_csv": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\solver_comparison_integration\\project_tvqp_euler_ns40_trajectory_live_opt\\results\\round2_candidates.csv",
+    "output_root": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\solver_comparison_integration\\project_tvqp_euler_ns40_trajectory_live_opt\\results\\round2_clean_live_10s",
+    "duration": 10.0,
+    "tau": 0.005,
+    "activation_exp_clip": 4.0,
+    "noise_profile": "clean",
+    "rerun_completed": false
+  }
+}

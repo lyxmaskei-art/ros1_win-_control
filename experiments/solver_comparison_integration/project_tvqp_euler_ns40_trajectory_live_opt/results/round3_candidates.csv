@@ -1,0 +1,16 @@
+trajectory,solver_gamma,drift_gain,task_gain,activation_power
+small_circle,4096,60,460,0.75
+small_circle,4096,80,420,0.75
+small_circle,4608,60,420,0.75
+line,4096,60,460,0.75
+line,4096,80,420,0.75
+line,4608,60,420,0.75
+circle,4096,60,460,0.75
+circle,4096,60,420,0.72
+circle,4096,80,420,0.75
+ellipse,4096,60,460,0.75
+ellipse,4096,60,420,0.72
+ellipse,4608,60,420,0.75
+figure8,4096,60,460,0.75
+figure8,4096,60,420,0.72
+figure8,4608,60,420,0.75

@@ -1,0 +1,96 @@
+{
+  "stem": "method2_dlccznn_live_with_fb",
+  "live_position_error_source": "CoppeliaSim object 'connection' in world frame",
+  "live_fk_position_error_source": "Local forward kinematics from CoppeliaSim joint feedback",
+  "live_visual_tip_error_source": "CoppeliaSim object 'Tip' in world frame",
+  "theta_initial": [
+    0.0,
+    -1.5707963705062866,
+    1.5707963705062866,
+    0.0,
+    1.5707963705062866,
+    0.0
+  ],
+  "theta_final": [
+    -3.9895076042739674e-06,
+    -1.5706688165664673,
+    1.5708218812942505,
+    0.00015006352623458952,
+    1.5706850290298462,
+    8.732778951525688e-05
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -3.9895076042739674e-06,
+      "delta_rad": -3.9895076042739674e-06
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963705062866,
+      "final_rad": -1.5706688165664673,
+      "delta_rad": 0.00012755393981933594
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963705062866,
+      "final_rad": 1.5708218812942505,
+      "delta_rad": 2.5510787963867188e-05
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": 0.00015006352623458952,
+      "delta_rad": 0.00015006352623458952
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963705062866,
+      "final_rad": 1.5706850290298462,
+      "delta_rad": -0.00011134147644042969
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": 8.732778951525688e-05,
+      "delta_rad": 8.732778951525688e-05
+    }
+  ],
+  "max_joint_drift_rad": 0.00015006352623458952,
+  "final_joint_drift_norm_rad": 0.00024388286766481124,
+  "mean_position_error_m": 0.00039966745185288224,
+  "final_position_error_m": 0.0004002226695999647,
+  "max_position_error_m": 0.0005822819024132183,
+  "mean_fk_position_error_m": 8.199910261972055e-05,
+  "final_fk_position_error_m": 6.149635993004701e-05,
+  "max_fk_position_error_m": 0.0003270636264956008,
+  "mean_tip_position_error_m": 0.010083288619789446,
+  "final_tip_position_error_m": 0.010092954355358775,
+  "max_tip_position_error_m": 0.010169405213556405,
+  "max_drift_norm": 0.08097696645550832,
+  "final_drift_norm": 0.00024388286766481124,
+  "mean_task_residual": 0.020896148492704457,
+  "final_task_residual": 0.005498121721347243,
+  "mean_solver_residual": 0.047141345278187745,
+  "final_solver_residual": 0.02715167645475527,
+  "mean_solver_energy": 0.0018824911874432888,
+  "final_solver_energy": 0.00036860676715185593,
+  "min_boundary_slack": 1.7001520487656965,
+  "final_boundary_slack": 1.9144744992734841,
+  "runtime_s": 184.20715230001952,
+  "avg_step_time_s": 0.09210357615000976,
+  "trajectory_name": "small_circle",
+  "solver_type": "dlccznn",
+  "task_gain": 420.0,
+  "drift_gain": 60.0,
+  "drift_feedback_mode": "nonlinear",
+  "solver_gamma": 4096.0,
+  "activation_power": 0.75,
+  "activation_exp_clip": 4.0,
+  "dlccznn_inner_steps": 40,
+  "dlccznn_integrator": "euler",
+  "noise_profile": "clean",
+  "pdnn_gain": 20.0,
+  "pdnn_inner_steps": 1
+}

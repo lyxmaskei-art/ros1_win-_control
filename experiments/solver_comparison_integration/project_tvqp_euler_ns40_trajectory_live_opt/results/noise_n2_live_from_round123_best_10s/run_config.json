@@ -1,0 +1,12 @@
+{
+  "best_csv": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\solver_comparison_integration\\project_tvqp_euler_ns40_trajectory_live_opt\\results\\round123_summary\\clean_best_by_trajectory.csv",
+  "arguments": {
+    "best_csv": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\solver_comparison_integration\\project_tvqp_euler_ns40_trajectory_live_opt\\results\\round123_summary\\clean_best_by_trajectory.csv",
+    "output_root": "C:\\Users\\lyx\\Desktop\\sci\\experiments\\solver_comparison_integration\\project_tvqp_euler_ns40_trajectory_live_opt\\results\\noise_n2_live_from_round123_best_10s",
+    "duration": 10.0,
+    "tau": 0.005,
+    "activation_exp_clip": 4.0,
+    "noise_profile": "paper_n2_linear",
+    "rerun_completed": false
+  }
+}
