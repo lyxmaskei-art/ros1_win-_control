@@ -19,9 +19,12 @@ if str(PROJECT_ROOT) not in sys.path:
 from _ros_real_ur3e import (
     DEFAULT_JOINT_NAMES,
     ROSUR3eInterface,
+    StopMotionGuard,
     add_ros_real_arguments,
     ensure_ros_node,
+    format_preflight_failure,
     normalize_ros_real_args,
+    save_ros_cycle_diagnostics,
     save_preflight_report,
 )
 
@@ -71,7 +74,17 @@ def run_ros_benchmark(args):
     output_dir = Path(args.output_root) if args.output_root else PROJECT_ROOT / "results" / "realtime" / time.strftime("%Y%m%d_%H%M%S")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    interface = ROSUR3eInterface(args.joint_state_topic, args.command_topic, args.joint_names)
+    interface = ROSUR3eInterface(
+        args.joint_state_topic,
+        args.command_topic,
+        args.joint_names,
+        command_mode=args.command_mode,
+        trajectory_command_topic=args.trajectory_command_topic,
+        velocity_command_topic=args.velocity_command_topic,
+        trajectory_command_duration=args.trajectory_command_duration,
+        tcp_pose_topic=args.tcp_pose_topic,
+    )
+    stop_guard = StopMotionGuard(interface)
     theta_lower = np.asarray(args.effective_theta_lower, dtype=float)
     theta_upper = np.asarray(args.effective_theta_upper, dtype=float)
     theta_initial = np.asarray(args.effective_theta_initial, dtype=float)
@@ -86,8 +99,11 @@ def run_ros_benchmark(args):
     if args.dry_run:
         print("Dry-run requested. No initialization move or benchmark command was published.")
         return
+    preflight_verdict = preflight.get("preflight_verdict", {})
+    if preflight_verdict.get("status") == "fail":
+        raise RuntimeError(format_preflight_failure(preflight_verdict))
     if not preflight.get("command_subscriber_ready", False):
-        raise RuntimeError(f"No subscriber connected to {args.command_topic}.")
+        raise RuntimeError(f"No subscriber connected to {interface.command_topic}.")
 
     robot = mod.UR3eKinematics()
     if hasattr(robot, "tool_offset"):
@@ -122,12 +138,20 @@ def run_ros_benchmark(args):
     drift_norms = np.empty(total_steps, dtype=float)
     missed_deadlines = 0
     t_start = time.perf_counter()
+    last_commanded_velocity = None
+    last_limited_velocity = None
+    last_cycle_start = None
+    cycle_diagnostics = []
 
     for step in range(total_steps):
         if rospy.is_shutdown():
             raise RuntimeError("ROS shut down during benchmark.")
+        cycle_start = time.perf_counter()
         tk = step * float(settings.tau)
+        state_read_start = time.perf_counter()
         theta_current = interface.get_joint_positions(max_age=args.state_timeout)
+        state_read_s = time.perf_counter() - state_read_start
+        state_age_s = interface.get_latest_state_age()
         desired_pos, desired_vel = trajectory.get_pose(tk)
         t0 = time.perf_counter()
         result = controller.step(theta_current, desired_pos, desired_vel, use_feedback=True)
@@ -136,25 +160,89 @@ def run_ros_benchmark(args):
         if elapsed > float(settings.tau):
             missed_deadlines += 1
         theta_next = np.asarray(result["theta_next"], dtype=float)
+        limited_velocity = np.asarray(result.get("theta_dot_next", np.zeros_like(theta_current)), dtype=float)
+        if args.max_command_accel is not None and float(args.max_command_accel) > 0.0:
+            if last_limited_velocity is None:
+                last_limited_velocity = limited_velocity.copy()
+            accel_step = float(args.max_command_accel) * float(settings.tau)
+            limited_velocity = np.clip(
+                limited_velocity,
+                last_limited_velocity - accel_step,
+                last_limited_velocity + accel_step,
+            )
+            theta_next = theta_current + float(settings.tau) * limited_velocity
+            last_limited_velocity = limited_velocity.copy()
         if args.max_command_step is not None and float(args.max_command_step) > 0.0:
             max_step = float(args.max_command_step)
             theta_next = np.clip(theta_next, theta_current - max_step, theta_current + max_step)
         theta_next = np.clip(theta_next, theta_lower, theta_upper)
         position_errors[step] = float(np.linalg.norm(np.asarray(result["current_pos"], dtype=float) - desired_pos))
         drift_norms[step] = float(np.linalg.norm(theta_current - theta_reference))
-        interface.publish_joint_positions(theta_next)
+        target_delta = theta_next - theta_current
+        commanded_velocity = target_delta / float(settings.tau)
+        if last_commanded_velocity is None:
+            commanded_accel = np.zeros_like(commanded_velocity)
+        else:
+            commanded_accel = (commanded_velocity - last_commanded_velocity) / float(settings.tau)
+        last_commanded_velocity = commanded_velocity.copy()
+        feedback_velocity = interface.get_latest_velocity()
+        feedback_velocity_norm = (
+            float("nan")
+            if feedback_velocity is None
+            else float(np.linalg.norm(np.asarray(feedback_velocity, dtype=float)))
+        )
+        publish_start = time.perf_counter()
+        if args.command_mode == "velocity_array":
+            interface.publish_joint_velocities(commanded_velocity)
+        else:
+            interface.publish_joint_positions(theta_next, duration_s=settings.tau)
+        publish_s = time.perf_counter() - publish_start
+        work_end = time.perf_counter()
         rate.sleep()
+        sleep_end = time.perf_counter()
+        cycle_work_s = work_end - cycle_start
+        sleep_s = sleep_end - work_end
+        cycle_period_s = float("nan") if last_cycle_start is None else cycle_start - last_cycle_start
+        last_cycle_start = cycle_start
+        cycle_diagnostics.append(
+            {
+                "step": int(step),
+                "time_s": float(tk),
+                "cycle_period_s": float(cycle_period_s),
+                "cycle_work_s": float(cycle_work_s),
+                "state_read_s": float(state_read_s),
+                "state_age_s": float(state_age_s),
+                "controller_step_s": float(elapsed),
+                "publish_s": float(publish_s),
+                "sleep_s": float(sleep_s),
+                "command_step_norm_rad": float(np.linalg.norm(target_delta)),
+                "command_step_max_abs_rad": float(np.max(np.abs(target_delta))),
+                "command_velocity_norm_rad_s": float(np.linalg.norm(commanded_velocity)),
+                "command_accel_norm_rad_s2": float(np.linalg.norm(commanded_accel)),
+                "feedback_velocity_norm_rad_s": feedback_velocity_norm,
+                "deadline_miss": bool(cycle_work_s > float(settings.tau)),
+                "period_overrun": bool(np.isfinite(cycle_period_s) and cycle_period_s > 1.25 * float(settings.tau)),
+            }
+        )
 
+    stop_guard.stop()
     runtime_s = time.perf_counter() - t_start
     summary = build_summary(step_times, settings.tau, missed_deadlines, runtime_s, total_steps)
+    cycle_summary = save_ros_cycle_diagnostics(output_dir, cycle_diagnostics, settings.tau)
     summary.update(
         {
             "method": args.method,
             "trajectory_name": trajectory_tag,
             "joint_state_topic": args.joint_state_topic,
-            "command_topic": args.command_topic,
+            "command_topic": interface.command_topic,
+            "position_command_topic": args.command_topic,
+            "trajectory_command_topic": args.trajectory_command_topic,
+            "velocity_command_topic": args.velocity_command_topic,
+            "command_mode": args.command_mode,
+            "trajectory_command_duration_s": interface.get_trajectory_command_duration(settings.tau),
             "joint_names": list(args.joint_names),
             "tcp_offset_m_tool_frame": np.asarray(args.effective_tcp_offset, dtype=float).tolist(),
+            "ros_real_cycle_diagnostics": cycle_summary,
         }
     )
 
