@@ -60,8 +60,6 @@
 --theta-dot-limit 0.3
 --max-command-accel 8
 --max-command-jerk 80
---trajectory-window-duration 0.08
---trajectory-window-points 5
 ```
 
 你仍然可以在命令行显式覆盖其中任意值。
@@ -79,7 +77,7 @@
 含义：
 
 - `position_array`：保留原来的 `std_msgs/Float64MultiArray` 位置数组接口。
-- `joint_trajectory`：发布 `trajectory_msgs/JointTrajectory`。在 `--real-safe-preset` 下默认发布约 `80 ms`、`5` 点短窗口，不再是 5 ms 单点反复重规划。
+- `joint_trajectory`：发布单点 `trajectory_msgs/JointTrajectory`，保持逐周期实时控制口径。
 - `velocity_array`：直接发布受限后的关节速度命令，更接近算法输出，但必须确认机器人上有对应 velocity controller。
 
 `velocity_array` 模式会在正常结束、异常栈展开、ROS shutdown 和进程退出时尝试发送零速度。
@@ -235,7 +233,7 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
   --tau 0.005
 ```
 
-如果只能使用 trajectory controller，再跑短窗口 trajectory 接口：
+如果只能使用 trajectory controller，再跑单点 trajectory 接口；这仍然是实时控制，但要重点看命令速度/反馈速度比：
 
 ```bash
 python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
@@ -246,8 +244,7 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
   --real-safe-preset \
   --command-mode joint_trajectory \
   --trajectory-command-topic /scaled_pos_joint_traj_controller/command \
-  --trajectory-window-duration 0.08 \
-  --trajectory-window-points 5 \
+  --trajectory-command-duration 0.02 \
   --tau 0.005
 ```
 
@@ -365,7 +362,7 @@ zip 里包含：
 - 降低 `--theta-dot-limit`
 - 降低 `--max-command-accel`
 - 加 `--max-command-jerk`
-- 如果必须用 trajectory controller，使用 `--trajectory-window-duration 0.08 --trajectory-window-points 5`
+- 如果必须用 trajectory controller，坚持单点发送并检查 `Command velocity greatly exceeds feedback velocity`；若仍滞后，说明这个控制器接口不适合当前实时速度型算法
 
 ### 5. position_array 抖，joint_trajectory 稳
 

@@ -27,8 +27,6 @@ REAL_SAFE_PRESET = {
     "theta_dot_limit": 0.3,
     "max_command_accel": 8.0,
     "max_command_jerk": 80.0,
-    "trajectory_window_duration": 0.08,
-    "trajectory_window_points": 5,
 }
 
 COMMAND_MODE_TOPIC_TYPES = {
@@ -572,14 +570,14 @@ def add_ros_real_arguments(parser):
         default=None,
         help=(
             "For command_mode=joint_trajectory, publish a short multi-point future window "
-            "instead of a single 5 ms target. Default under --real-safe-preset: 0.08 s."
+            "instead of a single real-time target. This is an explicit non-default A/B option."
         ),
     )
     parser.add_argument(
         "--trajectory-window-points",
         type=int,
         default=None,
-        help="Number of points in the joint_trajectory future window. Default under --real-safe-preset: 5.",
+        help="Number of points in the optional joint_trajectory future window. Default: 1 real-time point.",
     )
     parser.add_argument("--theta-initial-command", type=str, default=None)
     parser.add_argument("--theta-lower", type=str, default=None)

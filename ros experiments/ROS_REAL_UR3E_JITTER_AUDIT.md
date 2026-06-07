@@ -27,8 +27,7 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
 `--real-safe-preset` fills unset values with `--tcp-offset 0,0,0.145`,
 `--task-gain 240`, `--solver-gamma 30`, `--drift-gain 2`,
 `--theta-dot-limit 0.3`, `--max-command-accel 8`,
-`--max-command-jerk 80`, `--trajectory-window-duration 0.08`, and
-`--trajectory-window-points 5`. Explicit CLI values still override the preset.
+`--max-command-jerk 80`. Explicit CLI values still override the preset.
 
 If this still shakes, do not only keep lowering gains. First verify whether the
 published target sequence, ROS loop timing, or robot feedback is the noisy part.
@@ -108,9 +107,9 @@ It writes `ros_real_diagnostic_analysis.json` and
 
 3. If `Command velocity greatly exceeds feedback velocity` appears, the outer
    controller is producing velocity-like increments much faster than the real
-   controller follows. Prefer `velocity_array` with accel/jerk limits. If a
-   trajectory controller must be used, publish a short multi-point future
-   window instead of a single 5 ms target.
+   controller follows. Prefer `velocity_array` or a UR servo/RTDE velocity path with accel/jerk limits. If a
+   trajectory controller must be used for a real-time test, keep single-point
+   commands and treat persistent lag as an interface limitation.
 
 4. If local-FK tracking error looks good while the tool visibly shakes, the
    current metric is insufficient. Pass a measured TCP pose source when
@@ -141,10 +140,9 @@ It writes `ros_real_diagnostic_analysis.json` and
      --tau 0.005
    ```
 
-    This uses `trajectory_msgs/JointTrajectory` instead of the default
-    `std_msgs/Float64MultiArray` position-array stream. With the preset it
-    publishes a roughly 80 ms, 5-point window. Use it only when that trajectory
-    controller is loaded and subscribed.
+    This uses single-point `trajectory_msgs/JointTrajectory` instead of the default
+   `std_msgs/Float64MultiArray` position-array stream. It keeps the real-time
+   single-command semantics; use it only when that trajectory controller is loaded and subscribed.
 
    If the robot also has a joint-group velocity controller, run a second
    interface test that matches the algorithm output more directly:
@@ -186,6 +184,10 @@ It writes `ros_real_diagnostic_analysis.json` and
    The zip contains preflight reports, summary JSON, cycle diagnostics, analyzer
    outputs, a manifest, and an A/B comparison. Use `--include-heavy` only when
    history arrays or figures are needed.
+
+## Real-time-control constraint
+
+Multi-point trajectory windows are retained only as an explicit A/B diagnostic, not as the recommended real-time hardware validation path. The default remains one command per control cycle.
 
 ## Safer trial sequence
 

@@ -191,7 +191,8 @@ def classify(rows, tau, accel_warn_norm, accel_critical_norm, state_age_factor, 
             ),
             (
                 "The outer controller is producing velocity-like increments much faster than the real controller follows. "
-                "Prefer velocity_array with accel/jerk limits, or use a multi-point joint_trajectory window instead of dense single-step position targets."
+                "For a real-time single-point controller, prefer velocity_array or a UR servo/RTDE velocity path with accel/jerk limits; "
+                "do not hide this lag by sending a future multi-point trajectory."
             ),
         )
 
