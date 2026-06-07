@@ -1,0 +1,1004 @@
+{
+  "stem": "clean",
+  "live_position_error_source": "Local UR3e forward kinematics from ROS /joint_states feedback",
+  "live_fk_position_error_source": "Local UR3e forward kinematics from ROS /joint_states feedback",
+  "live_visual_tip_error_source": "Not used in ROS real mode; duplicated local FK position for plotting compatibility",
+  "joint_drift_source": "ROS joint-position feedback relative to measured post-initialization joint state",
+  "theta_final_semantics": "terminal ROS joint feedback after the last published joint-position command",
+  "theta_initial": [
+    -1.8421803609669496e-05,
+    -1.5707762998393555,
+    1.570820156727926,
+    2.996503796381944e-05,
+    1.5707827806472778,
+    1.4703597116749734e-05
+  ],
+  "theta_final": [
+    -0.06117421785463506,
+    -1.7031318149962367,
+    1.4545400778399866,
+    -0.09673102319750981,
+    1.5965501070022583,
+    -3.987947572881012e-05
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": -1.8421803609669496e-05,
+      "final_rad": -0.06117421785463506,
+      "delta_rad": -0.06115579605102539
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707762998393555,
+      "final_rad": -1.7031318149962367,
+      "delta_rad": -0.13235551515688115
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.570820156727926,
+      "final_rad": 1.4545400778399866,
+      "delta_rad": -0.11628007888793945
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 2.996503796381944e-05,
+      "final_rad": -0.09673102319750981,
+      "delta_rad": -0.09676098823547363
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707827806472778,
+      "final_rad": 1.5965501070022583,
+      "delta_rad": 0.02576732635498047
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 1.4703597116749734e-05,
+      "final_rad": -3.987947572881012e-05,
+      "delta_rad": -5.4583072845559855e-05
+    }
+  ],
+  "max_joint_drift_rad": 0.13235551515688115,
+  "final_joint_drift_norm_rad": 0.21167361068485796,
+  "mean_position_error_m": 0.006208493486896206,
+  "final_position_error_m": 0.03672052317988908,
+  "max_position_error_m": 0.03672052317988908,
+  "mean_fk_position_error_m": 0.006208493486896206,
+  "final_fk_position_error_m": 0.03672052317988908,
+  "max_fk_position_error_m": 0.03672052317988908,
+  "mean_tip_position_error_m": 0.006208493486896206,
+  "final_tip_position_error_m": 0.03672052317988908,
+  "max_tip_position_error_m": 0.03672052317988908,
+  "max_drift_norm": 0.21310967348048374,
+  "final_drift_norm": 0.2116939535326098,
+  "mean_task_residual": 1.3366609912244205,
+  "final_task_residual": 8.611993853953791,
+  "mean_solver_residual": 1.9834123148474803,
+  "final_solver_residual": 8.614129871708547,
+  "mean_solver_energy": 8.151487026217604,
+  "final_solver_energy": 37.101616723330764,
+  "min_boundary_slack": 0.0,
+  "final_boundary_slack": 0.0,
+  "runtime_s": 5.0001630850001675,
+  "avg_step_time_s": 0.005000163085000168,
+  "ros_real_cycle_diagnostics": {
+    "cycle_period_s": {
+      "mean": 0.005000156666666682,
+      "median": 0.005000484000447614,
+      "p95": 0.005057269099415862,
+      "p99": 0.005120639980013948,
+      "max": 0.005183676999877207
+    },
+    "cycle_work_s": {
+      "mean": 0.001447362105010143,
+      "median": 0.0014396560000022873,
+      "p95": 0.0016967700999884977,
+      "p99": 0.00205113439957131,
+      "max": 0.0029295959993760334
+    },
+    "state_read_s": {
+      "mean": 6.651102014984644e-06,
+      "median": 6.016499810357345e-06,
+      "p95": 8.556500461054384e-06,
+      "p99": 1.5504310258620532e-05,
+      "max": 7.632300003024284e-05
+    },
+    "state_age_s": {
+      "mean": 0.0010397134800077764,
+      "median": 0.0009931494996635593,
+      "p95": 0.002205332549601735,
+      "p99": 0.002272796340221248,
+      "max": 0.0038910270004635095
+    },
+    "controller_step_s": {
+      "mean": 0.0010437181049874197,
+      "median": 0.0010424464999232441,
+      "p95": 0.0012447572496057542,
+      "p99": 0.0014530447199831542,
+      "max": 0.002433777999613085
+    },
+    "publish_s": {
+      "mean": 5.2864221997879214e-05,
+      "median": 4.8565999804850435e-05,
+      "p95": 7.742405059616431e-05,
+      "p99": 0.00010369891989284951,
+      "max": 0.000149268999848573
+    },
+    "sleep_s": {
+      "mean": 0.0034740900689830597,
+      "median": 0.0035056945002907014,
+      "p95": 0.003684747999704996,
+      "p99": 0.003971924210045471,
+      "max": 0.004179957999440376
+    },
+    "command_step_norm_rad": {
+      "mean": 0.0026594025189988443,
+      "median": 0.003159250572820236,
+      "p95": 0.004472136035146113,
+      "p99": 0.004472139829128147,
+      "max": 0.0044721912947102505
+    },
+    "command_step_max_abs_rad": {
+      "mean": 0.0015065416495172721,
+      "median": 0.0020000000000000018,
+      "p95": 0.0020000000000000018,
+      "p99": 0.0020000000000000018,
+      "max": 0.0020000000000000018
+    },
+    "command_velocity_norm_rad_s": {
+      "mean": 0.5318805037997688,
+      "median": 0.6318501145640472,
+      "p95": 0.8944272070292225,
+      "p99": 0.8944279658256293,
+      "max": 0.89443825894205
+    },
+    "command_accel_norm_rad_s2": {
+      "mean": 5.442308839521704,
+      "median": 3.0095345947474827,
+      "p95": 17.320608678768373,
+      "p99": 20.18364551456883,
+      "max": 22.379171819046814
+    },
+    "feedback_velocity_norm_rad_s": {
+      "mean": 0.06891006941413531,
+      "median": 0.08162647951676365,
+      "p95": 0.11582435834214919,
+      "p99": 0.1227634370541844,
+      "max": 0.1271430552580461
+    },
+    "tcp_pose_age_s": {
+      "mean": null,
+      "median": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "tcp_fk_error_norm_m": {
+      "mean": null,
+      "median": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "samples": 1000,
+    "tau_s": 0.005,
+    "deadline_miss_count": 0,
+    "deadline_miss_ratio": 0.0,
+    "period_overrun_count": 0,
+    "period_overrun_ratio": 0.0,
+    "tcp_pose_used_count": 0,
+    "tcp_pose_used_ratio": 0.0,
+    "timing_scope": "whole ROS loop: state read, controller step, publish, and rate sleep"
+  },
+  "physical_reset_before_run": {
+    "interface": "ros1_joint_position_command",
+    "joint_state_topic": "/joint_states",
+    "tcp_pose_topic": "",
+    "tcp_pose_enabled": false,
+    "latest_tcp_position_m": null,
+    "latest_tcp_pose_age_s": null,
+    "command_topic": "/pos_joint_group_controller/command",
+    "position_command_topic": "/pos_joint_group_controller/command",
+    "trajectory_command_topic": "/scaled_pos_joint_traj_controller/command",
+    "velocity_command_topic": "/joint_group_vel_controller/command",
+    "command_mode": "position_array",
+    "command_message_type": "std_msgs/Float64MultiArray",
+    "trajectory_command_duration_s": 0.02,
+    "joint_names": [
+      "shoulder_pan_joint",
+      "shoulder_lift_joint",
+      "elbow_joint",
+      "wrist_1_joint",
+      "wrist_2_joint",
+      "wrist_3_joint"
+    ],
+    "latest_joint_position_rad": [
+      -2.209340230763246e-06,
+      -1.5707209875584631,
+      1.5707982222186487,
+      3.977412841749128e-06,
+      1.5708292722702026,
+      -4.116688863575746e-06
+    ],
+    "latest_joint_velocity_rad_s": [
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      0.0,
+      -0.0
+    ],
+    "latest_state_age_s": 0.0007568470000478555,
+    "command_subscriber_ready": true,
+    "published_topics": [
+      {
+        "topic": "/rosout_agg",
+        "type": "rosgraph_msgs/Log"
+      },
+      {
+        "topic": "/rosout",
+        "type": "rosgraph_msgs/Log"
+      },
+      {
+        "topic": "/tf",
+        "type": "tf2_msgs/TFMessage"
+      },
+      {
+        "topic": "/tf_static",
+        "type": "tf2_msgs/TFMessage"
+      },
+      {
+        "topic": "/ur_hardware_interface/robot_program_running",
+        "type": "std_msgs/Bool"
+      },
+      {
+        "topic": "/ur_hardware_interface/io_states",
+        "type": "ur_msgs/IOStates"
+      },
+      {
+        "topic": "/ur_hardware_interface/tool_data",
+        "type": "ur_msgs/ToolDataMsg"
+      },
+      {
+        "topic": "/ur_hardware_interface/robot_mode",
+        "type": "ur_dashboard_msgs/RobotMode"
+      },
+      {
+        "topic": "/ur_hardware_interface/safety_mode",
+        "type": "ur_dashboard_msgs/SafetyMode"
+      },
+      {
+        "topic": "/joint_states",
+        "type": "sensor_msgs/JointState"
+      },
+      {
+        "topic": "/ur_hardware_interface/set_mode/result",
+        "type": "ur_dashboard_msgs/SetModeActionResult"
+      },
+      {
+        "topic": "/ur_hardware_interface/set_mode/feedback",
+        "type": "ur_dashboard_msgs/SetModeActionFeedback"
+      },
+      {
+        "topic": "/ur_hardware_interface/set_mode/status",
+        "type": "actionlib_msgs/GoalStatusArray"
+      },
+      {
+        "topic": "/pos_joint_group_controller/command",
+        "type": "std_msgs/Float64MultiArray"
+      }
+    ],
+    "ros_master_state": {
+      "available": true,
+      "publishers": [
+        {
+          "topic": "/rosout_agg",
+          "nodes": [
+            "/rosout"
+          ]
+        },
+        {
+          "topic": "/rosout",
+          "nodes": [
+            "/robot_state_publisher",
+            "/ur_hardware_interface",
+            "/controller_stopper",
+            "/ur_hardware_interface/ur_robot_state_helper",
+            "/ros_control_stopped_spawner",
+            "/ros_control_controller_spawner",
+            "/run_clean_repetitive_tracking_ros_real"
+          ]
+        },
+        {
+          "topic": "/tf",
+          "nodes": [
+            "/robot_state_publisher",
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/tf_static",
+          "nodes": [
+            "/robot_state_publisher"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/robot_program_running",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/io_states",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/tool_data",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/robot_mode",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/safety_mode",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/joint_states",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/set_mode/result",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/set_mode/feedback",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/set_mode/status",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "topic": "/pos_joint_group_controller/command",
+          "nodes": [
+            "/run_clean_repetitive_tracking_ros_real"
+          ]
+        }
+      ],
+      "subscribers": [
+        {
+          "topic": "/rosout",
+          "nodes": [
+            "/rosout"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/robot_program_running",
+          "nodes": [
+            "/controller_stopper"
+          ]
+        },
+        {
+          "topic": "/joint_states",
+          "nodes": [
+            "/robot_state_publisher",
+            "/run_clean_repetitive_tracking_ros_real"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/robot_mode",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/safety_mode",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/script_command",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/joint_group_vel_controller/command",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/pos_joint_group_controller/command",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/set_mode/goal",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "topic": "/ur_hardware_interface/set_mode/cancel",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        }
+      ],
+      "services": [
+        {
+          "service": "/rosout/get_loggers",
+          "nodes": [
+            "/rosout"
+          ]
+        },
+        {
+          "service": "/rosout/set_logger_level",
+          "nodes": [
+            "/rosout"
+          ]
+        },
+        {
+          "service": "/robot_state_publisher/get_loggers",
+          "nodes": [
+            "/robot_state_publisher"
+          ]
+        },
+        {
+          "service": "/robot_state_publisher/set_logger_level",
+          "nodes": [
+            "/robot_state_publisher"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/get_loggers",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/set_logger_level",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_stopper/get_loggers",
+          "nodes": [
+            "/controller_stopper"
+          ]
+        },
+        {
+          "service": "/controller_stopper/set_logger_level",
+          "nodes": [
+            "/controller_stopper"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/ur_robot_state_helper/get_loggers",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/ur_robot_state_helper/set_logger_level",
+          "nodes": [
+            "/ur_hardware_interface/ur_robot_state_helper"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/brake_release",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/clear_operational_mode",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/close_popup",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/close_safety_popup",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/pause",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/play",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/power_off",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/power_on",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/restart_safety",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/shutdown",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/stop",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/unlock_protective_stop",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/program_running",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/get_loaded_program",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/load_installation",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/load_program",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/program_saved",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/is_in_remote_control",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/popup",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/program_state",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/get_safety_mode",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/get_robot_mode",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/add_to_log",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/raw_request",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/connect",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/dashboard/quit",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/set_speed_slider",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/set_io",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/hand_back_control",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/zero_ftsensor",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/set_payload",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ur_hardware_interface/activate_spline_interpolation",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_manager/list_controllers",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_manager/list_controller_types",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_manager/load_controller",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_manager/unload_controller",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_manager/switch_controller",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/controller_manager/reload_controller_libraries",
+          "nodes": [
+            "/ur_hardware_interface"
+          ]
+        },
+        {
+          "service": "/ros_control_stopped_spawner/get_loggers",
+          "nodes": [
+            "/ros_control_stopped_spawner"
+          ]
+        },
+        {
+          "service": "/ros_control_stopped_spawner/set_logger_level",
+          "nodes": [
+            "/ros_control_stopped_spawner"
+          ]
+        },
+        {
+          "service": "/ros_control_controller_spawner/get_loggers",
+          "nodes": [
+            "/ros_control_controller_spawner"
+          ]
+        },
+        {
+          "service": "/ros_control_controller_spawner/set_logger_level",
+          "nodes": [
+            "/ros_control_controller_spawner"
+          ]
+        },
+        {
+          "service": "/run_clean_repetitive_tracking_ros_real/get_loggers",
+          "nodes": [
+            "/run_clean_repetitive_tracking_ros_real"
+          ]
+        },
+        {
+          "service": "/run_clean_repetitive_tracking_ros_real/set_logger_level",
+          "nodes": [
+            "/run_clean_repetitive_tracking_ros_real"
+          ]
+        }
+      ],
+      "error": ""
+    },
+    "controller_manager": {
+      "service_name": "/controller_manager/list_controllers",
+      "available": true,
+      "controllers": [
+        {
+          "name": "joint_group_vel_controller",
+          "state": "initialized",
+          "type": "velocity_controllers/JointGroupVelocityController",
+          "claimed_resources": [
+            {
+              "hardware_interface": "hardware_interface::VelocityJointInterface",
+              "resources": [
+                "elbow_joint",
+                "shoulder_lift_joint",
+                "shoulder_pan_joint",
+                "wrist_1_joint",
+                "wrist_2_joint",
+                "wrist_3_joint"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "joint_state_controller",
+          "state": "running",
+          "type": "joint_state_controller/JointStateController",
+          "claimed_resources": [
+            {
+              "hardware_interface": "hardware_interface::JointStateInterface",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "name": "pos_joint_group_controller",
+          "state": "running",
+          "type": "position_controllers/JointGroupPositionController",
+          "claimed_resources": [
+            {
+              "hardware_interface": "hardware_interface::PositionJointInterface",
+              "resources": [
+                "elbow_joint",
+                "shoulder_lift_joint",
+                "shoulder_pan_joint",
+                "wrist_1_joint",
+                "wrist_2_joint",
+                "wrist_3_joint"
+              ]
+            }
+          ]
+        }
+      ],
+      "error": ""
+    },
+    "command_mode_recommendations": [
+      {
+        "mode": "velocity_array",
+        "priority": 2,
+        "command_topic": "/joint_group_vel_controller/command",
+        "expected_topic_type": "std_msgs/Float64MultiArray",
+        "observed_topic_type": null,
+        "topic_type_matches": true,
+        "subscriber_nodes": [
+          "/ur_hardware_interface"
+        ],
+        "subscriber_present": true,
+        "controller_name_hint": "joint_group_vel_controller",
+        "controller_state": "initialized",
+        "controller_name_hint_running": false,
+        "available": true,
+        "note": "Controller joint_group_vel_controller is not running."
+      },
+      {
+        "mode": "position_array",
+        "priority": 3,
+        "command_topic": "/pos_joint_group_controller/command",
+        "expected_topic_type": "std_msgs/Float64MultiArray",
+        "observed_topic_type": "std_msgs/Float64MultiArray",
+        "topic_type_matches": true,
+        "subscriber_nodes": [
+          "/ur_hardware_interface"
+        ],
+        "subscriber_present": true,
+        "controller_name_hint": "pos_joint_group_controller",
+        "controller_state": "running",
+        "controller_name_hint_running": true,
+        "available": true,
+        "note": "Fallback mode; dense position streaming can still excite real-controller interpolation."
+      },
+      {
+        "mode": "joint_trajectory",
+        "priority": 1,
+        "command_topic": "/scaled_pos_joint_traj_controller/command",
+        "expected_topic_type": "trajectory_msgs/JointTrajectory",
+        "observed_topic_type": null,
+        "topic_type_matches": true,
+        "subscriber_nodes": [],
+        "subscriber_present": false,
+        "controller_name_hint": "scaled_pos_joint_traj_controller",
+        "controller_state": "unknown",
+        "controller_name_hint_running": false,
+        "available": false,
+        "note": "No subscriber is registered for this command topic."
+      }
+    ],
+    "theta_lower_rad": [
+      -6.283185307179586,
+      -6.283185307179586,
+      -6.283185307179586,
+      -6.283185307179586,
+      -6.283185307179586,
+      -6.283185307179586
+    ],
+    "theta_upper_rad": [
+      6.283185307179586,
+      6.283185307179586,
+      6.283185307179586,
+      6.283185307179586,
+      6.283185307179586,
+      6.283185307179586
+    ],
+    "real_safe_preset": true,
+    "real_safe_preset_defaults": {
+      "tcp_offset": "0,0,0.145",
+      "task_gain": 240.0,
+      "solver_gamma": 30.0,
+      "drift_gain": 2.0,
+      "theta_dot_limit": 0.4,
+      "max_command_accel": 12.0
+    },
+    "max_command_step_rad": 0.01,
+    "max_command_accel_rad_s2": 10.0,
+    "settle_steps": 80,
+    "settle_rate_hz": 50.0,
+    "state_timeout_s": 0.5,
+    "preflight_verdict": {
+      "status": "pass",
+      "issues": [],
+      "selected_command_mode": "position_array",
+      "selected_command_topic": "/pos_joint_group_controller/command",
+      "tau_s": 0.005
+    },
+    "theta_initial_command_rad": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "tcp_offset_m_tool_frame": [
+      0.0,
+      0.0,
+      0.145
+    ]
+  },
+  "physical_reset_after_run": {
+    "reset_mode": "not_applicable_ros_real"
+  },
+  "terminal_feedback_after_last_command": {
+    "theta_feedback_rad": [
+      -0.06117421785463506,
+      -1.7031318149962367,
+      1.4545400778399866,
+      -0.09673102319750981,
+      1.5965501070022583,
+      -3.987947572881012e-05
+    ],
+    "joint_drift_rad": [
+      -0.06115579605102539,
+      -0.13235551515688115,
+      -0.11628007888793945,
+      -0.09676098823547363,
+      0.02576732635498047,
+      -5.4583072845559855e-05
+    ],
+    "joint_drift_norm_rad": 0.21167361068485796
+  },
+  "trajectory_name": "circle",
+  "solver_type": "dlccznn",
+  "task_gain": 240.0,
+  "drift_gain": 2.0,
+  "drift_free_term": "active",
+  "drift_feedback_mode": "linear",
+  "solver_gamma": 30.0,
+  "activation_power": 0.9,
+  "activation_exp_clip": 4.0,
+  "dlccznn_inner_steps": 1,
+  "pdnn_gain": 20.0,
+  "pdnn_inner_steps": 1,
+  "ros_real_interface": {
+    "joint_state_topic": "/joint_states",
+    "tcp_pose_topic": "",
+    "tcp_pose_enabled": false,
+    "tcp_pose_timeout_s": 0.05,
+    "command_topic": "/pos_joint_group_controller/command",
+    "position_command_topic": "/pos_joint_group_controller/command",
+    "trajectory_command_topic": "/scaled_pos_joint_traj_controller/command",
+    "velocity_command_topic": "/joint_group_vel_controller/command",
+    "command_mode": "position_array",
+    "trajectory_command_duration_s": 0.02,
+    "joint_names": [
+      "shoulder_pan_joint",
+      "shoulder_lift_joint",
+      "elbow_joint",
+      "wrist_1_joint",
+      "wrist_2_joint",
+      "wrist_3_joint"
+    ],
+    "tcp_offset_m_tool_frame": [
+      0.0,
+      0.0,
+      0.145
+    ],
+    "real_safe_preset": true,
+    "real_safe_preset_defaults": {
+      "tcp_offset": "0,0,0.145",
+      "task_gain": 240.0,
+      "solver_gamma": 30.0,
+      "drift_gain": 2.0,
+      "theta_dot_limit": 0.4,
+      "max_command_accel": 12.0
+    },
+    "max_command_step_rad": 0.01,
+    "max_command_accel_rad_s2": 10.0
+  }
+}

@@ -94,6 +94,7 @@ def main():
     add_ros_real_arguments(parser)
     parser.add_argument("--output-dir", default=None)
     parser.add_argument("--sample-duration", type=float, default=2.0)
+    parser.add_argument("--tau", type=float, default=0.005)
     parser.add_argument("--node-name", default="ros_real_ur3e_preflight_check")
     parser.add_argument(
         "--require-pass",
