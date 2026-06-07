@@ -113,6 +113,8 @@ def main():
         trajectory_command_topic=args.trajectory_command_topic,
         velocity_command_topic=args.velocity_command_topic,
         trajectory_command_duration=args.trajectory_command_duration,
+        trajectory_window_duration=args.trajectory_window_duration,
+        trajectory_window_points=args.trajectory_window_points,
         tcp_pose_topic=args.tcp_pose_topic,
     )
     preflight = interface.build_preflight_report(

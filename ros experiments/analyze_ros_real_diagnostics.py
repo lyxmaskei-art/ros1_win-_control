@@ -10,6 +10,7 @@ import numpy as np
 
 DIAGNOSTIC_CSV_NAME = "ros_real_cycle_diagnostics.csv"
 DEFAULT_TAU = 0.005
+ANALYSIS_SCHEMA_VERSION = 2
 
 
 def _to_float(value, default=float("nan")):
@@ -103,6 +104,8 @@ def classify(rows, tau, accel_warn_norm, accel_critical_norm, state_age_factor, 
         "command_step_max_abs_rad": stats(vector(rows, "command_step_max_abs_rad")),
         "command_velocity_norm_rad_s": stats(vector(rows, "command_velocity_norm_rad_s")),
         "command_accel_norm_rad_s2": stats(vector(rows, "command_accel_norm_rad_s2")),
+        "command_jerk_norm_rad_s3": stats(vector(rows, "command_jerk_norm_rad_s3")),
+        "raw_command_velocity_norm_rad_s": stats(vector(rows, "raw_command_velocity_norm_rad_s")),
         "feedback_velocity_norm_rad_s": stats(vector(rows, "feedback_velocity_norm_rad_s")),
         "tcp_pose_age_s": stats(vector(rows, "tcp_pose_age_s")),
         "tcp_fk_error_norm_m": stats(vector(rows, "tcp_fk_error_norm_m")),
@@ -117,6 +120,9 @@ def classify(rows, tau, accel_warn_norm, accel_critical_norm, state_age_factor, 
     state_age_p95 = metrics["state_age_s"]["p95"]
     accel_p95 = metrics["command_accel_norm_rad_s2"]["p95"]
     accel_max = metrics["command_accel_norm_rad_s2"]["max"]
+    jerk_p95 = metrics["command_jerk_norm_rad_s3"]["p95"]
+    command_velocity_p95 = metrics["command_velocity_norm_rad_s"]["p95"]
+    feedback_velocity_p95 = metrics["feedback_velocity_norm_rad_s"]["p95"]
     step_max = metrics["command_step_max_abs_rad"]["max"]
     controller_p99 = metrics["controller_step_s"]["p99"]
     publish_p99 = metrics["publish_s"]["p99"]
@@ -165,6 +171,37 @@ def classify(rows, tau, accel_warn_norm, accel_critical_norm, state_age_factor, 
             "Command acceleration is high",
             f"command_accel_norm_rad_s2 p95={accel_p95:.6g}, max={accel_max:.6g}",
             "Keep --max-command-accel enabled and sweep 6, 8, 12 rad/s^2 before changing the main gains.",
+        )
+
+    if (
+        command_velocity_p95 is not None
+        and feedback_velocity_p95 is not None
+        and command_velocity_p95 > 0.2
+        and feedback_velocity_p95 > 0.0
+        and command_velocity_p95 / feedback_velocity_p95 > 4.0
+    ):
+        add_finding(
+            findings,
+            "high",
+            "Command velocity greatly exceeds feedback velocity",
+            (
+                f"command_velocity_norm_rad_s p95={command_velocity_p95:.6g}, "
+                f"feedback_velocity_norm_rad_s p95={feedback_velocity_p95:.6g}, "
+                f"ratio={command_velocity_p95 / feedback_velocity_p95:.3g}"
+            ),
+            (
+                "The outer controller is producing velocity-like increments much faster than the real controller follows. "
+                "Prefer velocity_array with accel/jerk limits, or use a multi-point joint_trajectory window instead of dense single-step position targets."
+            ),
+        )
+
+    if jerk_p95 is not None and jerk_p95 > 200.0:
+        add_finding(
+            findings,
+            "medium",
+            "Command jerk is high",
+            f"command_jerk_norm_rad_s3 p95={jerk_p95:.6g}",
+            "Enable or lower --max-command-jerk, especially for velocity_array tests where acceleration spikes showed visible shake.",
         )
 
     if step_max is not None and step_max > 0.01:
@@ -256,7 +293,10 @@ def write_markdown(path, csv_path, metrics, findings):
         "controller_step_s",
         "publish_s",
         "command_step_max_abs_rad",
+        "command_velocity_norm_rad_s",
         "command_accel_norm_rad_s2",
+        "command_jerk_norm_rad_s3",
+        "raw_command_velocity_norm_rad_s",
         "feedback_velocity_norm_rad_s",
         "tcp_pose_age_s",
         "tcp_fk_error_norm_m",
@@ -304,6 +344,7 @@ def main():
         period_factor=args.period_factor,
     )
     result = {
+        "schema_version": ANALYSIS_SCHEMA_VERSION,
         "source_csv": str(csv_path),
         "metrics": metrics,
         "findings": findings,

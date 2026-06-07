@@ -5,7 +5,10 @@ import csv
 import json
 from pathlib import Path
 
+import numpy as np
+
 from analyze_ros_real_diagnostics import (
+    ANALYSIS_SCHEMA_VERSION,
     DEFAULT_TAU,
     classify,
     finite,
@@ -30,14 +33,19 @@ def _load_json(path):
 def _find_analysis_or_build(path):
     path = Path(path)
     if path.is_file() and path.name == "ros_real_diagnostic_analysis.json":
-        return path, _load_json(path)
+        payload = _load_json(path)
+        if payload.get("schema_version") == ANALYSIS_SCHEMA_VERSION:
+            return path, payload
+        path = path.parent
     csv_path = find_diagnostic_csv(path)
     analysis_path = csv_path.with_name("ros_real_diagnostic_analysis.json")
     if analysis_path.exists():
-        return analysis_path, _load_json(analysis_path)
+        payload = _load_json(analysis_path)
+        if payload.get("schema_version") == ANALYSIS_SCHEMA_VERSION:
+            return analysis_path, payload
     rows = load_rows(csv_path)
     time_values = finite(vector(rows, "time_s"))
-    tau = float((time_values[1:] - time_values[:-1]).mean()) if time_values.size > 1 else DEFAULT_TAU
+    tau = float(np.median(time_values[1:] - time_values[:-1])) if time_values.size > 1 else DEFAULT_TAU
     metrics, findings = classify(
         rows=rows,
         tau=tau,
@@ -47,6 +55,7 @@ def _find_analysis_or_build(path):
         period_factor=1.25,
     )
     payload = {
+        "schema_version": ANALYSIS_SCHEMA_VERSION,
         "source_csv": str(csv_path),
         "metrics": metrics,
         "findings": findings,
@@ -113,7 +122,13 @@ def summarize_run(path):
     overrun = float(metrics.get("period_overrun_ratio", 0.0) or 0.0)
     tcp_pose_used_ratio = float(metrics.get("tcp_pose_used_ratio", 0.0) or 0.0)
     state_age_p95 = _metric(metrics, "state_age_s", "p95", 0.0) or 0.0
+    command_velocity_p95 = _metric(metrics, "command_velocity_norm_rad_s", "p95", 0.0) or 0.0
+    feedback_velocity_p95 = _metric(metrics, "feedback_velocity_norm_rad_s", "p95", 0.0) or 0.0
+    velocity_ratio = ""
+    if feedback_velocity_p95 > 0.0:
+        velocity_ratio = command_velocity_p95 / feedback_velocity_p95
     accel_p95 = _metric(metrics, "command_accel_norm_rad_s2", "p95", 0.0) or 0.0
+    jerk_p95 = _metric(metrics, "command_jerk_norm_rad_s3", "p95", 0.0) or 0.0
     tcp_fk_error_p95 = _metric(metrics, "tcp_fk_error_norm_m", "p95", 0.0) or 0.0
     position_error = _float_or_none(summary.get("mean_position_error_m"))
     drift_norm = _float_or_none(summary.get("final_joint_drift_norm_rad"))
@@ -150,7 +165,11 @@ def summarize_run(path):
         "tcp_pose_used_ratio": tcp_pose_used_ratio,
         "cycle_period_p99_s": _metric(metrics, "cycle_period_s", "p99", ""),
         "state_age_p95_s": state_age_p95,
+        "command_velocity_p95_rad_s": command_velocity_p95,
+        "feedback_velocity_p95_rad_s": feedback_velocity_p95,
+        "command_feedback_velocity_ratio": velocity_ratio,
         "command_accel_p95_rad_s2": accel_p95,
+        "command_jerk_p95_rad_s3": jerk_p95,
         "tcp_fk_error_p95_m": tcp_fk_error_p95,
         "mean_position_error_m": "" if position_error is None else position_error,
         "final_joint_drift_norm_rad": "" if drift_norm is None else drift_norm,
@@ -168,12 +187,12 @@ def write_markdown(path, rows):
     lines = [
         "# ROS real A/B comparison",
         "",
-        "| Rank | Command mode | Score | High | Medium | Deadline miss | Period overrun | TCP used | State age p95 (s) | Command accel p95 | TCP-FK p95 (m) | Mean error (m) | Final drift (rad) | Top finding |",
-        "|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|",
+        "| Rank | Command mode | Score | High | Medium | Deadline miss | Period overrun | TCP used | State age p95 (s) | Cmd vel p95 | Fb vel p95 | Cmd/Fb vel | Accel p95 | Jerk p95 | TCP-FK p95 (m) | Mean error (m) | Final drift (rad) | Top finding |",
+        "|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|",
     ]
     for idx, row in enumerate(rows, start=1):
         lines.append(
-            "| {rank} | {mode} | {score:.6g} | {high} | {medium} | {deadline:.3%} | {overrun:.3%} | {tcp_used:.3%} | {age:.6g} | {accel:.6g} | {tcp_fk:.6g} | {error} | {drift} | {finding} |".format(
+            "| {rank} | {mode} | {score:.6g} | {high} | {medium} | {deadline:.3%} | {overrun:.3%} | {tcp_used:.3%} | {age:.6g} | {cmd_vel:.6g} | {fb_vel:.6g} | {vel_ratio} | {accel:.6g} | {jerk:.6g} | {tcp_fk:.6g} | {error} | {drift} | {finding} |".format(
                 rank=idx,
                 mode=row["command_mode"],
                 score=float(row["score"]),
@@ -183,7 +202,11 @@ def write_markdown(path, rows):
                 overrun=float(row["period_overrun_ratio"]),
                 tcp_used=float(row["tcp_pose_used_ratio"]),
                 age=float(row["state_age_p95_s"]),
+                cmd_vel=float(row["command_velocity_p95_rad_s"]),
+                fb_vel=float(row["feedback_velocity_p95_rad_s"]),
+                vel_ratio=row["command_feedback_velocity_ratio"],
                 accel=float(row["command_accel_p95_rad_s2"]),
+                jerk=float(row["command_jerk_p95_rad_s3"]),
                 tcp_fk=float(row["tcp_fk_error_p95_m"]),
                 error=row["mean_position_error_m"],
                 drift=row["final_joint_drift_norm_rad"],

@@ -4,25 +4,31 @@
 
 ## 当前判断
 
+根据 2026-06-07 上传的 UR3e 实机结果，`/joint_states` 预检中位频率约 `452-459 Hz`，ROS stamp age p95 约 `0.76-0.87 ms`，正式运行 5 ms 外环 deadline miss 基本为 `0%`。因此本轮数据里，主因不是 UR3e 反馈频率不够，而是命令接口和底层执行语义不匹配，再叠加命令加速度/jerk 偏尖。
+
 实机效果比 Windows/CoppeliaSim live 仿真差一个数量级，最可能不是单一参数问题，而是下面几类因素叠加：
 
 1. **控制接口语义不匹配**
 
    算法内部更接近“速度/增量控制”：先算 `theta_dot_next`，再积分得到 `theta_next`。原 ROS 实机路径把高频 `theta_next` 位置数组发给 `/pos_joint_group_controller/command`。仿真同步步进可以吃下这种命令，但真实 UR 控制器还有插值、伺服动态、通信延迟和安全限幅，200 Hz 密集位置流容易表现为抖动。
 
-2. **ROS 闭环时序不稳定**
+2. **控制器执行层滞后**
+
+   结果中 `position_array` / `joint_trajectory` 的命令速度 p95 约 `0.89 rad/s`，但反馈速度 p95 只有 `0.08-0.12 rad/s`，差了约 `7-11` 倍；`velocity_array` 则基本同量级。这说明脚本没掉频，是真实控制器没有按 5 ms 单点位置/轨迹目标同步跟上。
+
+3. **ROS 闭环时序不稳定**
 
    原 `03_real_time_feasibility/benchmark_step_time.py` 主要测 `controller.step`，没有测完整闭环周期。真实抖动可能来自 `/joint_states` 反馈过旧、ROS1/Python 调度抖动、publish 耗时、`rospy.Rate` sleep 误差或 deadline miss。
 
-3. **命令速度/加速度尖峰**
+4. **命令速度/加速度/jerk 尖峰**
 
    `task_gain`、`solver_gamma`、`drift_gain`、`theta_dot_limit`、`max_command_step`、`max_command_accel` 是耦合的。某些组合会让单步位置变化不大，但关节速度变化很急，真机上就会抖。
 
-4. **TCP / frame / FK 模型误差**
+5. **TCP / frame / FK 模型误差**
 
    如果只用 `/joint_states` 加本地 DH/FK 计算 TCP，日志里可能显示“跟踪还行”，但真实工具端因为 TCP offset、base/tool frame 或工具安装误差而偏离。需要可选真实 TCP pose 来交叉验证。
 
-5. **反馈频率撑不起控制频率**
+6. **反馈频率撑不起控制频率**
 
    `--tau 0.005` 对应 200 Hz。如果 `/joint_states` 实际频率明显低于 200 Hz，控制器就是在用旧状态闭环，继续调增益没有意义。
 
@@ -51,8 +57,11 @@
 --task-gain 240
 --solver-gamma 30
 --drift-gain 2
---theta-dot-limit 0.4
---max-command-accel 12
+--theta-dot-limit 0.3
+--max-command-accel 8
+--max-command-jerk 80
+--trajectory-window-duration 0.08
+--trajectory-window-points 5
 ```
 
 你仍然可以在命令行显式覆盖其中任意值。
@@ -70,7 +79,7 @@
 含义：
 
 - `position_array`：保留原来的 `std_msgs/Float64MultiArray` 位置数组接口。
-- `joint_trajectory`：发布单点 `trajectory_msgs/JointTrajectory`，带 `time_from_start`，更符合真实 trajectory controller。
+- `joint_trajectory`：发布 `trajectory_msgs/JointTrajectory`。在 `--real-safe-preset` 下默认发布约 `80 ms`、`5` 点短窗口，不再是 5 ms 单点反复重规划。
 - `velocity_array`：直接发布受限后的关节速度命令，更接近算法输出，但必须确认机器人上有对应 velocity controller。
 
 `velocity_array` 模式会在正常结束、异常栈展开、ROS shutdown 和进程退出时尝试发送零速度。
@@ -209,22 +218,7 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
   --tau 0.005
 ```
 
-再跑 trajectory 接口：
-
-```bash
-python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
-  --experiment single \
-  --method method2_dlccznn \
-  --trajectory-name circle \
-  --duration 5 \
-  --real-safe-preset \
-  --command-mode joint_trajectory \
-  --trajectory-command-topic /scaled_pos_joint_traj_controller/command \
-  --trajectory-command-duration 0.02 \
-  --tau 0.005
-```
-
-如果机器人上有 velocity controller，再跑：
+再跑 velocity 接口。2026-06-07 的结果里，`velocity_array` 是唯一让命令速度和反馈速度进入同一量级的模式：
 
 ```bash
 python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
@@ -235,6 +229,25 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
   --real-safe-preset \
   --command-mode velocity_array \
   --velocity-command-topic /joint_group_vel_controller/command \
+  --theta-dot-limit 0.25 \
+  --max-command-accel 6 \
+  --max-command-jerk 60 \
+  --tau 0.005
+```
+
+如果只能使用 trajectory controller，再跑短窗口 trajectory 接口：
+
+```bash
+python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
+  --experiment single \
+  --method method2_dlccznn \
+  --trajectory-name circle \
+  --duration 5 \
+  --real-safe-preset \
+  --command-mode joint_trajectory \
+  --trajectory-command-topic /scaled_pos_joint_traj_controller/command \
+  --trajectory-window-duration 0.08 \
+  --trajectory-window-points 5 \
   --tau 0.005
 ```
 
@@ -335,7 +348,8 @@ zip 里包含：
 
 ```bash
 --max-command-accel 6
---theta-dot-limit 0.2
+--max-command-jerk 60
+--theta-dot-limit 0.25
 --task-gain 160
 --solver-gamma 20
 --drift-gain 1
@@ -343,11 +357,21 @@ zip 里包含：
 
 再逐步回到 `--real-safe-preset`。
 
-### 4. position_array 抖，joint_trajectory 稳
+### 4. command velocity 远高于 feedback velocity
+
+如果 `Command velocity greatly exceeds feedback velocity` 是 high finding，说明脚本输出的速度型命令远快于底层控制器实际执行速度。此时不要继续只调高/调低增益，优先：
+
+- 使用 `velocity_array`
+- 降低 `--theta-dot-limit`
+- 降低 `--max-command-accel`
+- 加 `--max-command-jerk`
+- 如果必须用 trajectory controller，使用 `--trajectory-window-duration 0.08 --trajectory-window-points 5`
+
+### 5. position_array 抖，joint_trajectory 稳
 
 说明原高频位置数组接口很可能是主要问题。后续应优先使用 trajectory controller，或者进一步接入更合适的 velocity/servo 接口。
 
-### 5. TCP-FK error 大
+### 6. TCP-FK error 大
 
 说明本地 FK 和真实 TCP 不一致。先修：
 
@@ -372,8 +396,11 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
   --task-gain 160 \
   --solver-gamma 20 \
   --drift-gain 1 \
-  --theta-dot-limit 0.2 \
+  --command-mode velocity_array \
+  --velocity-command-topic /joint_group_vel_controller/command \
+  --theta-dot-limit 0.25 \
   --max-command-accel 6 \
+  --max-command-jerk 60 \
   --tau 0.005
 ```
 

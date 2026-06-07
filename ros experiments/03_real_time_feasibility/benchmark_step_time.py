@@ -20,6 +20,7 @@ from _ros_real_ur3e import (
     DEFAULT_JOINT_NAMES,
     ROSUR3eInterface,
     StopMotionGuard,
+    _limit_vector_norm,
     add_ros_real_arguments,
     ensure_ros_node,
     format_preflight_failure,
@@ -82,6 +83,8 @@ def run_ros_benchmark(args):
         trajectory_command_topic=args.trajectory_command_topic,
         velocity_command_topic=args.velocity_command_topic,
         trajectory_command_duration=args.trajectory_command_duration,
+        trajectory_window_duration=args.trajectory_window_duration,
+        trajectory_window_points=args.trajectory_window_points,
         tcp_pose_topic=args.tcp_pose_topic,
     )
     stop_guard = StopMotionGuard(interface)
@@ -139,7 +142,9 @@ def run_ros_benchmark(args):
     missed_deadlines = 0
     t_start = time.perf_counter()
     last_commanded_velocity = None
+    last_commanded_accel = None
     last_limited_velocity = None
+    last_limited_accel = None
     last_cycle_start = None
     cycle_diagnostics = []
 
@@ -161,15 +166,21 @@ def run_ros_benchmark(args):
             missed_deadlines += 1
         theta_next = np.asarray(result["theta_next"], dtype=float)
         limited_velocity = np.asarray(result.get("theta_dot_next", np.zeros_like(theta_current)), dtype=float)
+        raw_limited_velocity = limited_velocity.copy()
         if args.max_command_accel is not None and float(args.max_command_accel) > 0.0:
             if last_limited_velocity is None:
                 last_limited_velocity = limited_velocity.copy()
-            accel_step = float(args.max_command_accel) * float(settings.tau)
-            limited_velocity = np.clip(
-                limited_velocity,
-                last_limited_velocity - accel_step,
-                last_limited_velocity + accel_step,
-            )
+            accel = (limited_velocity - last_limited_velocity) / float(settings.tau)
+            accel = _limit_vector_norm(accel, float(args.max_command_accel))
+            if args.max_command_jerk is not None and float(args.max_command_jerk) > 0.0:
+                if last_limited_accel is None:
+                    last_limited_accel = accel.copy()
+                jerk = (accel - last_limited_accel) / float(settings.tau)
+                jerk = _limit_vector_norm(jerk, float(args.max_command_jerk))
+                accel = last_limited_accel + float(settings.tau) * jerk
+                accel = _limit_vector_norm(accel, float(args.max_command_accel))
+                last_limited_accel = accel.copy()
+            limited_velocity = last_limited_velocity + float(settings.tau) * accel
             theta_next = theta_current + float(settings.tau) * limited_velocity
             last_limited_velocity = limited_velocity.copy()
         if args.max_command_step is not None and float(args.max_command_step) > 0.0:
@@ -184,7 +195,12 @@ def run_ros_benchmark(args):
             commanded_accel = np.zeros_like(commanded_velocity)
         else:
             commanded_accel = (commanded_velocity - last_commanded_velocity) / float(settings.tau)
+        if last_commanded_accel is None:
+            commanded_jerk = np.zeros_like(commanded_accel)
+        else:
+            commanded_jerk = (commanded_accel - last_commanded_accel) / float(settings.tau)
         last_commanded_velocity = commanded_velocity.copy()
+        last_commanded_accel = commanded_accel.copy()
         feedback_velocity = interface.get_latest_velocity()
         feedback_velocity_norm = (
             float("nan")
@@ -195,7 +211,11 @@ def run_ros_benchmark(args):
         if args.command_mode == "velocity_array":
             interface.publish_joint_velocities(commanded_velocity)
         else:
-            interface.publish_joint_positions(theta_next, duration_s=settings.tau)
+            interface.publish_joint_positions(
+                theta_next,
+                duration_s=settings.tau,
+                joint_velocities=commanded_velocity,
+            )
         publish_s = time.perf_counter() - publish_start
         work_end = time.perf_counter()
         rate.sleep()
@@ -219,6 +239,8 @@ def run_ros_benchmark(args):
                 "command_step_max_abs_rad": float(np.max(np.abs(target_delta))),
                 "command_velocity_norm_rad_s": float(np.linalg.norm(commanded_velocity)),
                 "command_accel_norm_rad_s2": float(np.linalg.norm(commanded_accel)),
+                "command_jerk_norm_rad_s3": float(np.linalg.norm(commanded_jerk)),
+                "raw_command_velocity_norm_rad_s": float(np.linalg.norm(raw_limited_velocity)),
                 "feedback_velocity_norm_rad_s": feedback_velocity_norm,
                 "deadline_miss": bool(cycle_work_s > float(settings.tau)),
                 "period_overrun": bool(np.isfinite(cycle_period_s) and cycle_period_s > 1.25 * float(settings.tau)),

@@ -24,8 +24,11 @@ REAL_SAFE_PRESET = {
     "task_gain": 240.0,
     "solver_gamma": 30.0,
     "drift_gain": 2.0,
-    "theta_dot_limit": 0.4,
-    "max_command_accel": 12.0,
+    "theta_dot_limit": 0.3,
+    "max_command_accel": 8.0,
+    "max_command_jerk": 80.0,
+    "trajectory_window_duration": 0.08,
+    "trajectory_window_points": 5,
 }
 
 COMMAND_MODE_TOPIC_TYPES = {
@@ -113,6 +116,16 @@ def _finite_stats(values):
     }
 
 
+def _limit_vector_norm(vector, max_norm):
+    vector = np.asarray(vector, dtype=float)
+    if max_norm is None or float(max_norm) <= 0.0:
+        return vector
+    norm = float(np.linalg.norm(vector))
+    if norm <= float(max_norm) or norm <= 1e-12:
+        return vector
+    return vector * (float(max_norm) / norm)
+
+
 def _summarize_ros_cycle_diagnostics(rows, tau):
     if not rows:
         return {}
@@ -128,6 +141,8 @@ def _summarize_ros_cycle_diagnostics(rows, tau):
         "command_step_max_abs_rad",
         "command_velocity_norm_rad_s",
         "command_accel_norm_rad_s2",
+        "command_jerk_norm_rad_s3",
+        "raw_command_velocity_norm_rad_s",
         "feedback_velocity_norm_rad_s",
         "tcp_pose_age_s",
         "tcp_fk_error_norm_m",
@@ -542,6 +557,30 @@ def add_ros_real_arguments(parser):
     parser.add_argument("--settle-rate", type=float, default=50.0)
     parser.add_argument("--max-command-step", type=float, default=0.01)
     parser.add_argument("--max-command-accel", type=float, default=None)
+    parser.add_argument(
+        "--max-command-jerk",
+        type=float,
+        default=None,
+        help=(
+            "Limit the norm of command jerk in rad/s^3 after acceleration limiting. "
+            "This is useful for velocity_array UR real runs."
+        ),
+    )
+    parser.add_argument(
+        "--trajectory-window-duration",
+        type=float,
+        default=None,
+        help=(
+            "For command_mode=joint_trajectory, publish a short multi-point future window "
+            "instead of a single 5 ms target. Default under --real-safe-preset: 0.08 s."
+        ),
+    )
+    parser.add_argument(
+        "--trajectory-window-points",
+        type=int,
+        default=None,
+        help="Number of points in the joint_trajectory future window. Default under --real-safe-preset: 5.",
+    )
     parser.add_argument("--theta-initial-command", type=str, default=None)
     parser.add_argument("--theta-lower", type=str, default=None)
     parser.add_argument("--theta-upper", type=str, default=None)
@@ -673,6 +712,8 @@ def run_ros_position_live(
         trajectory_command_topic=args.trajectory_command_topic,
         velocity_command_topic=args.velocity_command_topic,
         trajectory_command_duration=args.trajectory_command_duration,
+        trajectory_window_duration=args.trajectory_window_duration,
+        trajectory_window_points=args.trajectory_window_points,
         tcp_pose_topic=args.tcp_pose_topic,
     )
     stop_guard = StopMotionGuard(interface)
@@ -731,7 +772,9 @@ def run_ros_position_live(
     rate = rospy.Rate(1.0 / float(settings.tau))
     t_start = time.perf_counter()
     last_limited_velocity = None
+    last_limited_accel = None
     last_commanded_velocity = None
+    last_commanded_accel = None
     last_cycle_start = None
     cycle_diagnostics = []
 
@@ -758,15 +801,21 @@ def run_ros_position_live(
         controller_step_s = time.perf_counter() - controller_start
         theta_next = np.asarray(result["theta_next"], dtype=float)
         limited_velocity = np.asarray(result.get("theta_dot_next", np.zeros_like(theta_current)), dtype=float)
+        raw_limited_velocity = limited_velocity.copy()
         if args.max_command_accel is not None and float(args.max_command_accel) > 0.0:
             if last_limited_velocity is None:
                 last_limited_velocity = limited_velocity.copy()
-            accel_step = float(args.max_command_accel) * float(settings.tau)
-            limited_velocity = np.clip(
-                limited_velocity,
-                last_limited_velocity - accel_step,
-                last_limited_velocity + accel_step,
-            )
+            accel = (limited_velocity - last_limited_velocity) / float(settings.tau)
+            accel = _limit_vector_norm(accel, float(args.max_command_accel))
+            if args.max_command_jerk is not None and float(args.max_command_jerk) > 0.0:
+                if last_limited_accel is None:
+                    last_limited_accel = accel.copy()
+                jerk = (accel - last_limited_accel) / float(settings.tau)
+                jerk = _limit_vector_norm(jerk, float(args.max_command_jerk))
+                accel = last_limited_accel + float(settings.tau) * jerk
+                accel = _limit_vector_norm(accel, float(args.max_command_accel))
+                last_limited_accel = accel.copy()
+            limited_velocity = last_limited_velocity + float(settings.tau) * accel
             theta_next = theta_current + float(settings.tau) * limited_velocity
             last_limited_velocity = limited_velocity.copy()
         if args.max_command_step is not None and float(args.max_command_step) > 0.0:
@@ -791,7 +840,12 @@ def run_ros_position_live(
             commanded_accel = np.zeros_like(commanded_velocity)
         else:
             commanded_accel = (commanded_velocity - last_commanded_velocity) / float(settings.tau)
+        if last_commanded_accel is None:
+            commanded_jerk = np.zeros_like(commanded_accel)
+        else:
+            commanded_jerk = (commanded_accel - last_commanded_accel) / float(settings.tau)
         last_commanded_velocity = commanded_velocity.copy()
+        last_commanded_accel = commanded_accel.copy()
         record_history(
             history,
             tk,
@@ -815,7 +869,11 @@ def run_ros_position_live(
         if args.command_mode == "velocity_array":
             interface.publish_joint_velocities(commanded_velocity)
         else:
-            interface.publish_joint_positions(theta_next, duration_s=settings.tau)
+            interface.publish_joint_positions(
+                theta_next,
+                duration_s=settings.tau,
+                joint_velocities=commanded_velocity,
+            )
         publish_s = time.perf_counter() - publish_start
         work_end = time.perf_counter()
         rate.sleep()
@@ -844,6 +902,8 @@ def run_ros_position_live(
                 "command_step_max_abs_rad": float(np.max(np.abs(target_delta))),
                 "command_velocity_norm_rad_s": float(np.linalg.norm(commanded_velocity)),
                 "command_accel_norm_rad_s2": float(np.linalg.norm(commanded_accel)),
+                "command_jerk_norm_rad_s3": float(np.linalg.norm(commanded_jerk)),
+                "raw_command_velocity_norm_rad_s": float(np.linalg.norm(raw_limited_velocity)),
                 "feedback_velocity_norm_rad_s": feedback_velocity_norm,
                 "tcp_pose_used": bool(tcp_pose_used),
                 "tcp_pose_age_s": float(tcp_pose_age_s),
@@ -919,6 +979,9 @@ def run_ros_position_live(
         "real_safe_preset_defaults": dict(REAL_SAFE_PRESET),
         "max_command_step_rad": None if args.max_command_step is None else float(args.max_command_step),
         "max_command_accel_rad_s2": None if args.max_command_accel is None else float(args.max_command_accel),
+        "max_command_jerk_rad_s3": None if args.max_command_jerk is None else float(args.max_command_jerk),
+        "trajectory_window_duration_s": interface.get_trajectory_window_duration(settings.tau),
+        "trajectory_window_points": interface.get_trajectory_window_points(),
     }
     if hasattr(controller.cfg, "internal_disturbance"):
         summary["internal_disturbance"] = getattr(controller.cfg, "internal_disturbance", "none")
@@ -940,6 +1003,8 @@ class ROSUR3eInterface:
         trajectory_command_topic=None,
         velocity_command_topic=None,
         trajectory_command_duration=None,
+        trajectory_window_duration=None,
+        trajectory_window_points=None,
         tcp_pose_topic="",
     ):
         self.rospy, JointState, Float64MultiArray, JointTrajectory, JointTrajectoryPoint, PoseStamped = import_ros_deps()
@@ -963,6 +1028,12 @@ class ROSUR3eInterface:
             self.command_topic = self.velocity_command_topic
         self.trajectory_command_duration = (
             None if trajectory_command_duration is None else float(trajectory_command_duration)
+        )
+        self.trajectory_window_duration = (
+            None if trajectory_window_duration is None else float(trajectory_window_duration)
+        )
+        self.trajectory_window_points = (
+            None if trajectory_window_points is None else int(trajectory_window_points)
         )
         self.joint_names = tuple(joint_names)
         self._lock = threading.Lock()
@@ -1077,7 +1148,17 @@ class ROSUR3eInterface:
             return float(self.trajectory_command_duration)
         return max(2.0 * float(tau), 0.02)
 
-    def publish_joint_positions(self, joint_targets, duration_s=None):
+    def get_trajectory_window_duration(self, tau):
+        if self.trajectory_window_duration is not None and self.trajectory_window_duration > 0.0:
+            return float(self.trajectory_window_duration)
+        return self.get_trajectory_command_duration(tau)
+
+    def get_trajectory_window_points(self):
+        if self.trajectory_window_points is not None and self.trajectory_window_points > 1:
+            return int(self.trajectory_window_points)
+        return 1
+
+    def publish_joint_positions(self, joint_targets, duration_s=None, joint_velocities=None):
         targets = np.asarray(joint_targets, dtype=float).tolist()
         if self.command_mode == "velocity_array":
             raise RuntimeError("publish_joint_positions cannot be used when command_mode=velocity_array.")
@@ -1088,13 +1169,28 @@ class ROSUR3eInterface:
             return
 
         duration = self.get_trajectory_command_duration(0.0 if duration_s is None else duration_s)
+        window_duration = self.get_trajectory_window_duration(duration)
+        window_points = self.get_trajectory_window_points()
         msg = self.JointTrajectory()
         msg.header.stamp = self.rospy.Time.now()
         msg.joint_names = list(self.joint_names)
-        point = self.JointTrajectoryPoint()
-        point.positions = targets
-        point.time_from_start = self.rospy.Duration.from_sec(duration)
-        msg.points = [point]
+        if window_points <= 1 or joint_velocities is None:
+            point = self.JointTrajectoryPoint()
+            point.positions = targets
+            point.time_from_start = self.rospy.Duration.from_sec(duration)
+            msg.points = [point]
+        else:
+            target_array = np.asarray(joint_targets, dtype=float)
+            velocity_array = np.asarray(joint_velocities, dtype=float)
+            point_times = np.linspace(duration, window_duration, num=window_points)
+            msg.points = []
+            for point_time in point_times:
+                point = self.JointTrajectoryPoint()
+                dt_future = max(0.0, float(point_time) - float(duration))
+                point.positions = (target_array + dt_future * velocity_array).tolist()
+                point.velocities = velocity_array.tolist()
+                point.time_from_start = self.rospy.Duration.from_sec(float(point_time))
+                msg.points.append(point)
         self._publisher.publish(msg)
 
     def publish_joint_velocities(self, joint_velocities):
@@ -1214,6 +1310,8 @@ class ROSUR3eInterface:
                 else "std_msgs/Float64MultiArray"
             ),
             "trajectory_command_duration_s": self.get_trajectory_command_duration(getattr(args, "tau", 0.0)),
+            "trajectory_window_duration_s": self.get_trajectory_window_duration(getattr(args, "tau", 0.0)),
+            "trajectory_window_points": self.get_trajectory_window_points(),
             "joint_names": list(self.joint_names),
             "latest_joint_position_rad": latest.tolist(),
             "latest_joint_velocity_rad_s": None if velocity is None else velocity.tolist(),
@@ -1229,6 +1327,7 @@ class ROSUR3eInterface:
             "real_safe_preset_defaults": dict(REAL_SAFE_PRESET),
             "max_command_step_rad": None if args.max_command_step is None else float(args.max_command_step),
             "max_command_accel_rad_s2": None if args.max_command_accel is None else float(args.max_command_accel),
+            "max_command_jerk_rad_s3": None if args.max_command_jerk is None else float(args.max_command_jerk),
             "settle_steps": int(args.settle_steps),
             "settle_rate_hz": float(args.settle_rate),
             "state_timeout_s": float(args.state_timeout),

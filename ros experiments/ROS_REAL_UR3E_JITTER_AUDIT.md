@@ -1,15 +1,17 @@
 # ROS real UR3e jitter audit
 
-Date: 2026-06-06
+Date: 2026-06-07
 
 ## Main diagnosis
 
-The current real-robot path is not only a gain-tuning problem. The controller
-computes a velocity-like command, integrates it to `theta_next`, and then
-publishes dense joint-position samples to `/pos_joint_group_controller/command`.
-That worked acceptably in CoppeliaSim synchronous stepping, but a real UR3e
-position controller has its own interpolation, servo dynamics, transport delay,
-and ROS scheduling jitter. This interface mismatch can easily appear as shake.
+The current real-robot path is not only a gain-tuning problem. The uploaded
+UR3e evidence shows `/joint_states` at about 452-459 Hz and stable 5 ms outer
+loop timing, so feedback rate is not the main fault in this run set. The
+strongest fault signal is execution-layer lag: in `position_array` and
+`joint_trajectory` runs, commanded joint velocity p95 was about 0.89 rad/s but
+feedback velocity p95 was only about 0.08-0.12 rad/s. `velocity_array` finally
+made commanded and feedback velocities comparable, but still needed stricter
+acceleration and jerk shaping.
 
 The README's low-shake command is therefore the right direction:
 
@@ -24,8 +26,9 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
 
 `--real-safe-preset` fills unset values with `--tcp-offset 0,0,0.145`,
 `--task-gain 240`, `--solver-gamma 30`, `--drift-gain 2`,
-`--theta-dot-limit 0.4`, and `--max-command-accel 12`. Explicit CLI values still
-override the preset.
+`--theta-dot-limit 0.3`, `--max-command-accel 8`,
+`--max-command-jerk 80`, `--trajectory-window-duration 0.08`, and
+`--trajectory-window-points 5`. Explicit CLI values still override the preset.
 
 If this still shakes, do not only keep lowering gains. First verify whether the
 published target sequence, ROS loop timing, or robot feedback is the noisy part.
@@ -62,6 +65,8 @@ The diagnostics include:
 - command step norm
 - command velocity norm
 - command acceleration norm
+- command jerk norm
+- raw command velocity norm before command shaping
 - feedback velocity norm
 - optional measured TCP pose age
 - optional measured TCP versus local-FK error norm
@@ -101,10 +106,11 @@ It writes `ros_real_diagnostic_analysis.json` and
 2. If `command_accel_norm_rad_s2` has spikes when the robot shakes, enable or
    lower `--max-command-accel` and reduce `--theta-dot-limit`.
 
-3. If command smoothness is good but feedback velocity shakes, the position
-   controller or hardware servo layer is the likely bottleneck. Prefer a true
-   velocity command path or a time-stamped joint trajectory controller over
-   high-rate position array streaming.
+3. If `Command velocity greatly exceeds feedback velocity` appears, the outer
+   controller is producing velocity-like increments much faster than the real
+   controller follows. Prefer `velocity_array` with accel/jerk limits. If a
+   trajectory controller must be used, publish a short multi-point future
+   window instead of a single 5 ms target.
 
 4. If local-FK tracking error looks good while the tool visibly shakes, the
    current metric is insufficient. Pass a measured TCP pose source when
@@ -135,9 +141,10 @@ It writes `ros_real_diagnostic_analysis.json` and
      --tau 0.005
    ```
 
-   This uses `trajectory_msgs/JointTrajectory` instead of the default
-   `std_msgs/Float64MultiArray` position-array stream. Use it only when that
-   trajectory controller is loaded and subscribed.
+    This uses `trajectory_msgs/JointTrajectory` instead of the default
+    `std_msgs/Float64MultiArray` position-array stream. With the preset it
+    publishes a roughly 80 ms, 5-point window. Use it only when that trajectory
+    controller is loaded and subscribed.
 
    If the robot also has a joint-group velocity controller, run a second
    interface test that matches the algorithm output more directly:
@@ -191,12 +198,15 @@ python3 01_clean_repetitive_tracking/run_clean_repetitive_tracking.py \
   --trajectory-name circle \
   --duration 5 \
   --real-safe-preset \
+  --command-mode velocity_array \
+  --velocity-command-topic /joint_group_vel_controller/command \
   --tcp-offset 0,0,0.145 \
   --task-gain 160 \
   --solver-gamma 20 \
   --drift-gain 1 \
-  --theta-dot-limit 0.2 \
+  --theta-dot-limit 0.25 \
   --max-command-accel 6 \
+  --max-command-jerk 60 \
   --tau 0.005
 ```
 
