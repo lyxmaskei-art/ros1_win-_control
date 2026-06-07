@@ -187,10 +187,12 @@ def run_ros_benchmark(args):
             max_step = float(args.max_command_step)
             theta_next = np.clip(theta_next, theta_current - max_step, theta_current + max_step)
         theta_next = np.clip(theta_next, theta_lower, theta_upper)
-        position_errors[step] = float(np.linalg.norm(np.asarray(result["current_pos"], dtype=float) - desired_pos))
-        drift_norms[step] = float(np.linalg.norm(theta_current - theta_reference))
         target_delta = theta_next - theta_current
         commanded_velocity = target_delta / float(settings.tau)
+        if args.max_command_accel is not None and float(args.max_command_accel) > 0.0:
+            last_limited_velocity = commanded_velocity.copy()
+        position_errors[step] = float(np.linalg.norm(np.asarray(result["current_pos"], dtype=float) - desired_pos))
+        drift_norms[step] = float(np.linalg.norm(theta_current - theta_reference))
         if last_commanded_velocity is None:
             commanded_accel = np.zeros_like(commanded_velocity)
         else:

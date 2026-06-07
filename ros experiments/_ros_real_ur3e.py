@@ -822,6 +822,10 @@ def run_ros_position_live(
             max_step = float(args.max_command_step)
             theta_next = np.clip(theta_next, theta_current - max_step, theta_current + max_step)
         theta_next = np.clip(theta_next, theta_lower, theta_upper)
+        target_delta = theta_next - theta_current
+        commanded_velocity = target_delta / float(settings.tau)
+        if args.max_command_accel is not None and float(args.max_command_accel) > 0.0:
+            last_limited_velocity = commanded_velocity.copy()
 
         fk_pos = np.asarray(result.get("current_pos", robot.forward_kinematics(theta_current)[:3, 3]), dtype=float)
         measured_tcp_pos = interface.get_latest_tcp_position(max_age=args.tcp_pose_timeout)
@@ -834,8 +838,6 @@ def run_ros_position_live(
             else float(np.linalg.norm(actual_pos - fk_pos))
         )
         feedback_velocity = interface.get_latest_velocity()
-        target_delta = theta_next - theta_current
-        commanded_velocity = target_delta / float(settings.tau)
         if last_commanded_velocity is None:
             commanded_accel = np.zeros_like(commanded_velocity)
         else:
