@@ -1,0 +1,346 @@
+{
+  "stem": "method2_dlccznn_live_with_fb",
+  "live_position_error_source": "CoppeliaSim object 'Tip' in world frame",
+  "live_fk_position_error_source": "Local forward kinematics from CoppeliaSim joint feedback",
+  "live_visual_tip_error_source": "CoppeliaSim object 'Tip' in world frame",
+  "joint_drift_source": "CoppeliaSim joint-position feedback relative to post-reset initial feedback",
+  "theta_final_semantics": "terminal CoppeliaSim joint feedback after the last command has been executed",
+  "theta_initial": [
+    0.0,
+    -1.5707963267948966,
+    1.5707963267948966,
+    0.0,
+    1.5707963267948966,
+    0.0
+  ],
+  "theta_final": [
+    -0.01608375005861662,
+    -1.371774264942661,
+    1.1822095505826518,
+    0.6317478934165273,
+    1.521258060277157,
+    -3.39081949629616e-07
+  ],
+  "joint_drift_table": [
+    {
+      "joint": "theta_1",
+      "initial_rad": 0.0,
+      "final_rad": -0.01608375005861662,
+      "delta_rad": -0.01608375005861662
+    },
+    {
+      "joint": "theta_2",
+      "initial_rad": -1.5707963267948966,
+      "final_rad": -1.371774264942661,
+      "delta_rad": 0.1990220618522356
+    },
+    {
+      "joint": "theta_3",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.1822095505826518,
+      "delta_rad": -0.3885867762122448
+    },
+    {
+      "joint": "theta_4",
+      "initial_rad": 0.0,
+      "final_rad": 0.6317478934165273,
+      "delta_rad": 0.6317478934165273
+    },
+    {
+      "joint": "theta_5",
+      "initial_rad": 1.5707963267948966,
+      "final_rad": 1.521258060277157,
+      "delta_rad": -0.049538266517739515
+    },
+    {
+      "joint": "theta_6",
+      "initial_rad": 0.0,
+      "final_rad": -3.39081949629616e-07,
+      "delta_rad": -3.39081949629616e-07
+    }
+  ],
+  "max_joint_drift_rad": 0.6317478934165273,
+  "final_joint_drift_norm_rad": 0.7696931800742461,
+  "mean_position_error_m": 0.0004783023583905766,
+  "final_position_error_m": 0.0004816238917671501,
+  "max_position_error_m": 0.0005321030367017864,
+  "mean_fk_position_error_m": 9.478408516118831e-05,
+  "final_fk_position_error_m": 6.67198961354018e-05,
+  "max_fk_position_error_m": 0.00019021912582149002,
+  "mean_tip_position_error_m": 0.0004783023583905766,
+  "final_tip_position_error_m": 0.0004816238917671501,
+  "max_tip_position_error_m": 0.0005321030367017864,
+  "max_drift_norm": 0.7696034018053002,
+  "final_drift_norm": 0.7696034018053002,
+  "mean_task_residual": 0.001918104097004838,
+  "final_task_residual": 0.0003594704106856784,
+  "mean_solver_residual": 0.004935078191292181,
+  "final_solver_residual": 0.0018293103161062323,
+  "mean_solver_energy": 1.5443596926536657e-05,
+  "final_solver_energy": 1.673188116306342e-06,
+  "min_boundary_slack": 1.6554848953433832,
+  "final_boundary_slack": 1.9452435021195504,
+  "runtime_s": 74.73497649999626,
+  "avg_step_time_s": 0.018683744124999065,
+  "physical_reset_before_run": {
+    "reset_mode": "stop_start_toolbar_equivalent",
+    "before_stop_rad": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "after_start_rad": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "expected_theta_rad": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "expected_error_rad": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max_abs_expected_error_rad": 0.0,
+    "stop_wait_s": 1.0,
+    "warmup_steps": 8
+  },
+  "physical_reset_after_run": {
+    "reset_mode": "stop_start_toolbar_equivalent",
+    "before_stop_rad": [
+      -0.01608375005861662,
+      -1.371774264942661,
+      1.1822095505826518,
+      0.6317478934165273,
+      1.521258060277157,
+      -3.39081949629616e-07
+    ],
+    "after_start_rad": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "expected_theta_rad": [
+      0.0,
+      -1.5707963267948966,
+      1.5707963267948966,
+      0.0,
+      1.5707963267948966,
+      0.0
+    ],
+    "expected_error_rad": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max_abs_expected_error_rad": 0.0,
+    "stop_wait_s": 1.0,
+    "warmup_steps": 8
+  },
+  "terminal_feedback_after_last_command": {
+    "theta_feedback_rad": [
+      -0.01608375005861662,
+      -1.371774264942661,
+      1.1822095505826518,
+      0.6317478934165273,
+      1.521258060277157,
+      -3.39081949629616e-07
+    ],
+    "joint_drift_rad": [
+      -0.01608375005861662,
+      0.1990220618522356,
+      -0.3885867762122448,
+      0.6317478934165273,
+      -0.049538266517739515,
+      -3.39081949629616e-07
+    ],
+    "joint_drift_norm_rad": 0.7696931800742461
+  },
+  "servo_like_velocity_control": {
+    "command_transport": "servo_like_servoj_equivalent",
+    "manual_position_integration": false,
+    "direct_joint_position_write": false,
+    "configured": true,
+    "max_force": 1000.0,
+    "max_velocity": 2.0,
+    "joints": [
+      {
+        "handle": 18,
+        "motor_enabled_before": 1,
+        "dynctrlmode_before": 8,
+        "ctrl_enabled_before": 1,
+        "configured": true,
+        "motor_enabled_after": 1,
+        "dynctrlmode_after": 8,
+        "ctrl_enabled_after": 1,
+        "target_velocity_after": 0.0
+      },
+      {
+        "handle": 21,
+        "motor_enabled_before": 1,
+        "dynctrlmode_before": 8,
+        "ctrl_enabled_before": 1,
+        "configured": true,
+        "motor_enabled_after": 1,
+        "dynctrlmode_after": 8,
+        "ctrl_enabled_after": 1,
+        "target_velocity_after": 0.0
+      },
+      {
+        "handle": 24,
+        "motor_enabled_before": 1,
+        "dynctrlmode_before": 8,
+        "ctrl_enabled_before": 1,
+        "configured": true,
+        "motor_enabled_after": 1,
+        "dynctrlmode_after": 8,
+        "ctrl_enabled_after": 1,
+        "target_velocity_after": 0.0
+      },
+      {
+        "handle": 27,
+        "motor_enabled_before": 1,
+        "dynctrlmode_before": 8,
+        "ctrl_enabled_before": 1,
+        "configured": true,
+        "motor_enabled_after": 1,
+        "dynctrlmode_after": 8,
+        "ctrl_enabled_after": 1,
+        "target_velocity_after": 0.0
+      },
+      {
+        "handle": 30,
+        "motor_enabled_before": 1,
+        "dynctrlmode_before": 8,
+        "ctrl_enabled_before": 1,
+        "configured": true,
+        "motor_enabled_after": 1,
+        "dynctrlmode_after": 8,
+        "ctrl_enabled_after": 1,
+        "target_velocity_after": 0.0
+      },
+      {
+        "handle": 33,
+        "motor_enabled_before": 1,
+        "dynctrlmode_before": 8,
+        "ctrl_enabled_before": 1,
+        "configured": true,
+        "motor_enabled_after": 1,
+        "dynctrlmode_after": 8,
+        "ctrl_enabled_after": 1,
+        "target_velocity_after": 0.0
+      }
+    ],
+    "after_reset_reconfigure": {
+      "command_transport": "servo_like_servoj_equivalent",
+      "manual_position_integration": false,
+      "direct_joint_position_write": false,
+      "configured": true,
+      "max_force": 1000.0,
+      "max_velocity": 2.0,
+      "joints": [
+        {
+          "handle": 18,
+          "motor_enabled_before": 1,
+          "dynctrlmode_before": 8,
+          "ctrl_enabled_before": 1,
+          "configured": true,
+          "motor_enabled_after": 1,
+          "dynctrlmode_after": 8,
+          "ctrl_enabled_after": 1,
+          "target_velocity_after": 0.0
+        },
+        {
+          "handle": 21,
+          "motor_enabled_before": 1,
+          "dynctrlmode_before": 8,
+          "ctrl_enabled_before": 1,
+          "configured": true,
+          "motor_enabled_after": 1,
+          "dynctrlmode_after": 8,
+          "ctrl_enabled_after": 1,
+          "target_velocity_after": 0.0
+        },
+        {
+          "handle": 24,
+          "motor_enabled_before": 1,
+          "dynctrlmode_before": 8,
+          "ctrl_enabled_before": 1,
+          "configured": true,
+          "motor_enabled_after": 1,
+          "dynctrlmode_after": 8,
+          "ctrl_enabled_after": 1,
+          "target_velocity_after": 0.0
+        },
+        {
+          "handle": 27,
+          "motor_enabled_before": 1,
+          "dynctrlmode_before": 8,
+          "ctrl_enabled_before": 1,
+          "configured": true,
+          "motor_enabled_after": 1,
+          "dynctrlmode_after": 8,
+          "ctrl_enabled_after": 1,
+          "target_velocity_after": 0.0
+        },
+        {
+          "handle": 30,
+          "motor_enabled_before": 1,
+          "dynctrlmode_before": 8,
+          "ctrl_enabled_before": 1,
+          "configured": true,
+          "motor_enabled_after": 1,
+          "dynctrlmode_after": 8,
+          "ctrl_enabled_after": 1,
+          "target_velocity_after": 0.0
+        },
+        {
+          "handle": 33,
+          "motor_enabled_before": 1,
+          "dynctrlmode_before": 8,
+          "ctrl_enabled_before": 1,
+          "configured": true,
+          "motor_enabled_after": 1,
+          "dynctrlmode_after": 8,
+          "ctrl_enabled_after": 1,
+          "target_velocity_after": 0.0
+        }
+      ]
+    }
+  },
+  "command_transport": "servo_like_servoj_equivalent",
+  "manual_position_integration": false,
+  "direct_joint_position_write": false,
+  "trajectory_name": "circle",
+  "solver_type": "dlccznn",
+  "task_gain": 340.0,
+  "drift_gain": 0.0,
+  "drift_feedback_mode": "nonlinear",
+  "solver_gamma": 4352.0,
+  "activation_power": 0.8,
+  "activation_exp_clip": 4.0,
+  "dlccznn_inner_steps": 60,
+  "pdnn_gain": 20.0,
+  "pdnn_inner_steps": 1
+}
