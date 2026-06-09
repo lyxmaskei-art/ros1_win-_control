@@ -5,6 +5,7 @@ import argparse
 import csv
 import json
 import os
+import socket
 import sys
 import threading
 import time
@@ -217,14 +218,80 @@ class ROSRealUR3eAdapter:
             "shoulder_pan_joint,shoulder_lift_joint,elbow_joint,wrist_1_joint,wrist_2_joint,wrist_3_joint",
         )
         self.joint_names = tuple(name.strip() for name in joint_names_text.split(",") if name.strip())
+        self.command_backend = os.environ.get("UR3E_COMMAND_BACKEND", "servoj").strip().lower()
+        self.robot_ip = os.environ.get("UR3E_ROBOT_IP", os.environ.get("ROBOT_IP", "")).strip()
+        self.script_port = int(os.environ.get("UR3E_SCRIPT_PORT", "30002"))
+        self.servoj_t = float(os.environ.get("UR3E_SERVOJ_T", "0.005"))
+        self.servoj_lookahead_time = float(os.environ.get("UR3E_SERVOJ_LOOKAHEAD_TIME", "0.05"))
+        self.servoj_gain = float(os.environ.get("UR3E_SERVOJ_GAIN", "500"))
+        self.speedj_accel = float(os.environ.get("UR3E_SPEEDJ_ACCEL", "1.0"))
+        self.speedj_t = float(os.environ.get("UR3E_SPEEDJ_T", "0.005"))
+        self.wait_for_fresh_feedback = os.environ.get("UR3E_WAIT_FRESH_FEEDBACK", "1") != "0"
+        self.feedback_wait_timeout = float(os.environ.get("UR3E_FEEDBACK_WAIT_TIMEOUT", "0.03"))
+        self.use_actual_dt_for_position_integration = os.environ.get("UR3E_USE_ACTUAL_DT", "0") == "1"
         self._lock = threading.Lock()
         self._latest_positions = None
         self._latest_wall_time = None
+        self._latest_stamp = None
+        self._feedback_seq = 0
         self._publisher = None
         self._subscriber = None
+        self._script_socket = None
         self._paused = False
         self._pending_positions = None
         self._pending_velocities = None
+        self._last_command_wall_time = None
+        self._last_command_feedback_seq = 0
+        self._last_error = ""
+        self._command_count = 0
+        self._script_reconnects = 0
+        self._feedback_wait_timeouts = 0
+        self._command_dt_samples = []
+        self._feedback_age_samples = []
+        self._target_step_samples = []
+        self._last_target = None
+
+    def configure_real_transport(
+        self,
+        backend=None,
+        robot_ip=None,
+        script_port=None,
+        servoj_t=None,
+        servoj_lookahead_time=None,
+        servoj_gain=None,
+        speedj_accel=None,
+        speedj_t=None,
+        wait_fresh_feedback=None,
+        feedback_wait_timeout=None,
+        use_actual_dt=None,
+    ):
+        if backend is not None:
+            self.command_backend = str(backend).strip().lower()
+        if robot_ip is not None:
+            self.robot_ip = str(robot_ip).strip()
+        if script_port is not None:
+            self.script_port = int(script_port)
+        if servoj_t is not None:
+            self.servoj_t = float(servoj_t)
+        if servoj_lookahead_time is not None:
+            self.servoj_lookahead_time = float(servoj_lookahead_time)
+        if servoj_gain is not None:
+            self.servoj_gain = float(servoj_gain)
+        if speedj_accel is not None:
+            self.speedj_accel = float(speedj_accel)
+        if speedj_t is not None:
+            self.speedj_t = float(speedj_t)
+        if wait_fresh_feedback is not None:
+            self.wait_for_fresh_feedback = bool(wait_fresh_feedback)
+        if feedback_wait_timeout is not None:
+            self.feedback_wait_timeout = float(feedback_wait_timeout)
+        if use_actual_dt is not None:
+            self.use_actual_dt_for_position_integration = bool(use_actual_dt)
+        valid = {"topic_position", "servoj", "speedj"}
+        if self.command_backend not in valid:
+            raise RuntimeError(f"UR3E command backend must be one of {sorted(valid)}, got {self.command_backend!r}.")
+        if self.command_backend in {"servoj", "speedj"} and not self.robot_ip:
+            raise RuntimeError("UR3E_ROBOT_IP or --ur3e-robot-ip is required for servoj/speedj backends.")
 
     def _require_ros(self):
         if ROS_IMPORT_ERROR is not None:
@@ -235,6 +302,7 @@ class ROSRealUR3eAdapter:
 
     def _init_ros(self):
         self._require_ros()
+        self.configure_real_transport()
         if len(self.joint_names) != 6:
             raise RuntimeError("UR3E_JOINT_NAMES must contain exactly 6 comma-separated joint names.")
         if not rospy.core.is_initialized():
@@ -243,13 +311,26 @@ class ROSRealUR3eAdapter:
                 anonymous=True,
                 disable_signals=True,
             )
-        if self._publisher is None:
-            self._publisher = rospy.Publisher(self.command_topic, Float64MultiArray, queue_size=10)
         if self._subscriber is None:
-            self._subscriber = rospy.Subscriber(self.joint_state_topic, JointState, self._joint_state_callback, queue_size=1)
+            self._subscriber = rospy.Subscriber(
+                self.joint_state_topic,
+                JointState,
+                self._joint_state_callback,
+                queue_size=1,
+                tcp_nodelay=True,
+            )
+        if self.command_backend == "topic_position" and self._publisher is None:
+            self._publisher = rospy.Publisher(
+                self.command_topic,
+                Float64MultiArray,
+                queue_size=1,
+                tcp_nodelay=True,
+            )
         self.wait_for_joint_state(float(os.environ.get("UR3E_JOINT_STATE_TIMEOUT", "10.0")))
-        if os.environ.get("UR3E_SKIP_COMMAND_SUBSCRIBER_WAIT", "0") != "1":
+        if self.command_backend == "topic_position" and os.environ.get("UR3E_SKIP_COMMAND_SUBSCRIBER_WAIT", "0") != "1":
             self.wait_for_command_subscriber(float(os.environ.get("UR3E_COMMAND_SUBSCRIBER_TIMEOUT", "5.0")))
+        if self.command_backend in {"servoj", "speedj"}:
+            self._connect_script_socket()
 
     def _joint_state_callback(self, msg):
         if not msg.name or not msg.position:
@@ -258,13 +339,21 @@ class ROSRealUR3eAdapter:
         if any(name not in name_to_index for name in self.joint_names):
             return
         ordered = np.asarray([msg.position[name_to_index[name]] for name in self.joint_names], dtype=float)
+        stamp = None
+        try:
+            if msg.header.stamp is not None:
+                stamp = msg.header.stamp.to_sec()
+        except Exception:
+            stamp = None
         with self._lock:
             self._latest_positions = ordered
             self._latest_wall_time = time.monotonic()
+            self._latest_stamp = stamp
+            self._feedback_seq += 1
 
     def wait_for_joint_state(self, timeout):
         deadline = time.monotonic() + float(timeout)
-        rate = rospy.Rate(100)
+        rate = rospy.Rate(200)
         while not rospy.is_shutdown():
             with self._lock:
                 if self._latest_positions is not None:
@@ -287,21 +376,88 @@ class ROSRealUR3eAdapter:
             raise TimeoutError(f"Timed out waiting for a subscriber on {self.command_topic}.")
         return True
 
-    def _current_positions(self, max_age=1.0):
+    def _snapshot(self, max_age=1.0):
         with self._lock:
             positions = None if self._latest_positions is None else self._latest_positions.copy()
             wall_time = self._latest_wall_time
+            seq = self._feedback_seq
         if positions is None:
             raise RuntimeError(f"No joint state has been received on {self.joint_state_topic}.")
         if wall_time is None or (time.monotonic() - wall_time) > float(max_age):
             raise RuntimeError(f"Latest joint state is stale on {self.joint_state_topic}.")
+        return positions, wall_time, seq
+
+    def _current_positions(self, max_age=1.0):
+        positions, _, _ = self._snapshot(max_age=max_age)
         return positions
 
+    def _wait_for_new_feedback(self, previous_seq):
+        if not self.wait_for_fresh_feedback:
+            if rospy is not None and rospy.core.is_initialized():
+                rospy.sleep(max(float(self.stepping_dt), 0.0))
+            else:
+                time.sleep(max(float(self.stepping_dt), 0.0))
+            return True
+        deadline = time.monotonic() + max(float(self.feedback_wait_timeout), float(self.stepping_dt))
+        rate = rospy.Rate(500)
+        while not rospy.is_shutdown():
+            with self._lock:
+                if self._feedback_seq > int(previous_seq):
+                    return True
+            if time.monotonic() >= deadline:
+                self._feedback_wait_timeouts += 1
+                return False
+            rate.sleep()
+        return False
+
     def _publish_joint_positions(self, positions):
+        if self._publisher is None:
+            raise RuntimeError("topic_position backend is not initialized.")
         positions = np.asarray(positions, dtype=float)
         msg = Float64MultiArray()
         msg.data = positions.tolist()
         self._publisher.publish(msg)
+
+    def _connect_script_socket(self):
+        if self._script_socket is not None:
+            return
+        if not self.robot_ip:
+            raise RuntimeError("UR3E_ROBOT_IP or --ur3e-robot-ip is required for URScript command backends.")
+        self._script_socket = socket.create_connection((self.robot_ip, int(self.script_port)), timeout=2.0)
+        self._script_socket.settimeout(0.2)
+
+    def _send_urscript(self, program):
+        payload = (str(program).strip() + "\n").encode("ascii")
+        for attempt in range(2):
+            try:
+                self._connect_script_socket()
+                self._script_socket.sendall(payload)
+                return
+            except OSError as exc:
+                self._last_error = str(exc)
+                try:
+                    if self._script_socket is not None:
+                        self._script_socket.close()
+                except OSError:
+                    pass
+                self._script_socket = None
+                self._script_reconnects += 1
+                if attempt >= 1:
+                    raise
+
+    @staticmethod
+    def _format_vector(values):
+        return "[" + ", ".join(f"{float(v):.10f}" for v in np.asarray(values, dtype=float)) + "]"
+
+    def _send_servoj(self, target):
+        q = self._format_vector(target)
+        self._send_urscript(
+            f"servoj({q}, 0, 0, {self.servoj_t:.6f}, {self.servoj_lookahead_time:.6f}, {self.servoj_gain:.1f})"
+        )
+
+    def _send_speedj(self, velocity):
+        qd = self._format_vector(velocity)
+        self._send_urscript(f"speedj({qd}, {self.speedj_accel:.6f}, {self.speedj_t:.6f})")
 
     def _joint_index(self, handle):
         index = int(handle) - 1
@@ -313,25 +469,83 @@ class ROSRealUR3eAdapter:
         theta = self._current_positions(max_age=1.0)
         return UR3eKinematics().forward_kinematics(theta)[:3, 3]
 
+    def _command_dt(self):
+        now = time.monotonic()
+        if self._last_command_wall_time is None:
+            dt = float(self.stepping_dt)
+        else:
+            dt = max(now - self._last_command_wall_time, 1e-6)
+        self._last_command_wall_time = now
+        self._command_dt_samples.append(float(dt))
+        if len(self._command_dt_samples) > 20000:
+            self._command_dt_samples = self._command_dt_samples[-10000:]
+        return dt
+
+    def _finish_command_accounting(self, target_or_velocity, feedback_wall_time, feedback_seq):
+        self._command_count += 1
+        self._last_command_feedback_seq = int(feedback_seq)
+        self._feedback_age_samples.append(float(max(time.monotonic() - feedback_wall_time, 0.0)))
+        if len(self._feedback_age_samples) > 20000:
+            self._feedback_age_samples = self._feedback_age_samples[-10000:]
+        if target_or_velocity is not None:
+            values = np.asarray(target_or_velocity, dtype=float)
+            if self._last_target is not None and values.shape == self._last_target.shape:
+                self._target_step_samples.append(float(np.max(np.abs(values - self._last_target))))
+                if len(self._target_step_samples) > 20000:
+                    self._target_step_samples = self._target_step_samples[-10000:]
+            self._last_target = values.copy()
+
     def _flush_pending_commands(self):
-        if self._publisher is None:
-            return
-        target = self._current_positions(max_age=1.0)
-        has_command = False
+        positions, feedback_wall_time, feedback_seq = self._snapshot(max_age=1.0)
+        target = positions.copy()
+        velocity = np.zeros(6, dtype=float)
+        has_position = False
+        has_velocity = False
         if self._pending_positions is not None:
             mask = np.isfinite(self._pending_positions)
             target[mask] = self._pending_positions[mask]
-            has_command = has_command or bool(np.any(mask))
+            has_position = bool(np.any(mask))
         if self._pending_velocities is not None:
             mask = np.isfinite(self._pending_velocities)
-            target[mask] = target[mask] + self._pending_velocities[mask] * float(self.stepping_dt)
-            has_command = has_command or bool(np.any(mask))
-        if has_command:
+            velocity[mask] = self._pending_velocities[mask]
+            has_velocity = bool(np.any(mask))
+        if not has_position and not has_velocity:
+            self._pending_positions = None
+            self._pending_velocities = None
+            return
+        dt = self._command_dt()
+        integration_dt = dt if self.use_actual_dt_for_position_integration else float(self.stepping_dt)
+        if has_velocity and self.command_backend in {"topic_position", "servoj"}:
+            target = target + velocity * float(integration_dt)
+        if self.command_backend == "topic_position":
             self._publish_joint_positions(target)
+            accounted = target
+        elif self.command_backend == "servoj":
+            self._send_servoj(target)
+            accounted = target
+        elif self.command_backend == "speedj":
+            if has_position and not has_velocity:
+                velocity = np.clip((target - positions) / max(float(integration_dt), 1e-6), -2.0, 2.0)
+            self._send_speedj(velocity)
+            accounted = velocity
+        else:
+            raise RuntimeError(f"Unsupported command backend: {self.command_backend}")
+        self._finish_command_accounting(accounted, feedback_wall_time, feedback_seq)
         self._pending_positions = None
         self._pending_velocities = None
 
     def simxFinish(self, client_id):
+        if self.command_backend == "speedj" and self._script_socket is not None:
+            try:
+                self._send_speedj(np.zeros(6, dtype=float))
+            except Exception:
+                pass
+        try:
+            if self._script_socket is not None:
+                self._script_socket.close()
+        except OSError:
+            pass
+        self._script_socket = None
         return self.simx_return_ok
 
     def simxStart(self, host, port, wait_until_connected, do_not_reconnect, timeout_ms, comm_thread_cycle_ms):
@@ -343,10 +557,7 @@ class ROSRealUR3eAdapter:
         return self.simx_return_ok
 
     def simxSynchronousTrigger(self, client_id):
-        if rospy is not None and rospy.core.is_initialized():
-            rospy.sleep(max(float(self.stepping_dt), 0.0))
-        else:
-            time.sleep(max(float(self.stepping_dt), 0.0))
+        self._wait_for_new_feedback(self._last_command_feedback_seq)
         return self.simx_return_ok
 
     def simxGetPingTime(self, client_id):
@@ -367,8 +578,13 @@ class ROSRealUR3eAdapter:
         return self.simx_return_ok
 
     def simxStopSimulation(self, client_id, opmode):
-        if self._publisher is not None:
+        if self.command_backend == "topic_position" and self._publisher is not None:
             self._publish_joint_positions(self._current_positions(max_age=1.0))
+        elif self.command_backend == "speedj":
+            try:
+                self._send_speedj(np.zeros(6, dtype=float))
+            except Exception:
+                pass
         return self.simx_return_ok
 
     def simxGetObjectHandle(self, client_id, object_name, opmode):
@@ -388,7 +604,8 @@ class ROSRealUR3eAdapter:
     def simxGetJointPosition(self, client_id, handle, opmode):
         try:
             return self.simx_return_ok, float(self._current_positions(max_age=1.0)[self._joint_index(handle)])
-        except Exception:
+        except Exception as exc:
+            self._last_error = str(exc)
             return self.simx_return_initialize_error_flag, 0.0
 
     def simxSetJointPosition(self, client_id, handle, position, opmode):
@@ -401,29 +618,70 @@ class ROSRealUR3eAdapter:
             else:
                 target = self._current_positions(max_age=1.0)
                 target[index] = float(position)
-                self._publish_joint_positions(target)
+                if self.command_backend == "topic_position":
+                    self._publish_joint_positions(target)
+                elif self.command_backend == "servoj":
+                    self._send_servoj(target)
+                elif self.command_backend == "speedj":
+                    current = self._current_positions(max_age=1.0)
+                    velocity = np.clip((target - current) / max(float(self.stepping_dt), 1e-6), -2.0, 2.0)
+                    self._send_speedj(velocity)
             return self.simx_return_ok
-        except Exception:
+        except Exception as exc:
+            self._last_error = str(exc)
             return self.simx_return_initialize_error_flag
 
     def simxGetObjectPosition(self, client_id, handle, relative_to_handle, opmode):
         try:
             return self.simx_return_ok, self._fk_position().tolist()
-        except Exception:
+        except Exception as exc:
+            self._last_error = str(exc)
             return self.simx_return_initialize_error_flag, [0.0, 0.0, 0.0]
 
     def simxSetJointTargetVelocity(self, client_id, handle, velocity, opmode):
         try:
             index = self._joint_index(handle)
             if self._paused:
+                if self._pending_velocities is None:
+                    self._pending_velocities = np.full(6, np.nan, dtype=float)
                 self._pending_velocities[index] = float(velocity)
             else:
-                target = self._current_positions(max_age=1.0)
-                target[index] = target[index] + float(velocity) * float(self.stepping_dt)
-                self._publish_joint_positions(target)
+                self._pending_velocities = np.zeros(6, dtype=float)
+                self._pending_velocities[index] = float(velocity)
+                self._flush_pending_commands()
             return self.simx_return_ok
-        except Exception:
+        except Exception as exc:
+            self._last_error = str(exc)
             return self.simx_return_initialize_error_flag
+
+    def diagnostic_report(self):
+        def stats(values):
+            if not values:
+                return {"mean": None, "max": None, "min": None}
+            arr = np.asarray(values, dtype=float)
+            return {"mean": float(np.mean(arr)), "max": float(np.max(arr)), "min": float(np.min(arr))}
+        return {
+            "command_backend": self.command_backend,
+            "joint_state_topic": self.joint_state_topic,
+            "command_topic": self.command_topic if self.command_backend == "topic_position" else "",
+            "robot_ip": self.robot_ip,
+            "script_port": self.script_port,
+            "servoj_t": self.servoj_t,
+            "servoj_lookahead_time": self.servoj_lookahead_time,
+            "servoj_gain": self.servoj_gain,
+            "speedj_accel": self.speedj_accel,
+            "speedj_t": self.speedj_t,
+            "wait_for_fresh_feedback": self.wait_for_fresh_feedback,
+            "feedback_wait_timeout": self.feedback_wait_timeout,
+            "use_actual_dt_for_position_integration": self.use_actual_dt_for_position_integration,
+            "command_count": self._command_count,
+            "script_reconnects": self._script_reconnects,
+            "feedback_wait_timeouts": self._feedback_wait_timeouts,
+            "command_dt_s": stats(self._command_dt_samples),
+            "feedback_age_s": stats(self._feedback_age_samples),
+            "target_or_velocity_step_norm": stats(self._target_step_samples),
+            "last_error": self._last_error,
+        }
 
 
 sim = ROSRealUR3eAdapter()
@@ -960,11 +1218,13 @@ def reset_simulation_with_toolbar_equivalent(
 ):
     before_stop = read_joint_positions_fast(client_id, joint_handles)
     sim.stepping_dt = float(tau)
+    backend = getattr(sim, 'command_backend', 'topic_position')
+    real_ur_backend = backend in {'servoj', 'speedj'}
     sim.simxStopSimulation(client_id, sim.simx_opmode_oneshot)
     sim.simxGetPingTime(client_id)
     time.sleep(max(float(stop_wait_s), 0.0))
 
-    if expected_theta is not None:
+    if expected_theta is not None and not real_ur_backend:
         expected = np.asarray(expected_theta, dtype=float)
         set_joint_positions_direct(client_id, joint_handles, expected)
         sim.simxGetPingTime(client_id)
@@ -973,28 +1233,34 @@ def reset_simulation_with_toolbar_equivalent(
     sim.simxStartSimulation(client_id, sim.simx_opmode_oneshot)
     sim.simxGetPingTime(client_id)
 
-    if expected_theta is not None:
+    if expected_theta is not None and not real_ur_backend:
         set_joint_positions_direct(client_id, joint_handles, expected)
         sim.simxGetPingTime(client_id)
 
     for _ in range(max(int(warmup_steps), 1)):
-        sim.simxSynchronousTrigger(client_id)
-        sim.simxGetPingTime(client_id)
-        time.sleep(min(float(tau), 0.005))
+        if not real_ur_backend:
+            sim.simxSynchronousTrigger(client_id)
+            sim.simxGetPingTime(client_id)
+            time.sleep(min(float(tau), 0.005))
 
     after_start = read_joint_positions_fast(client_id, joint_handles)
+    reset_settle_steps = 0
     if expected_theta is not None:
         expected = np.asarray(expected_theta, dtype=float)
-        for _ in range(600):
+        reset_max_qdot = float(os.environ.get('UR3E_RESET_MAX_QDOT', '0.5' if real_ur_backend else '2.0'))
+        reset_tolerance = float(os.environ.get('UR3E_RESET_TOLERANCE_RAD', '0.001' if real_ur_backend else '0.000001'))
+        max_reset_steps = int(os.environ.get('UR3E_RESET_MAX_STEPS', '1200' if real_ur_backend else '600'))
+        for _ in range(max_reset_steps):
             error = expected - after_start
-            if np.max(np.abs(error)) <= 1e-6:
+            if np.max(np.abs(error)) <= reset_tolerance:
                 break
-            settle_velocity = np.clip(error / max(float(tau), 1e-6), -2.0, 2.0)
+            settle_velocity = np.clip(error / max(float(tau), 1e-6), -reset_max_qdot, reset_max_qdot)
             send_joint_velocity_commands(client_id, joint_handles, settle_velocity)
             sim.simxSynchronousTrigger(client_id)
             sim.simxGetPingTime(client_id)
             time.sleep(min(float(tau), 0.005))
             after_start = read_joint_positions_fast(client_id, joint_handles)
+            reset_settle_steps += 1
         send_joint_velocity_commands(client_id, joint_handles, np.zeros_like(expected))
     expected_error = None
     max_abs_expected_error = None
@@ -1004,7 +1270,10 @@ def reset_simulation_with_toolbar_equivalent(
         max_abs_expected_error = float(np.max(np.abs(expected_error)))
 
     report = {
-        'reset_mode': 'stop_start_toolbar_equivalent',
+        'reset_mode': 'real_arm_velocity_settle' if real_ur_backend else 'stop_start_toolbar_equivalent',
+        'real_command_backend': backend,
+        'direct_joint_position_write_used': bool(expected_theta is not None and not real_ur_backend),
+        'reset_settle_steps': int(reset_settle_steps),
         'before_stop_rad': np.asarray(before_stop, dtype=float).tolist(),
         'after_start_rad': np.asarray(after_start, dtype=float).tolist(),
         'expected_theta_rad': None if expected_theta is None else expected_theta.tolist(),
@@ -1014,7 +1283,6 @@ def reset_simulation_with_toolbar_equivalent(
         'warmup_steps': int(warmup_steps),
     }
     return np.asarray(after_start, dtype=float), report
-
 
 def startup_handshake_and_settle(
     client_id,
@@ -2213,7 +2481,9 @@ def run_live(method_name, controller_builder, robot, settings, output_dir, use_f
     summary['physical_reset_after_run'] = post_reset_report
     summary['terminal_feedback_after_last_command'] = terminal_feedback_report
     summary['servo_like_velocity_control'] = servo_like_config_report
-    summary['command_transport'] = 'servo_like_servoj_equivalent'
+    summary['command_transport'] = 'real_ur3e_configurable_transport'
+    if hasattr(sim, 'diagnostic_report'):
+        summary['real_transport_diagnostics'] = sim.diagnostic_report()
     summary['manual_position_integration'] = False
     summary['direct_joint_position_write'] = False
     summary['trajectory_name'] = trajectory_tag
@@ -2645,6 +2915,12 @@ $$
 def parse_args():
     parser = argparse.ArgumentParser(description='TVQP + ELNCP + PDNN versus DLCCZNN comparison runner')
     parser.add_argument(
+        '--live-backend',
+        choices=['real_ur3e', 'coppelia_zmq'],
+        default='real_ur3e',
+        help='Execution backend for live runs.',
+    )
+    parser.add_argument(
         '--experiment',
         choices=['single', 'pdnn_accuracy', 'shape_screen', 'comparison', 'full_pipeline'],
         default='single',
@@ -2652,27 +2928,38 @@ def parse_args():
     parser.add_argument(
         '--method',
         choices=['method2_pdnn', 'method2_dlccznn'],
-        default='method2_pdnn',
+        default='method2_dlccznn',
         help='Only used when --experiment single.',
     )
-    parser.add_argument('--trajectory-name', default='heart')
+    parser.add_argument('--trajectory-name', default='circle')
     parser.add_argument('--no-feedback', action='store_true', help='Remove position feedback from task equality')
     parser.add_argument('--duration', type=float, default=20.0, help='Live experiment duration (s)')
     parser.add_argument('--offline-duration', type=float, default=20.0, help='Offline experiment duration (s)')
     parser.add_argument('--trajectory-period', type=float, default=10.0, help='Reference trajectory period (s)')
-    parser.add_argument('--heart-scale', type=float, default=0.008, help='Base trajectory scale; circle radius is 4 * heart_scale.')
+    parser.add_argument('--heart-scale', type=float, default=0.0175, help='Base trajectory scale; circle radius is 4 * heart_scale.')
     parser.add_argument('--tau', type=float, default=0.005, help='Control time step (s)')
     parser.add_argument('--output-root', default=None, help='Output root directory')
-    parser.add_argument('--task-gain', type=float, default=None, help='Override task feedback gain')
-    parser.add_argument('--drift-gain', type=float, default=None, help='Override drift gain')
-    parser.add_argument('--solver-gamma', type=float, default=None, help='Override DLCCZNN solver gain')
-    parser.add_argument('--activation-power', type=float, default=None, help='Override solver activation power')
-    parser.add_argument('--activation-exp-clip', type=float, default=None, help='Override solver activation exponential clip')
-    parser.add_argument('--drift-feedback-mode', choices=['linear', 'nonlinear'], default=None)
+    parser.add_argument('--task-gain', type=float, default=160.0, help='Override task feedback gain')
+    parser.add_argument('--drift-gain', type=float, default=10.0, help='Override drift gain')
+    parser.add_argument('--solver-gamma', type=float, default=4352.0, help='Override DLCCZNN solver gain')
+    parser.add_argument('--activation-power', type=float, default=0.8, help='Override solver activation power')
+    parser.add_argument('--activation-exp-clip', type=float, default=4.0, help='Override solver activation exponential clip')
+    parser.add_argument('--drift-feedback-mode', choices=['linear', 'nonlinear'], default='nonlinear')
     parser.add_argument('--solver-regularization', type=float, default=None, help='Override solver regularization')
     parser.add_argument('--theta-dot-limit', type=float, default=None, help='Override joint velocity limit')
+    parser.add_argument('--real-command-backend', choices=['servoj', 'speedj', 'topic_position'], default='servoj', help='Real UR3e transport backend.')
+    parser.add_argument('--ur3e-robot-ip', default=None, help='UR controller IP for servoj/speedj backends.')
+    parser.add_argument('--ur3e-script-port', type=int, default=None, help='URScript secondary interface port, usually 30002.')
+    parser.add_argument('--ur3e-servoj-t', type=float, default=0.005, help='URScript servoj t parameter.')
+    parser.add_argument('--ur3e-servoj-lookahead-time', type=float, default=0.05, help='URScript servoj lookahead_time parameter.')
+    parser.add_argument('--ur3e-servoj-gain', type=float, default=500.0, help='URScript servoj gain parameter.')
+    parser.add_argument('--ur3e-speedj-accel', type=float, default=None, help='URScript speedj acceleration parameter.')
+    parser.add_argument('--ur3e-speedj-t', type=float, default=0.005, help='URScript speedj t parameter.')
+    parser.add_argument('--no-wait-fresh-feedback', action='store_true', help='Do not wait for a new /joint_states sample after each command.')
+    parser.add_argument('--feedback-wait-timeout', type=float, default=0.03, help='Max seconds to wait for fresh feedback after each command.')
+    parser.add_argument('--use-actual-dt', action='store_true', help='Use measured command dt for qdot-to-q integration in position backends.')
     parser.add_argument('--eta', type=float, default=None, help='Override dynamic bound safety coefficient')
-    parser.add_argument('--dlccznn-inner-steps', type=int, default=1)
+    parser.add_argument('--dlccznn-inner-steps', type=int, default=60)
     parser.add_argument('--pdnn-gain', type=float, default=20.0)
     parser.add_argument('--pdnn-inner-steps', type=int, default=1)
     parser.add_argument('--pdnn-max-gradient-norm', type=float, default=1e4)
@@ -2692,7 +2979,26 @@ def parse_args():
 
 
 def main():
+    global sim
     args = parse_args()
+    if args.live_backend == 'coppelia_zmq':
+        sim = ZMQCoppeliaSimAdapter()
+    else:
+        sim = ROSRealUR3eAdapter()
+    if hasattr(sim, 'configure_real_transport'):
+        sim.configure_real_transport(
+            backend=args.real_command_backend,
+            robot_ip=args.ur3e_robot_ip,
+            script_port=args.ur3e_script_port,
+            servoj_t=args.ur3e_servoj_t,
+            servoj_lookahead_time=args.ur3e_servoj_lookahead_time,
+            servoj_gain=args.ur3e_servoj_gain,
+            speedj_accel=args.ur3e_speedj_accel,
+            speedj_t=args.ur3e_speedj_t,
+            wait_fresh_feedback=not args.no_wait_fresh_feedback,
+            feedback_wait_timeout=args.feedback_wait_timeout,
+            use_actual_dt=args.use_actual_dt,
+        )
     use_feedback = not args.no_feedback
     fb_label = 'with_feedback' if use_feedback else 'without_feedback'
     output_root = Path(args.output_root) if args.output_root else build_run_output_root(PROJECT_ROOT / 'results' / fb_label, args, "live")
