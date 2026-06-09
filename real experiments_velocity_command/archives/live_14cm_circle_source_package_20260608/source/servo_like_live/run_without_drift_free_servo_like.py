@@ -4,7 +4,9 @@
 import argparse
 import csv
 import json
+import os
 import sys
+import threading
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -26,7 +28,7 @@ def find_workspace_code_root(start_dir):
         nested = candidate / "code"
         if (nested / "core").is_dir() and (nested / "sim").is_dir():
             return nested
-    raise RuntimeError(f"Cannot locate workspace code root from {start_dir}")
+    return start_dir
 
 
 CODE_ROOT = find_workspace_code_root(CURRENT_DIR)
@@ -41,6 +43,18 @@ except ImportError as exc:
     ZMQ_IMPORT_ERROR = exc
 else:
     ZMQ_IMPORT_ERROR = None
+
+try:
+    import rospy
+    from sensor_msgs.msg import JointState
+    from std_msgs.msg import Float64MultiArray
+except ImportError as exc:
+    rospy = None
+    JointState = None
+    Float64MultiArray = None
+    ROS_IMPORT_ERROR = exc
+else:
+    ROS_IMPORT_ERROR = None
 
 
 DEFAULT_ZMQ_REMOTE_API_PORT = 23000
@@ -183,7 +197,236 @@ class ZMQCoppeliaSimAdapter:
         return self.simx_return_ok
 
 
-sim = ZMQCoppeliaSimAdapter()
+class ROSRealUR3eAdapter:
+    simx_return_ok = 0
+    simx_return_initialize_error_flag = 1
+    simx_opmode_blocking = 0
+    simx_opmode_streaming = 1
+    simx_opmode_buffer = 2
+    simx_opmode_oneshot = 3
+    sim_jointfloatparam_upper_limit = "jointfloatparam_upper_limit"
+
+    def __init__(self):
+        self.stepping_dt = 0.005
+        self.client = None
+        self.sim = None
+        self.joint_state_topic = os.environ.get("UR3E_JOINT_STATE_TOPIC", "/joint_states")
+        self.command_topic = os.environ.get("UR3E_COMMAND_TOPIC", "/pos_joint_group_controller/command")
+        joint_names_text = os.environ.get(
+            "UR3E_JOINT_NAMES",
+            "shoulder_pan_joint,shoulder_lift_joint,elbow_joint,wrist_1_joint,wrist_2_joint,wrist_3_joint",
+        )
+        self.joint_names = tuple(name.strip() for name in joint_names_text.split(",") if name.strip())
+        self._lock = threading.Lock()
+        self._latest_positions = None
+        self._latest_wall_time = None
+        self._publisher = None
+        self._subscriber = None
+        self._paused = False
+        self._pending_positions = None
+        self._pending_velocities = None
+
+    def _require_ros(self):
+        if ROS_IMPORT_ERROR is not None:
+            raise RuntimeError(
+                "ROS real-arm mode requires rospy, sensor_msgs, and std_msgs in the active Python environment. "
+                "Source the catkin workspace before running this script."
+            ) from ROS_IMPORT_ERROR
+
+    def _init_ros(self):
+        self._require_ros()
+        if len(self.joint_names) != 6:
+            raise RuntimeError("UR3E_JOINT_NAMES must contain exactly 6 comma-separated joint names.")
+        if not rospy.core.is_initialized():
+            rospy.init_node(
+                os.environ.get("UR3E_ROS_NODE_NAME", "servo_like_live_real_ur3e"),
+                anonymous=True,
+                disable_signals=True,
+            )
+        if self._publisher is None:
+            self._publisher = rospy.Publisher(self.command_topic, Float64MultiArray, queue_size=10)
+        if self._subscriber is None:
+            self._subscriber = rospy.Subscriber(self.joint_state_topic, JointState, self._joint_state_callback, queue_size=1)
+        self.wait_for_joint_state(float(os.environ.get("UR3E_JOINT_STATE_TIMEOUT", "10.0")))
+        if os.environ.get("UR3E_SKIP_COMMAND_SUBSCRIBER_WAIT", "0") != "1":
+            self.wait_for_command_subscriber(float(os.environ.get("UR3E_COMMAND_SUBSCRIBER_TIMEOUT", "5.0")))
+
+    def _joint_state_callback(self, msg):
+        if not msg.name or not msg.position:
+            return
+        name_to_index = {name: idx for idx, name in enumerate(msg.name)}
+        if any(name not in name_to_index for name in self.joint_names):
+            return
+        ordered = np.asarray([msg.position[name_to_index[name]] for name in self.joint_names], dtype=float)
+        with self._lock:
+            self._latest_positions = ordered
+            self._latest_wall_time = time.monotonic()
+
+    def wait_for_joint_state(self, timeout):
+        deadline = time.monotonic() + float(timeout)
+        rate = rospy.Rate(100)
+        while not rospy.is_shutdown():
+            with self._lock:
+                if self._latest_positions is not None:
+                    return self._latest_positions.copy()
+            if time.monotonic() >= deadline:
+                break
+            rate.sleep()
+        raise TimeoutError(f"Timed out waiting for joint states on {self.joint_state_topic}.")
+
+    def wait_for_command_subscriber(self, timeout):
+        deadline = time.monotonic() + float(timeout)
+        rate = rospy.Rate(50)
+        while not rospy.is_shutdown():
+            if self._publisher.get_num_connections() > 0:
+                return True
+            if time.monotonic() >= deadline:
+                break
+            rate.sleep()
+        if self._publisher.get_num_connections() <= 0:
+            raise TimeoutError(f"Timed out waiting for a subscriber on {self.command_topic}.")
+        return True
+
+    def _current_positions(self, max_age=1.0):
+        with self._lock:
+            positions = None if self._latest_positions is None else self._latest_positions.copy()
+            wall_time = self._latest_wall_time
+        if positions is None:
+            raise RuntimeError(f"No joint state has been received on {self.joint_state_topic}.")
+        if wall_time is None or (time.monotonic() - wall_time) > float(max_age):
+            raise RuntimeError(f"Latest joint state is stale on {self.joint_state_topic}.")
+        return positions
+
+    def _publish_joint_positions(self, positions):
+        positions = np.asarray(positions, dtype=float)
+        msg = Float64MultiArray()
+        msg.data = positions.tolist()
+        self._publisher.publish(msg)
+
+    def _joint_index(self, handle):
+        index = int(handle) - 1
+        if index < 0 or index >= 6:
+            raise RuntimeError(f"Invalid UR3e joint handle: {handle}")
+        return index
+
+    def _fk_position(self):
+        theta = self._current_positions(max_age=1.0)
+        return UR3eKinematics().forward_kinematics(theta)[:3, 3]
+
+    def _flush_pending_commands(self):
+        if self._publisher is None:
+            return
+        target = self._current_positions(max_age=1.0)
+        has_command = False
+        if self._pending_positions is not None:
+            mask = np.isfinite(self._pending_positions)
+            target[mask] = self._pending_positions[mask]
+            has_command = has_command or bool(np.any(mask))
+        if self._pending_velocities is not None:
+            mask = np.isfinite(self._pending_velocities)
+            target[mask] = target[mask] + self._pending_velocities[mask] * float(self.stepping_dt)
+            has_command = has_command or bool(np.any(mask))
+        if has_command:
+            self._publish_joint_positions(target)
+        self._pending_positions = None
+        self._pending_velocities = None
+
+    def simxFinish(self, client_id):
+        return self.simx_return_ok
+
+    def simxStart(self, host, port, wait_until_connected, do_not_reconnect, timeout_ms, comm_thread_cycle_ms):
+        self._init_ros()
+        self.client = 0
+        return 0
+
+    def simxSynchronous(self, client_id, enable):
+        return self.simx_return_ok
+
+    def simxSynchronousTrigger(self, client_id):
+        if rospy is not None and rospy.core.is_initialized():
+            rospy.sleep(max(float(self.stepping_dt), 0.0))
+        else:
+            time.sleep(max(float(self.stepping_dt), 0.0))
+        return self.simx_return_ok
+
+    def simxGetPingTime(self, client_id):
+        return self.simx_return_ok
+
+    def simxPauseCommunication(self, client_id, pause):
+        if pause:
+            self._paused = True
+            self._pending_positions = np.full(6, np.nan, dtype=float)
+            self._pending_velocities = np.full(6, np.nan, dtype=float)
+        else:
+            self._flush_pending_commands()
+            self._paused = False
+        return self.simx_return_ok
+
+    def simxStartSimulation(self, client_id, opmode):
+        self.wait_for_joint_state(float(os.environ.get("UR3E_JOINT_STATE_TIMEOUT", "10.0")))
+        return self.simx_return_ok
+
+    def simxStopSimulation(self, client_id, opmode):
+        if self._publisher is not None:
+            self._publish_joint_positions(self._current_positions(max_age=1.0))
+        return self.simx_return_ok
+
+    def simxGetObjectHandle(self, client_id, object_name, opmode):
+        name = str(object_name).strip("/")
+        if name.startswith("UR3e_joint"):
+            try:
+                return self.simx_return_ok, int(name.replace("UR3e_joint", ""))
+            except ValueError:
+                return self.simx_return_initialize_error_flag, 0
+        if name in (CONTROL_POINT_OBJECT_NAME, VISUAL_TIP_OBJECT_NAME, "Tip"):
+            return self.simx_return_ok, 100
+        return self.simx_return_initialize_error_flag, 0
+
+    def simxGetObjectFloatParameter(self, client_id, handle, parameter, opmode):
+        return self.simx_return_ok, 2.0 * np.pi
+
+    def simxGetJointPosition(self, client_id, handle, opmode):
+        try:
+            return self.simx_return_ok, float(self._current_positions(max_age=1.0)[self._joint_index(handle)])
+        except Exception:
+            return self.simx_return_initialize_error_flag, 0.0
+
+    def simxSetJointPosition(self, client_id, handle, position, opmode):
+        try:
+            index = self._joint_index(handle)
+            if self._paused:
+                if self._pending_positions is None:
+                    self._pending_positions = np.full(6, np.nan, dtype=float)
+                self._pending_positions[index] = float(position)
+            else:
+                target = self._current_positions(max_age=1.0)
+                target[index] = float(position)
+                self._publish_joint_positions(target)
+            return self.simx_return_ok
+        except Exception:
+            return self.simx_return_initialize_error_flag
+
+    def simxGetObjectPosition(self, client_id, handle, relative_to_handle, opmode):
+        try:
+            return self.simx_return_ok, self._fk_position().tolist()
+        except Exception:
+            return self.simx_return_initialize_error_flag, [0.0, 0.0, 0.0]
+
+    def simxSetJointTargetVelocity(self, client_id, handle, velocity, opmode):
+        try:
+            index = self._joint_index(handle)
+            if self._paused:
+                self._pending_velocities[index] = float(velocity)
+            else:
+                target = self._current_positions(max_age=1.0)
+                target[index] = target[index] + float(velocity) * float(self.stepping_dt)
+                self._publish_joint_positions(target)
+            return self.simx_return_ok
+        except Exception:
+            return self.simx_return_initialize_error_flag
+
+
+sim = ROSRealUR3eAdapter()
 
 
 RUN_TAG_KEYS = (
@@ -2509,4 +2752,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
