@@ -109,6 +109,14 @@ def make_rtde_adapter_class(default_control_mode):
                 self.command_backend = "rtde_speedj"
 
         def _require_rtde(self):
+            if os.environ.get("UR3E_ENABLE_RTDE_EXPERIMENT_I_ACCEPT_RISK", "0") != "1":
+                raise RuntimeError(
+                    "RTDE real-arm command output is disabled by default because this "
+                    "package produced unsafe UR3e motion. Do not run it on hardware "
+                    "until the transport and frame/command semantics are re-audited. "
+                    "Set UR3E_ENABLE_RTDE_EXPERIMENT_I_ACCEPT_RISK=1 only after a "
+                    "formal safety review and with the robot speed reduced."
+                )
             if RTDE_IMPORT_ERROR is not None:
                 raise RuntimeError(
                     "Python package ur_rtde is required. Install it on Ubuntu with: "
