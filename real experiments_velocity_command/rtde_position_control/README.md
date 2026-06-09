@@ -1,73 +1,52 @@
-# RTDE servoJ angle-command real UR3e experiments
+# ROS UR driver position-trajectory checkout for UR3e
 
-This folder contains the RTDE position/angle-command version of the four real UR3e live experiments.
+This folder name is historical. The current code does **not** use bare `ur_rtde`, `speedJ`, `servoJ`, raw sockets, or port `30002`.
 
-Control semantics:
-
-```text
-ZNN computes qdot online every control period.
-The adapter integrates q_cmd = q_cmd + qdot * dt.
-The robot receives q_cmd through ur_rtde RTDEControlInterface.servoJ(...).
-```
-
-This matches the best CoppeliaSim live simulation command semantics more closely than direct speed control, because the simulation executed integrated joint-angle targets.
-
-Files:
-
-- `run_clean_repetitive_tracking_rtde_position.py`
-- `run_with_drift_free_rtde_position.py`
-- `run_without_drift_free_rtde_position.py`
-- `run_mild_disturbance_rtde_position.py`
-- `rtde_realtime_adapter.py`
-
-Important implementation details:
-
-- No raw `30002` URScript streaming is used in this folder.
-- The old socket-based `servoj(...)` transport has been removed from these scripts.
-- `rtde_realtime_adapter.py` uses `RTDEControlInterface` and `RTDEReceiveInterface`.
-- Each command period calls `initPeriod()`, sends `servoJ(...)`, then waits in `waitPeriod(...)` through the script's synchronous-trigger wrapper.
-- `q_cmd` is kept continuous inside the adapter; it is not reset to feedback at every step.
-- `servoStop()` is called when stopping the run.
-
-Default real-control parameters:
+Current command path:
 
 ```text
-real_command_backend = rtde_servoj
-trajectory_name = circle
-heart_scale = 0.0175      # circle radius = 4 * heart_scale = 0.07 m, diameter = 14 cm
-tau / servoj_t = 0.005 s
-servoj_lookahead_time = 0.05 s
-servoj_gain = 500
-solver_gamma = 4352
-activation_power = 0.8
-dlccznn_inner_steps = 60
-command_filter_alpha = 1.0
+ZNN computes qdot
+-> hard safety limits in rtde_realtime_adapter.py
+-> one-step trajectory_msgs/JointTrajectory
+-> /scaled_pos_joint_traj_controller/command
+-> Universal Robots official ROS driver + External Control URCap
+-> UR3e
 ```
 
-Ubuntu setup:
+This is not a full pre-generated trajectory. It sends short online trajectory points through the UR ROS driver controller, with per-step limits.
+
+The scripts are locked by default. They refuse to publish nonzero commands unless:
 
 ```bash
-python3 -m pip install ur_rtde
-export UR3E_ROBOT_IP=192.168.126.10
+export UR3E_ENABLE_ROS_DRIVER_EXPERIMENT_I_ACCEPT_RISK=1
 ```
 
-Recommended first validation before a full circle:
+Do not set that variable until:
+
+- UR ROS driver is running.
+- External Control is active on the teach pendant.
+- `/scaled_pos_joint_traj_controller/command` has exactly one expected subscriber.
+- Robot speed slider is reduced.
+- Emergency stop has been tested.
+- The workspace is clear.
+
+Safety defaults:
+
+```text
+duration = 2 s
+tau = 0.01 s
+circle radius = 5 mm
+max_abs_qdot = 0.03 rad/s
+max_qdot_delta = 0.01 rad/s per cycle
+max_position_step = 0.0003 rad per cycle
+```
+
+Run only after the ROS driver and controller are already up:
 
 ```bash
-python3 run_clean_repetitive_tracking_rtde_position.py \
-  --live-backend ros_real_ur3e \
-  --ur3e-robot-ip "$UR3E_ROBOT_IP" \
-  --duration 2 \
-  --skip-plots
+source ~/catkin_ws/devel/setup.bash
+export UR3E_ENABLE_ROS_DRIVER_EXPERIMENT_I_ACCEPT_RISK=1
+python3 run_clean_repetitive_tracking_rtde_position.py --live-backend ros_real_ur3e
 ```
 
-Then run the 20 s circle:
-
-```bash
-python3 run_clean_repetitive_tracking_rtde_position.py \
-  --live-backend ros_real_ur3e \
-  --ur3e-robot-ip "$UR3E_ROBOT_IP" \
-  --duration 20
-```
-
-Use this folder first when comparing against the previous CoppeliaSim live results.
+Full 14 cm, 20 s experiments are **not** defaults anymore. Only use them after the 2 s / 5 mm checkout is stable.

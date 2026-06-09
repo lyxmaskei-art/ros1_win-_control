@@ -733,7 +733,7 @@ def reset_simulation_with_toolbar_equivalent(
     before_stop = read_joint_positions_fast(client_id, joint_handles)
     sim.stepping_dt = float(tau)
     backend = getattr(sim, 'command_backend', 'topic_position')
-    real_ur_backend = backend in {'servoj', 'speedj', 'rtde_servoj', 'rtde_speedj'}
+    real_ur_backend = backend in {'servoj', 'speedj', 'rtde_servoj', 'rtde_speedj', 'ros_velocity', 'ros_position_trajectory'}
     sim.simxStopSimulation(client_id, sim.simx_opmode_oneshot)
     sim.simxGetPingTime(client_id)
     time.sleep(max(float(stop_wait_s), 0.0))
@@ -759,7 +759,13 @@ def reset_simulation_with_toolbar_equivalent(
 
     after_start = read_joint_positions_fast(client_id, joint_handles)
     reset_settle_steps = 0
-    if expected_theta is not None:
+    ros_driver_backend = backend in {'ros_velocity', 'ros_position_trajectory'}
+    if expected_theta is not None and ros_driver_backend:
+        # Never auto-drive a real UR3e to the nominal initial pose from this
+        # experiment script. Initial posture must be achieved manually or by a
+        # separately reviewed low-speed homing procedure.
+        pass
+    elif expected_theta is not None:
         expected = np.asarray(expected_theta, dtype=float)
         reset_max_qdot = float(os.environ.get('UR3E_RESET_MAX_QDOT', '0.5' if real_ur_backend else '2.0'))
         reset_tolerance = float(os.environ.get('UR3E_RESET_TOLERANCE_RAD', '0.001' if real_ur_backend else '0.000001'))
@@ -784,7 +790,7 @@ def reset_simulation_with_toolbar_equivalent(
         max_abs_expected_error = float(np.max(np.abs(expected_error)))
 
     report = {
-        'reset_mode': 'real_arm_velocity_settle' if real_ur_backend else 'stop_start_toolbar_equivalent',
+        'reset_mode': 'ros_driver_no_auto_reset' if backend in {'ros_velocity', 'ros_position_trajectory'} else ('real_arm_velocity_settle' if real_ur_backend else 'stop_start_toolbar_equivalent'),
         'real_command_backend': backend,
         'direct_joint_position_write_used': bool(expected_theta is not None and not real_ur_backend),
         'reset_settle_steps': int(reset_settle_steps),
@@ -2406,11 +2412,11 @@ def parse_args():
     )
     parser.add_argument('--trajectory-name', default='circle')
     parser.add_argument('--no-feedback', action='store_true', help='Remove position feedback from task equality')
-    parser.add_argument('--duration', type=float, default=20.0, help='Live experiment duration (s)')
+    parser.add_argument('--duration', type=float, default=2.0, help='Live experiment duration (s); default is a safety checkout, not the final 20 s run.')
     parser.add_argument('--offline-duration', type=float, default=20.0, help='Offline experiment duration (s)')
     parser.add_argument('--trajectory-period', type=float, default=10.0, help='Reference trajectory period (s)')
-    parser.add_argument('--heart-scale', type=float, default=0.0175, help='Base trajectory scale; circle radius is 4 * heart_scale.')
-    parser.add_argument('--tau', type=float, default=0.005, help='Control time step (s)')
+    parser.add_argument('--heart-scale', type=float, default=0.00125, help='Base trajectory scale; circle radius is 4 * heart_scale. Safety default radius is 5 mm.')
+    parser.add_argument('--tau', type=float, default=0.01, help='Control time step (s). Safety default is 100 Hz.')
     parser.add_argument('--output-root', default=None, help='Output root directory')
     parser.add_argument('--task-gain', type=float, default=160.0, help='Override task feedback gain')
     parser.add_argument('--drift-gain', type=float, default=0.0, help='Ignored when no drift criterion is requested.')
@@ -2421,14 +2427,14 @@ def parse_args():
     parser.add_argument('--drift-feedback-mode', choices=['linear', 'nonlinear'], default='nonlinear')
     parser.add_argument('--solver-regularization', type=float, default=None, help='Override solver regularization')
     parser.add_argument('--theta-dot-limit', type=float, default=None, help='Override joint velocity limit')
-    parser.add_argument('--real-command-backend', choices=['rtde_servoj', 'rtde_speedj', 'servoj', 'speedj', 'topic_position'], default='rtde_speedj', help='Real UR3e transport backend.')
+    parser.add_argument('--real-command-backend', choices=['ros_velocity'], default='ros_velocity', help='Real UR3e transport backend.')
     parser.add_argument('--ur3e-robot-ip', default=None, help='UR controller IP for servoj/speedj backends.')
     parser.add_argument('--ur3e-script-port', type=int, default=None, help='Ignored by RTDE folders; kept only for CLI compatibility.')
-    parser.add_argument('--ur3e-servoj-t', type=float, default=0.005, help='RTDE servoJ t/control-period parameter.')
+    parser.add_argument('--ur3e-servoj-t', type=float, default=0.01, help='ROS position trajectory control-period parameter.')
     parser.add_argument('--ur3e-servoj-lookahead-time', type=float, default=0.05, help='URScript servoj lookahead_time parameter.')
     parser.add_argument('--ur3e-servoj-gain', type=float, default=500.0, help='URScript servoj gain parameter.')
     parser.add_argument('--ur3e-speedj-accel', type=float, default=0.5, help='RTDE speedJ acceleration parameter.')
-    parser.add_argument('--ur3e-speedj-t', type=float, default=0.005, help='RTDE speedJ t/control-period parameter.')
+    parser.add_argument('--ur3e-speedj-t', type=float, default=0.01, help='ROS velocity control-period parameter.')
     parser.add_argument('--no-wait-fresh-feedback', action='store_true', help='Do not wait for a new /joint_states sample after each command.')
     parser.add_argument('--feedback-wait-timeout', type=float, default=0.03, help='Max seconds to wait for fresh feedback after each command.')
     parser.add_argument('--use-actual-dt', action='store_true', help='Use measured command dt for qdot-to-q integration in position backends.')
