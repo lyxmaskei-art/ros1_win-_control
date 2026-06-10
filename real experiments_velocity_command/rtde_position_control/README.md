@@ -34,7 +34,7 @@ Safety defaults:
 
 ```text
 duration = 2 s
-tau = 0.01 s
+tau = 0.005 s
 circle radius = 5 mm
 max_abs_qdot = 0.03 rad/s
 max_qdot_delta = 0.01 rad/s per cycle

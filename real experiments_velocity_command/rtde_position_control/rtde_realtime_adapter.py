@@ -45,7 +45,7 @@ def make_rtde_adapter_class(default_control_mode):
             self.command_backend = (
                 "ros_position_trajectory" if self.control_mode == "position" else "ros_velocity"
             )
-            self.stepping_dt = float(os.environ.get("UR3E_TAU", "0.01"))
+            self.stepping_dt = float(os.environ.get("UR3E_TAU", "0.005"))
             self.joint_state_topic = os.environ.get("UR3E_JOINT_STATE_TOPIC", "/joint_states")
             self.velocity_command_topic = os.environ.get(
                 "UR3E_VELOCITY_COMMAND_TOPIC",
