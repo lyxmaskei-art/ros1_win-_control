@@ -6,7 +6,7 @@ Current command path:
 
 ```text
 ZNN computes qdot
--> hard safety limits in rtde_realtime_adapter.py
+-> runtime guards in rtde_realtime_adapter.py
 -> std_msgs/Float64MultiArray
 -> /joint_group_vel_controller/command
 -> Universal Robots official ROS driver + External Control URCap
@@ -34,35 +34,31 @@ Safety defaults:
 duration = 2 s
 tau = 0.005 s
 circle radius = 5 mm
-max_abs_qdot = 0.03 rad/s
-max_qdot_delta = 0.01 rad/s per cycle
 ```
 
-The default `max_abs_qdot = 0.03 rad/s` is only a checkout clamp for a tiny 2 s / 5 mm motion. It is intentionally too small for the formal 14 cm validation trajectory. If the measured or expected joint speed is around `0.3 rad/s`, a formal run must raise the clamp explicitly. Use `0.30` only when the measured peak stays below that value; use `0.35` when the peak is around `0.3` and you need margin against harmless clipping.
+The ROS transport layer does not add an extra velocity clamp or slew-rate limiter. It publishes the controller's `qdot` output directly after only these runtime guards:
 
-```bash
-export UR3E_SAFE_MAX_ABS_QDOT=0.35
-export UR3E_SAFE_MAX_QDOT_DELTA=0.01
-```
+- command output must be explicitly enabled;
+- `/joint_states` must be fresh;
+- the command topic must have a controller subscriber;
+- the command vector must be finite and 6-dimensional.
 
-`UR3E_SAFE_MAX_QDOT_DELTA=0.01` means each joint command can change by at most `0.01 rad/s` every `5 ms`, equivalent to about `2 rad/s^2`. That is normally already above the smooth 20 s two-circle reference demand, while still blocking sharp command jumps. If the diagnostic report shows repeated clipping during a stable checkout, raise it gradually instead of removing it.
+Trajectory and joint-velocity limits are therefore the same as the live-simulation controller path: the script-level TVQP/ZNN limits such as `theta_dot_limit`, dynamic joint bounds, and the UR ROS controller itself.
 
-After each live run, check the adapter diagnostic report:
+The script does not reset or home the real robot. It reads the current `/joint_states` sample and uses that as the live run's initial joint reference. Move the robot to the desired initial posture before launching the experiment.
+
+After each live run, the adapter diagnostic report records:
 
 ```text
-raw_velocity_max_abs  raw ZNN velocity peak before safety clipping
-abs_clip_count        number of cycles clipped by UR3E_SAFE_MAX_ABS_QDOT
-delta_clip_count      number of cycles clipped by UR3E_SAFE_MAX_QDOT_DELTA
+raw_velocity_max_abs  raw ZNN velocity peak before ROS publication
 ```
-
-For a formal tracking run, `abs_clip_count` should normally be zero. If it is not zero, the absolute velocity clamp is still below the controller demand and the trajectory is being distorted by the transport layer.
 
 Run only after the ROS driver and controller are already up:
 
 ```bash
 source ~/catkin_ws/devel/setup.bash
 export UR3E_ENABLE_ROS_DRIVER_EXPERIMENT_I_ACCEPT_RISK=1
-python3 run_clean_repetitive_tracking_rtde_speed.py --live-backend ros_real_ur3e
+python3 run_clean_repetitive_tracking_rtde_speed.py --live-backend real_ur3e
 ```
 
 Full 14 cm, 20 s experiments are **not** defaults anymore. Only use them after the 2 s / 5 mm checkout is stable.

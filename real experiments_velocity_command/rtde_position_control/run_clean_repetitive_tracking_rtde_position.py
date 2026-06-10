@@ -734,6 +734,27 @@ def reset_simulation_with_toolbar_equivalent(
     sim.stepping_dt = float(tau)
     backend = getattr(sim, 'command_backend', 'topic_position')
     real_ur_backend = backend in {'servoj', 'speedj', 'rtde_servoj', 'rtde_speedj', 'ros_velocity', 'ros_position_trajectory'}
+    if backend in {'ros_velocity', 'ros_position_trajectory'}:
+        expected_error = None
+        max_abs_expected_error = 0.0
+        if expected_theta is not None:
+            expected_theta = np.asarray(expected_theta, dtype=float)
+            expected_error = before_stop - expected_theta
+            max_abs_expected_error = float(np.max(np.abs(expected_error)))
+        report = {
+            'reset_mode': 'ros_driver_no_reset',
+            'real_command_backend': backend,
+            'direct_joint_position_write_used': False,
+            'reset_settle_steps': 0,
+            'before_stop_rad': np.asarray(before_stop, dtype=float).tolist(),
+            'after_start_rad': np.asarray(before_stop, dtype=float).tolist(),
+            'expected_theta_rad': None if expected_theta is None else expected_theta.tolist(),
+            'expected_error_rad': None if expected_error is None else np.asarray(expected_error, dtype=float).tolist(),
+            'max_abs_expected_error_rad': max_abs_expected_error,
+            'stop_wait_s': 0.0,
+            'warmup_steps': 0,
+        }
+        return np.asarray(before_stop, dtype=float), report
     sim.simxStopSimulation(client_id, sim.simx_opmode_oneshot)
     sim.simxGetPingTime(client_id)
     time.sleep(max(float(stop_wait_s), 0.0))
@@ -1923,7 +1944,7 @@ def run_live(method_name, controller_builder, robot, settings, output_dir, use_f
         )
         controller.reset(theta_reference)
         print(
-            '    Reset before run: '
+            '    Initial joint reference: '
             f"mode={pre_reset_report['reset_mode']}, "
             f"expected_error={pre_reset_report['max_abs_expected_error_rad']:.3e} rad",
             flush=True,
@@ -2020,7 +2041,7 @@ def run_live(method_name, controller_builder, robot, settings, output_dir, use_f
             warmup_steps=8,
         )
         print(
-            '    Reset after run: '
+            '    Final joint reference check: '
             f"mode={post_reset_report['reset_mode']}, "
             f"expected_error={post_reset_report['max_abs_expected_error_rad']:.3e} rad",
             flush=True,
