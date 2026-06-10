@@ -63,7 +63,8 @@ def make_rtde_adapter_class(default_control_mode):
             self.enable_commands = os.environ.get("UR3E_ENABLE_ROS_DRIVER_EXPERIMENT_I_ACCEPT_RISK", "0") == "1"
             self.max_abs_qdot = float(os.environ.get("UR3E_SAFE_MAX_ABS_QDOT", "0.03"))
             self.max_qdot_delta = float(os.environ.get("UR3E_SAFE_MAX_QDOT_DELTA", "0.01"))
-            self.max_position_step = float(os.environ.get("UR3E_SAFE_MAX_POSITION_STEP", "0.0003"))
+            self._max_position_step_override = os.environ.get("UR3E_SAFE_MAX_POSITION_STEP")
+            self.max_position_step = self._compute_max_position_step()
             self.feedback_timeout = float(os.environ.get("UR3E_FEEDBACK_TIMEOUT", "0.2"))
             self.require_command_subscriber = os.environ.get("UR3E_REQUIRE_COMMAND_SUBSCRIBER", "1") != "0"
             self._latest_q = None
@@ -82,6 +83,9 @@ def make_rtde_adapter_class(default_control_mode):
             self._last_error = ""
             self._command_count = 0
             self._blocked_command_count = 0
+            self._abs_clip_count = 0
+            self._delta_clip_count = 0
+            self._raw_velocity_max_abs = 0.0
             self._target_step_samples = []
 
         def configure_real_transport(
@@ -102,6 +106,7 @@ def make_rtde_adapter_class(default_control_mode):
                 self.stepping_dt = float(speedj_t)
             if servoj_t is not None and self.control_mode == "position":
                 self.stepping_dt = float(servoj_t)
+            self.max_position_step = self._compute_max_position_step()
             requested = "" if backend is None else str(backend).strip().lower()
             allowed_position = {"", "position", "topic_position", "servoj", "rtde_servoj", "ros_position", "ros_position_trajectory"}
             allowed_speed = {"", "speed", "speedj", "rtde_speedj", "ros_velocity"}
@@ -113,6 +118,11 @@ def make_rtde_adapter_class(default_control_mode):
                 if requested not in allowed_speed:
                     raise RuntimeError(f"This folder is ROS velocity control only; got backend={requested!r}.")
                 self.command_backend = "ros_velocity"
+
+        def _compute_max_position_step(self):
+            if self._max_position_step_override is not None:
+                return float(self._max_position_step_override)
+            return float(self.max_abs_qdot) * float(self.stepping_dt)
 
         def _require_ros(self):
             if ROS_IMPORT_ERROR is not None:
@@ -206,8 +216,14 @@ def make_rtde_adapter_class(default_control_mode):
             v = np.asarray(velocity, dtype=float)
             if v.shape != (6,) or not np.all(np.isfinite(v)):
                 raise RuntimeError("Invalid velocity command.")
+            self._raw_velocity_max_abs = max(self._raw_velocity_max_abs, float(np.max(np.abs(v))))
+            if np.any(np.abs(v) > self.max_abs_qdot):
+                self._abs_clip_count += 1
             v = np.clip(v, -self.max_abs_qdot, self.max_abs_qdot)
-            dv = np.clip(v - self._last_velocity, -self.max_qdot_delta, self.max_qdot_delta)
+            raw_dv = v - self._last_velocity
+            if np.any(np.abs(raw_dv) > self.max_qdot_delta):
+                self._delta_clip_count += 1
+            dv = np.clip(raw_dv, -self.max_qdot_delta, self.max_qdot_delta)
             v = self._last_velocity + dv
             self._last_velocity = v.copy()
             return v
@@ -390,6 +406,9 @@ def make_rtde_adapter_class(default_control_mode):
                 "max_position_step": self.max_position_step,
                 "command_count": int(self._command_count),
                 "blocked_command_count": int(self._blocked_command_count),
+                "raw_velocity_max_abs": float(self._raw_velocity_max_abs),
+                "abs_clip_count": int(self._abs_clip_count),
+                "delta_clip_count": int(self._delta_clip_count),
                 "target_or_velocity_step_norm": stats(self._target_step_samples),
                 "last_error": self._last_error,
             }
